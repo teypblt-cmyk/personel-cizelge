@@ -402,7 +402,7 @@ html[data-pre] .av{box-shadow:0 0 0 2px var(--pri)}
 <button type="button" id="lalt" class="llink">Şifreyi değiştir</button>
 </form>
 </div>
-<div class="hdr"><h1>Personel Çizelgesi</h1><span id="stt" class="sm"></span><button id="lockb" type="button" aria-label="Kilitle ve çık" title="Kilitle ve çık">🔒</button></div>
+<div class="hdr"><h1>Personel Çizelgesi</h1><button id="lockb" type="button" aria-label="Çıkış yap" title="Çıkış yap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9.5"/></svg></button></div>
 <div class="tabs" id="tabs" style="margin-bottom:6px"></div>
 <div class="tabs" id="tabs2"></div>
 <div class="card hide" id="nav"></div>
@@ -620,7 +620,7 @@ function ens(){if(!S.gl)S.gl={};if(!S.gp)S.gp={};if(!S.co)S.co={};if(!S.rv)S.rv=
 var CFG={URL:'https://wogswssxyfotwkeflycl.supabase.co',KEY:'sb_publishable_PbxaNErJXA0kll1lcF-Zbg_uwkW638W'};
 var sb=null,pw=null,authed=false,dirty=false,lastJson='',pushT=null,pollOn=false;
 try{pw=localStorage.getItem('cizelge_pw')||null}catch(e){}
-function setSt(t){var e=document.getElementById('stt');if(e)e.textContent=t}
+function setSt(t){}
 function isAuthErr(m){return /Şifre|deneme/.test(m||'')}
 function $l(id){return document.getElementById(id)}
 function lmsg(t,ok){var m=$l('lmsg');m.textContent=t||'';m.className='lmsg'+(ok?' ok':'')}
