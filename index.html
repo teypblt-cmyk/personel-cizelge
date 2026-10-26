@@ -349,13 +349,60 @@ html[data-pre] .av{box-shadow:0 0 0 2px var(--pri)}
 
 .hdr{display:flex;align-items:center;gap:10px;margin:6px 0 12px}.hdr h1{flex:1;margin:0}.hdr .sm{white-space:nowrap}
 #lockb{flex:0 0 auto;width:40px;height:40px;padding:0;font-size:18px;display:flex;align-items:center;justify-content:center}
-#login{background:#0b1020;z-index:200}
-#login .wbox{background:#141b33;border-color:rgba(255,255,255,.12)}
-#login input{margin-bottom:8px}
-#login .wb button{background:var(--pri,#0063B1);color:#fff;border-color:transparent;font-weight:700}
+#lockb{font-size:17px}
+#login{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:max(20px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom));background:#060a16;overflow:auto;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#eef3ff}
+#login *{box-sizing:border-box}
+#login .lbg{position:absolute;inset:0;overflow:hidden;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.4px);background-size:24px 24px}
+#login .lbg i{position:absolute;border-radius:50%;filter:blur(80px);opacity:.5;animation:ldrift 18s ease-in-out infinite alternate}
+#login .lbg i:nth-child(1){width:46vmax;height:46vmax;left:-14vmax;top:-18vmax;background:#2f6bff}
+#login .lbg i:nth-child(2){width:38vmax;height:38vmax;right:-12vmax;bottom:-14vmax;background:#f97316;opacity:.34;animation-duration:22s;animation-delay:-6s}
+#login .lbg i:nth-child(3){width:26vmax;height:26vmax;left:38%;top:52%;background:#6a5cff;opacity:.32;animation-duration:26s;animation-delay:-11s}
+@keyframes ldrift{from{transform:translate(0,0) scale(1)}to{transform:translate(5vmax,4vmax) scale(1.12)}}
+#login .lcard{position:relative;width:min(390px,100%);margin:auto;padding:36px 28px 22px;border-radius:30px;text-align:center;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(26px) saturate(1.3);-webkit-backdrop-filter:blur(26px) saturate(1.3);box-shadow:0 40px 90px -20px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.18);animation:lrise .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes lrise{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+#login .lmark{display:block;width:76px;height:76px;margin:0 auto 20px;filter:drop-shadow(0 10px 24px rgba(47,107,255,.55))}
+#login h2{margin:0 0 6px;font:700 27px/1.15 Fraunces,Georgia,serif;letter-spacing:-.01em;color:#fff}
+#login .lsub{margin:0 0 26px;font-size:14.5px;color:#9aa9c6}
+#login .lfld{display:flex;align-items:center;gap:10px;height:56px;padding:0 6px 0 16px;margin:0 0 12px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);transition:border-color .2s,box-shadow .2s,background .2s}
+#login .lfld:focus-within{border-color:#6f9bff;background:rgba(255,255,255,.1);box-shadow:0 0 0 4px rgba(91,140,255,.22)}
+#login .lfld svg{flex:0 0 auto;width:19px;height:19px;stroke:#8fa3cc;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+#login .lfld input{flex:1;min-width:0;height:100%;padding:0;border:0;outline:0;background:none;color:#fff;font:500 16px Inter,system-ui,sans-serif;border-radius:0}
+#login .lfld input::placeholder{color:#7d8db0;font-weight:400}
+#login .leye{flex:0 0 auto;width:44px;height:44px;padding:0;border:0;border-radius:14px;background:none;color:#8fa3cc;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#login .leye:hover{background:rgba(255,255,255,.08);color:#cfe0ff}
+#login .leye .e2{display:none}#login .lcard.show .leye .e1{display:none}#login .lcard.show .leye .e2{display:block}
+#login .lcard[data-mode=in] .lch,#login .lcard[data-mode=ch] .lin{display:none}
+#login .lcard.swap .lin,#login .lcard.swap .lch{animation:lfade .3s ease both}
+@keyframes lfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#login .lmsg{min-height:22px;margin:2px 0 12px;font-size:13.5px;line-height:1.35;color:#ff8fa0}
+#login .lmsg.ok{color:#43e0a0}
+#login .lbtn{position:relative;width:100%;height:56px;border:0;border-radius:18px;background:linear-gradient(135deg,#2f7bff,#6a5cff);color:#fff;font:700 16px Inter,system-ui,sans-serif;letter-spacing:.01em;cursor:pointer;box-shadow:0 14px 34px -10px rgba(79,110,255,.85),inset 0 1px 0 rgba(255,255,255,.28);transition:transform .15s,filter .2s,opacity .2s}
+#login .lbtn:hover{filter:brightness(1.08)}#login .lbtn:active{transform:scale(.98)}
+#login .lbtn:disabled{opacity:.7;cursor:default}
+#login .lcard.busy .lbtn::after{content:'';position:absolute;right:20px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:lspin .7s linear infinite}
+@keyframes lspin{to{transform:rotate(360deg)}}
+#login .llink{margin:14px auto 0;padding:10px 14px;border:0;background:none;color:#9db7ff;font:500 14px Inter,system-ui,sans-serif;cursor:pointer;border-radius:12px}
+#login .llink:hover{color:#fff;background:rgba(255,255,255,.06)}
+#login .lcard.shake{animation:lshake .45s ease}
+@keyframes lshake{15%{transform:translateX(-9px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(5px)}75%{transform:translateX(-2px)}}
+@media (prefers-reduced-motion:reduce){#login *{animation:none!important;transition:none!important}}
 </style></head><body>
-<div id="login" class="wdlg"><div class="wbox"><div class="wt">Personel Çizelgesi</div><div class="ws">Devam etmek için şifreyi girin.</div><input type="password" id="lpw" autocomplete="current-password" autocapitalize="off" spellcheck="false" placeholder="Şifre"><div id="lmsg" class="sm" style="min-height:18px;margin-bottom:8px"></div><div class="wb"><button id="lgo" type="button">Giriş</button></div></div></div>
-<div class="hdr"><h1>Personel Çizelgesi</h1><span id="stt" class="sm"></span><button id="lockb" type="button" aria-label="Hesap">🔑</button></div>
+<div id="login" role="dialog" aria-modal="true" aria-labelledby="ltitle">
+<div class="lbg"><i></i><i></i><i></i></div>
+<form id="lcard" class="lcard" data-mode="in" novalidate>
+<svg class="lmark" viewBox="0 0 76 76" aria-hidden="true"><rect width="76" height="76" rx="22" fill="#0e1430"/><g><rect x="9.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="34.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="43.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="17.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="43.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="34.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="51.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="26.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/></g></svg>
+<h2 id="ltitle">Personel Çizelgesi</h2>
+<p class="lsub" id="lsub">Devam etmek için şifrenizi girin</p>
+<div class="lfld lin"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lpw" type="password" placeholder="Şifre" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
+<div class="lfld lch"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lp0" type="password" placeholder="Şu anki şifre" autocomplete="current-password" autocapitalize="off" spellcheck="false"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
+<div class="lfld lch"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg><input id="lp1" type="password" placeholder="Yeni şifre (en az 6 karakter)" autocomplete="new-password" autocapitalize="off" spellcheck="false"></div>
+<div class="lfld lch"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg><input id="lp2" type="password" placeholder="Yeni şifre (tekrar)" autocomplete="new-password" autocapitalize="off" spellcheck="false"></div>
+<div id="lmsg" class="lmsg" role="alert" aria-live="polite"></div>
+<button type="submit" id="lgo" class="lbtn"><span id="lgot">Giriş</span></button>
+<button type="button" id="lalt" class="llink">Şifreyi değiştir</button>
+</form>
+</div>
+<div class="hdr"><h1>Personel Çizelgesi</h1><span id="stt" class="sm"></span><button id="lockb" type="button" aria-label="Kilitle ve çık" title="Kilitle ve çık">🔒</button></div>
 <div class="tabs" id="tabs" style="margin-bottom:6px"></div>
 <div class="tabs" id="tabs2"></div>
 <div class="card hide" id="nav"></div>
@@ -575,8 +622,22 @@ var sb=null,pw=null,authed=false,dirty=false,lastJson='',pushT=null,pollOn=false
 try{pw=localStorage.getItem('cizelge_pw')||null}catch(e){}
 function setSt(t){var e=document.getElementById('stt');if(e)e.textContent=t}
 function isAuthErr(m){return /Şifre|deneme/.test(m||'')}
-function showLogin(msg){authed=false;var l=document.getElementById('login');l.style.display='flex';document.getElementById('lmsg').textContent=msg||'';var i=document.getElementById('lpw');i.value='';setTimeout(function(){try{i.focus()}catch(e){}},60)}
-function hideLogin(){var a=document.activeElement;if(a&&a.blur)a.blur();document.getElementById('login').style.display='none'}
+function $l(id){return document.getElementById(id)}
+function lmsg(t,ok){var m=$l('lmsg');m.textContent=t||'';m.className='lmsg'+(ok?' ok':'')}
+function lerr(t){lmsg(t);var c=$l('lcard');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake')}
+function setShow(v){var c=$l('lcard');c.classList.toggle('show',!!v);['lpw','lp0','lp1','lp2'].forEach(function(id){$l(id).type=v?'text':'password'});[].forEach.call(c.querySelectorAll('.leye'),function(b){b.setAttribute('aria-label',v?'Şifreyi gizle':'Şifreyi göster')})}
+function setMode(m){
+ var c=$l('lcard');c.dataset.mode=m;c.classList.remove('swap');void c.offsetWidth;c.classList.add('swap');
+ $l('lsub').textContent=m==='in'?'Devam etmek için şifrenizi girin':'Yeni şifrenizi belirleyin';
+ $l('lgot').textContent=m==='in'?'Giriş':'Şifreyi kaydet';
+ $l('lalt').textContent=m==='in'?'Şifreyi değiştir':'← Girişe dön';
+ $l('lp0').autocomplete='current-password';
+}
+function showLogin(msg){
+ authed=false;$l('login').style.display='flex';setMode('in');lmsg(msg||'');
+ ['lpw','lp0','lp1','lp2'].forEach(function(id){$l(id).value=''});setShow(false);
+ setTimeout(function(){try{$l('lpw').focus()}catch(e){}},80)}
+function hideLogin(){var a=document.activeElement;if(a&&a.blur)a.blur();$l('login').style.display='none'}
 function forgetPw(){pw=null;try{localStorage.removeItem('cizelge_pw')}catch(e){}}
 function lockOut(msg){forgetPw();authed=false;dirty=false;clearTimeout(pushT);showLogin(msg)}
 function logout(){lockOut('')}
@@ -647,50 +708,42 @@ async function enter(p,fromSaved){
  startPoll();setTimeout(bkAuto,1500);
  return null
 }
-function dlg(html){var o=document.createElement('div');o.className='wdlg';o.innerHTML='<div class="wbox">'+html+'</div>';document.body.appendChild(o);o.addEventListener('click',function(e){if(e.target===o)o.remove()});return o}
-function askMenu(){
- var o=dlg('<div class="wt">Hesap</div><div class="ws">Giriş şifresini değiştirebilir veya bu cihazdan çıkış yapabilirsiniz.</div><div class="wb" style="flex-direction:column"><button id="mcp" class="on">Şifreyi değiştir</button><button id="mlo">Çıkış yap</button><button id="mx">Kapat</button></div>');
- o.querySelector('#mx').onclick=function(){o.remove()};
- o.querySelector('#mlo').onclick=function(){o.remove();logout()};
- o.querySelector('#mcp').onclick=function(){o.remove();askChange()};
-}
-function askChange(){
- var o=dlg('<div class="wt">Şifreyi değiştir</div><div class="ws">Yeni şifre en az 6 karakter olmalı.</div><input type="password" id="cp0" placeholder="Şu anki şifre" autocomplete="current-password" style="margin-bottom:8px"><input type="password" id="cp1" placeholder="Yeni şifre" autocomplete="new-password" style="margin-bottom:8px"><input type="password" id="cp2" placeholder="Yeni şifre (tekrar)" autocomplete="new-password" style="margin-bottom:8px"><div id="cpm" class="sm" style="min-height:18px;margin-bottom:8px"></div><div class="wb"><button id="cpx">Vazgeç</button><button id="cpok" class="on">Kaydet</button></div>');
- var m=o.querySelector('#cpm'),busy=false;
- o.querySelector('#cpx').onclick=function(){o.remove()};
- o.querySelector('#cpok').onclick=async function(){
-  if(busy)return;
-  var a=o.querySelector('#cp0').value,b=o.querySelector('#cp1').value,c=o.querySelector('#cp2').value;
-  if(!a||!b){m.textContent='Alanları doldurun';return}
-  if(b.length<6){m.textContent='Yeni şifre en az 6 karakter olmalı';return}
-  if(b!==c){m.textContent='Yeni şifreler aynı değil';return}
-  busy=true;m.textContent='Kaydediliyor…';
-  try{var r=await sb.rpc('cizelge_change_pw',{p_old:a,p_new:b}),d=r.data;
-   if(r.error||!d){m.textContent='Bağlantı hatası';busy=false;return}
-   if(!d.ok){m.textContent=d.error||'Hata';busy=false;return}
-   pw=b;try{localStorage.setItem('cizelge_pw',b)}catch(e){}
-   m.textContent='Şifre değiştirildi ✓';setTimeout(function(){o.remove()},900)
-  }catch(e){m.textContent='Bağlantı hatası';busy=false}
- };
-}
 window.addEventListener('load',async function(){
- var lb=document.getElementById('lockb');if(lb)lb.onclick=askMenu;
- var inp=document.getElementById('lpw'),btn=document.getElementById('lgo'),msg=document.getElementById('lmsg'),busy=false;
- if(!window.supabase){msg.textContent='Bulut bağlantısı kurulamadı. Sayfayı yenileyin.';return}
- sb=window.supabase.createClient(CFG.URL,CFG.KEY);
- async function go(){
-  if(busy)return;var v=inp.value;if(!v){msg.textContent='Şifreyi girin';return}
-  busy=true;btn.disabled=true;msg.textContent='Kontrol ediliyor…';
-  var e=await enter(v,false);
-  busy=false;btn.disabled=false;
-  if(e){msg.textContent=e;inp.select()}
+ var lb=$l('lockb');if(lb)lb.onclick=logout;
+ var card=$l('lcard'),busy=false;
+ function lock(v){busy=v;$l('lgo').disabled=v;card.classList.toggle('busy',v)}
+ [].forEach.call(card.querySelectorAll('.leye'),function(b){b.onclick=function(){setShow(!card.classList.contains('show'))}});
+ $l('lalt').onclick=function(){if(busy)return;var m=card.dataset.mode==='in'?'ch':'in';setMode(m);lmsg('');setTimeout(function(){try{$l(m==='in'?'lpw':'lp0').focus()}catch(e){}},60)};
+ async function goIn(){
+  var v=$l('lpw').value;if(!v){lerr('Şifreyi girin');return}
+  lock(true);lmsg('Kontrol ediliyor…');
+  var e=await enter(v,false);lock(false);
+  if(e){lerr(e);var i=$l('lpw');try{i.focus();i.select()}catch(x){}}
  }
- btn.onclick=go;inp.onkeydown=function(e){if(e.key==='Enter')go()};
+ async function goCh(){
+  var a=$l('lp0').value,b=$l('lp1').value,c=$l('lp2').value;
+  if(!a||!b||!c){lerr('Tüm alanları doldurun');return}
+  if(b.length<6){lerr('Yeni şifre en az 6 karakter olmalı');return}
+  if(b!==c){lerr('Yeni şifreler aynı değil');return}
+  if(b===a){lerr('Yeni şifre eskisiyle aynı olamaz');return}
+  lock(true);lmsg('Kaydediliyor…');
+  try{
+   var r=await sb.rpc('cizelge_change_pw',{p_old:a,p_new:b}),d=r.data;
+   if(r.error||!d){lock(false);lerr('Bağlantı hatası. İnternetinizi kontrol edin.');return}
+   if(!d.ok){lock(false);lerr(d.error||'Hata');return}
+   lmsg('Şifre değiştirildi ✓',true);
+   var e=await enter(b,false);lock(false);
+   if(e){setMode('in');lerr(e)}
+  }catch(x){lock(false);lerr('Bağlantı hatası. İnternetinizi kontrol edin.')}
+ }
+ card.addEventListener('submit',function(e){e.preventDefault();if(busy)return;if(card.dataset.mode==='in')goIn();else goCh()});
+ if(!window.supabase){lerr('Bulut bağlantısı kurulamadı. Sayfayı yenileyin.');return}
+ sb=window.supabase.createClient(CFG.URL,CFG.KEY);
  if(pw){
-  msg.textContent='Giriş yapılıyor…';
+  lmsg('Giriş yapılıyor…');
   var e=await enter(pw,true);
   if(e){forgetPw();showLogin(/Şifre/.test(e)?'Şifre değişmiş. Yeniden giriş yapın.':e)}
- }else{inp.focus()}
+ }else{try{$l('lpw').focus()}catch(x){}}
 });
 if('serviceWorker' in navigator)window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
 function rn(i){return ['Bahçelievler','Yenibosna'][i]}
