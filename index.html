@@ -349,9 +349,13 @@ html[data-pre] .av{box-shadow:0 0 0 2px var(--pri)}
 
 .hdr{display:flex;align-items:center;gap:10px;margin:6px 0 12px}.hdr h1{flex:1;margin:0}.hdr .sm{white-space:nowrap}
 #lockb{flex:0 0 auto;width:40px;height:40px;padding:0;font-size:18px;display:flex;align-items:center;justify-content:center}
-body.ro select,body.ro textarea,body.ro #micin,body.ro .lv,body.ro .csb,body.ro .chip button,body.ro .cgh,body.ro .gh,body.ro .dl,body.ro .fm,body.ro .rqcap button,body.ro .grid input,body.ro #itms button,body.ro #lvtypes button,body.ro .lkb,body.ro .er,body.ro .wkman button,body.ro .weeks button.wadd,body.ro #bkn,body.ro #bkl{pointer-events:none;opacity:.55}
+#login{background:#0b1020;z-index:200}
+#login .wbox{background:#141b33;border-color:rgba(255,255,255,.12)}
+#login input{margin-bottom:8px}
+#login .wb button{background:var(--pri,#0063B1);color:#fff;border-color:transparent;font-weight:700}
 </style></head><body>
-<div class="hdr"><h1>Personel Çizelgesi</h1><span id="stt" class="sm"></span><button id="lockb" type="button" aria-label="Düzenleme kilidi">🔒</button></div>
+<div id="login" class="wdlg"><div class="wbox"><div class="wt">Personel Çizelgesi</div><div class="ws">Devam etmek için şifreyi girin.</div><input type="password" id="lpw" autocomplete="current-password" autocapitalize="off" spellcheck="false" placeholder="Şifre"><div id="lmsg" class="sm" style="min-height:18px;margin-bottom:8px"></div><div class="wb"><button id="lgo" type="button">Giriş</button></div></div></div>
+<div class="hdr"><h1>Personel Çizelgesi</h1><span id="stt" class="sm"></span><button id="lockb" type="button" aria-label="Hesap">🔑</button></div>
 <div class="tabs" id="tabs" style="margin-bottom:6px"></div>
 <div class="tabs" id="tabs2"></div>
 <div class="card hide" id="nav"></div>
@@ -567,25 +571,29 @@ function migrateItems(){
 }
 function ens(){if(!S.gl)S.gl={};if(!S.gp)S.gp={};if(!S.co)S.co={};if(!S.rv)S.rv={};if(!S.codes)S.codes=[];while(S.codes.length<N)S.codes.push('');if(!S.gi)migrateItems();if(!S.pv)S.pv=pvDef();if(!ens.d){wk=Math.max(0,Math.min(S.w.length-1,curWk()));ens.d=1}if(wk>=S.w.length)wk=Math.max(0,S.w.length-1)}
 var CFG={URL:'https://wogswssxyfotwkeflycl.supabase.co',KEY:'sb_publishable_PbxaNErJXA0kll1lcF-Zbg_uwkW638W'};
-var sb=null,adminPin=null,ro=true,dirty=false,lastJson='',pushT=null;
-try{adminPin=localStorage.getItem('cizelge_pin')||null}catch(e){}
+var sb=null,pw=null,authed=false,dirty=false,lastJson='',pushT=null,pollOn=false;
+try{pw=localStorage.getItem('cizelge_pw')||null}catch(e){}
 function setSt(t){var e=document.getElementById('stt');if(e)e.textContent=t}
-function setRo(v){ro=v;document.body.classList.toggle('ro',v);var b=document.getElementById('lockb');if(b){b.textContent=v?'🔒':'✏️';b.title=v?'Salt okunur. Düzenlemek için yönetici PIN girin':'Düzenleme açık. Kilitlemek için dokunun'}}
-function lockEdit(clear){adminPin=null;dirty=false;if(clear){try{localStorage.removeItem('cizelge_pin')}catch(e){}}setRo(true);setSt('Salt okunur')}
+function isAuthErr(m){return /Şifre|deneme/.test(m||'')}
+function showLogin(msg){authed=false;var l=document.getElementById('login');l.style.display='flex';document.getElementById('lmsg').textContent=msg||'';var i=document.getElementById('lpw');i.value='';setTimeout(function(){try{i.focus()}catch(e){}},60)}
+function hideLogin(){var a=document.activeElement;if(a&&a.blur)a.blur();document.getElementById('login').style.display='none'}
+function forgetPw(){pw=null;try{localStorage.removeItem('cizelge_pw')}catch(e){}}
+function lockOut(msg){forgetPw();authed=false;dirty=false;clearTimeout(pushT);showLogin(msg)}
+function logout(){lockOut('')}
 async function pushNow(){
- if(!sb||ro||!adminPin)return;
+ if(!sb||!authed||!pw)return;
  var j=JSON.stringify(S);lastJson=j;dirty=false;setSt('Kaydediliyor…');
  try{
-  var r=await sb.rpc('cizelge_set',{p_pin:adminPin,p_json:j,p_t:Date.now()});
+  var r=await sb.rpc('cizelge_set',{p_pin:pw,p_json:j,p_t:Date.now()});
   if(r.error)throw r.error;
   var d=r.data;
   if(d&&d.ok){setSt('Senkronize ✓')}
-  else{lastJson='';dirty=true;setSt((d&&d.error)||'Kaydedilemedi');if(d&&/PIN|yetki/i.test(d.error||''))lockEdit(true)}
+  else{lastJson='';dirty=true;if(d&&isAuthErr(d.error))lockOut('Şifre değişmiş. Yeniden giriş yapın.');else setSt((d&&d.error)||'Kaydedilemedi')}
  }catch(e){lastJson='';dirty=true;setSt('Senkron hatası — yalnızca bu cihazda kayıtlı')}
 }
 function save(){
  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
- if(sb&&!ro){dirty=true;clearTimeout(pushT);pushT=setTimeout(pushNow,600)}
+ if(sb&&authed){dirty=true;clearTimeout(pushT);pushT=setTimeout(pushNow,600)}
 }
 function applyRemote(j){
  if(j===lastJson||dirty)return;
@@ -595,65 +603,94 @@ function applyRemote(j){
   buildNames();show()}}catch(e){}
 }
 async function loadRemote(first){
- var r=await sb.from('cizelge_doc').select('json').eq('id','main').maybeSingle();
+ var r=await sb.rpc('cizelge_get',{p_pin:pw});
  if(r.error)throw r.error;
- if(r.data&&r.data.json){if(first)lastJson='';applyRemote(r.data.json);if(!dirty)setSt(ro?'Salt okunur':'Senkronize ✓')}
- else if(first&&!ro)pushNow();
+ var d=r.data;
+ if(d&&d.ok){
+  if(d.json){if(first)lastJson='';applyRemote(d.json);if(!dirty)setSt('Senkronize ✓')}
+  else if(first)pushNow();
+ }else if(d&&isAuthErr(d.error)){lockOut('Şifre değişmiş. Yeniden giriş yapın.')}
 }
 async function bkList(cb){
- if(!sb||ro||!adminPin){cb(null);return}
- try{var r=await sb.rpc('cizelge_yedek_list',{p_pin:adminPin}),d=r.data;
+ if(!sb||!authed||!pw){cb(null);return}
+ try{var r=await sb.rpc('cizelge_yedek_list',{p_pin:pw}),d=r.data;
   if(r.error||!d||!d.ok){cb(null);return}
   cb(d.items.map(function(x){return {id:x.id,t:+x.t,n:x.n||'',w:x.w||0}}))}catch(e){cb(null)}
 }
 async function bkMake(note,cb){
- if(!sb||ro||!adminPin){if(cb)cb(false);return}
- try{var r=await sb.rpc('cizelge_yedek_al',{p_pin:adminPin,p_note:note,p_json:JSON.stringify(S),p_w:S.w.length});
+ if(!sb||!authed||!pw){if(cb)cb(false);return}
+ try{var r=await sb.rpc('cizelge_yedek_al',{p_pin:pw,p_note:note,p_json:JSON.stringify(S),p_w:S.w.length});
   if(cb)cb(!!(r.data&&r.data.ok))}catch(e){if(cb)cb(false)}
 }
 async function bkGet(id,cb){
- try{var r=await sb.rpc('cizelge_yedek_get',{p_pin:adminPin,p_id:id});cb(r.data&&r.data.ok?r.data.json:null)}catch(e){cb(null)}
+ try{var r=await sb.rpc('cizelge_yedek_get',{p_pin:pw,p_id:id});cb(r.data&&r.data.ok?r.data.json:null)}catch(e){cb(null)}
 }
 function bkAuto(){bkList(function(a){if(a===null)return;if(!a.length||Date.now()-a[0].t>20*36e5)bkMake('Otomatik')})}
 function bkDate(t){var d=new Date(t);return d.getDate()+' '+MONS[d.getMonth()]+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
-function askPin(){
- if(!sb)return;
- var o=document.createElement('div');o.className='wdlg';
- o.innerHTML='<div class="wbox"><div class="wt">Yönetici PIN</div><div class="ws">Düzenlemek için izin sayfasındaki yönetici PIN\'ini girin.</div><input type="password" id="pinin" autocomplete="off" autocapitalize="off" spellcheck="false" style="margin-bottom:8px"><div id="pinmsg" class="sm" style="min-height:18px;margin-bottom:8px"></div><div class="wb"><button id="pinx">Vazgeç</button><button id="pinok" class="on">Giriş</button></div></div>';
- document.body.appendChild(o);
- var inp=o.querySelector('#pinin'),msg=o.querySelector('#pinmsg');inp.focus();
- function close(){o.remove()}
- o.querySelector('#pinx').onclick=close;
- async function go(){
-  var v=(inp.value||'').trim();if(!v){msg.textContent='PIN girin';return}
-  msg.textContent='Kontrol ediliyor…';
-  try{var r=await sb.rpc('admin_login',{p_pin:v}),d=r.data;
-   if(r.error||!d){msg.textContent='Bağlantı hatası';return}
-   if(!d.ok){msg.textContent=d.error||'PIN hatalı';return}
-   adminPin=v;try{localStorage.setItem('cizelge_pin',v)}catch(e){}
-   setRo(false);close();setSt('Düzenleme açık');loadRemote(false).catch(function(){});setTimeout(bkAuto,1500);
-  }catch(e){msg.textContent='Bağlantı hatası'}
- }
- o.querySelector('#pinok').onclick=go;
- inp.onkeydown=function(e){if(e.key==='Enter')go()};
+function startPoll(){
+ if(pollOn)return;pollOn=true;
+ function tick(){if(document.hidden||!authed)return;if(dirty)pushNow();else loadRemote(false).catch(function(){})}
+ setInterval(tick,10000);
+ document.addEventListener('visibilitychange',tick);
+}
+async function enter(p,fromSaved){
+ // dönüş: null = girildi, metin = hata mesajı
+ var r;
+ try{r=await sb.rpc('cizelge_login',{p_pin:p})}catch(e){r={error:e}}
+ if(r.error||!r.data){
+  if(fromSaved){authed=true;hideLogin();setSt('Çevrimdışı — cihazdaki kayıt gösteriliyor');startPoll();return null}
+  return 'Bağlantı hatası. İnternetinizi kontrol edin.'}
+ if(!r.data.ok)return r.data.error||'Şifre hatalı';
+ pw=p;try{localStorage.setItem('cizelge_pw',p)}catch(e){}
+ authed=true;hideLogin();setSt('Bağlanıyor…');
+ try{await loadRemote(true)}catch(e){setSt('Çevrimdışı — cihazdaki kayıt gösteriliyor')}
+ startPoll();setTimeout(bkAuto,1500);
+ return null
+}
+function dlg(html){var o=document.createElement('div');o.className='wdlg';o.innerHTML='<div class="wbox">'+html+'</div>';document.body.appendChild(o);o.addEventListener('click',function(e){if(e.target===o)o.remove()});return o}
+function askMenu(){
+ var o=dlg('<div class="wt">Hesap</div><div class="ws">Giriş şifresini değiştirebilir veya bu cihazdan çıkış yapabilirsiniz.</div><div class="wb" style="flex-direction:column"><button id="mcp" class="on">Şifreyi değiştir</button><button id="mlo">Çıkış yap</button><button id="mx">Kapat</button></div>');
+ o.querySelector('#mx').onclick=function(){o.remove()};
+ o.querySelector('#mlo').onclick=function(){o.remove();logout()};
+ o.querySelector('#mcp').onclick=function(){o.remove();askChange()};
+}
+function askChange(){
+ var o=dlg('<div class="wt">Şifreyi değiştir</div><div class="ws">Yeni şifre en az 6 karakter olmalı.</div><input type="password" id="cp0" placeholder="Şu anki şifre" autocomplete="current-password" style="margin-bottom:8px"><input type="password" id="cp1" placeholder="Yeni şifre" autocomplete="new-password" style="margin-bottom:8px"><input type="password" id="cp2" placeholder="Yeni şifre (tekrar)" autocomplete="new-password" style="margin-bottom:8px"><div id="cpm" class="sm" style="min-height:18px;margin-bottom:8px"></div><div class="wb"><button id="cpx">Vazgeç</button><button id="cpok" class="on">Kaydet</button></div>');
+ var m=o.querySelector('#cpm'),busy=false;
+ o.querySelector('#cpx').onclick=function(){o.remove()};
+ o.querySelector('#cpok').onclick=async function(){
+  if(busy)return;
+  var a=o.querySelector('#cp0').value,b=o.querySelector('#cp1').value,c=o.querySelector('#cp2').value;
+  if(!a||!b){m.textContent='Alanları doldurun';return}
+  if(b.length<6){m.textContent='Yeni şifre en az 6 karakter olmalı';return}
+  if(b!==c){m.textContent='Yeni şifreler aynı değil';return}
+  busy=true;m.textContent='Kaydediliyor…';
+  try{var r=await sb.rpc('cizelge_change_pw',{p_old:a,p_new:b}),d=r.data;
+   if(r.error||!d){m.textContent='Bağlantı hatası';busy=false;return}
+   if(!d.ok){m.textContent=d.error||'Hata';busy=false;return}
+   pw=b;try{localStorage.setItem('cizelge_pw',b)}catch(e){}
+   m.textContent='Şifre değiştirildi ✓';setTimeout(function(){o.remove()},900)
+  }catch(e){m.textContent='Bağlantı hatası';busy=false}
+ };
 }
 window.addEventListener('load',async function(){
- var lb=document.getElementById('lockb');if(lb)lb.onclick=function(){if(ro)askPin();else lockEdit(true)};
- setRo(true);
- if(!window.supabase){setSt('Bulut bağlantısı kurulamadı');return}
- sb=window.supabase.createClient(CFG.URL,CFG.KEY,{realtime:{params:{eventsPerSecond:5}}});
- setSt('Bağlanıyor…');
- if(adminPin){
-  try{var r=await sb.rpc('admin_login',{p_pin:adminPin});
-   if(r.data&&r.data.ok)setRo(false);else if(r.data)lockEdit(true)}
-  catch(e){setRo(false)}
+ var lb=document.getElementById('lockb');if(lb)lb.onclick=askMenu;
+ var inp=document.getElementById('lpw'),btn=document.getElementById('lgo'),msg=document.getElementById('lmsg'),busy=false;
+ if(!window.supabase){msg.textContent='Bulut bağlantısı kurulamadı. Sayfayı yenileyin.';return}
+ sb=window.supabase.createClient(CFG.URL,CFG.KEY);
+ async function go(){
+  if(busy)return;var v=inp.value;if(!v){msg.textContent='Şifreyi girin';return}
+  busy=true;btn.disabled=true;msg.textContent='Kontrol ediliyor…';
+  var e=await enter(v,false);
+  busy=false;btn.disabled=false;
+  if(e){msg.textContent=e;inp.select()}
  }
- try{await loadRemote(true)}catch(e){setSt('Çevrimdışı — cihazdaki kayıt gösteriliyor')}
- if(!ro)setTimeout(bkAuto,1500);
- try{sb.channel('cizelge-canli').on('postgres_changes',{event:'*',schema:'public',table:'cizelge_doc'},function(p){var n=p&&p.new;if(n&&n.json)applyRemote(n.json)}).subscribe()}catch(e){}
- function tick(){if(document.hidden)return;if(dirty&&!ro)pushNow();else loadRemote(false).catch(function(){})}
- setInterval(tick,20000);
- document.addEventListener('visibilitychange',tick);
+ btn.onclick=go;inp.onkeydown=function(e){if(e.key==='Enter')go()};
+ if(pw){
+  msg.textContent='Giriş yapılıyor…';
+  var e=await enter(pw,true);
+  if(e){forgetPw();showLogin(/Şifre/.test(e)?'Şifre değişmiş. Yeniden giriş yapın.':e)}
+ }else{inp.focus()}
 });
 if('serviceWorker' in navigator)window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
 function rn(i){return ['Bahçelievler','Yenibosna'][i]}
@@ -743,7 +780,7 @@ function applyPreset(){
 function bkUI(box){
  box.innerHTML='<div class="weeks" style="margin:0 0 8px"><button id="bkn" style="flex:1 1 0">Şimdi yedekle</button><button id="bkl" style="flex:1 1 0">Yedekten yükle</button></div><div id="bkm" class="sm"></div><div id="bkr"></div>';
  var m=box.querySelector('#bkm'),lst=box.querySelector('#bkr');
- if(!sb||ro){m.textContent='Yedek için yönetici PIN girilmeli.'}
+ if(!sb||!authed){m.textContent='Yedek için giriş yapılmalı.'}
  box.querySelector('#bkn').onclick=function(){m.textContent='Yedekleniyor…';bkMake('Elle',function(ok){m.textContent=ok?'Yedek alındı ✓ ('+bkDate(Date.now())+')':'Yedek alınamadı.'})};
  box.querySelector('#bkl').onclick=function(){
   if(lst.innerHTML){lst.innerHTML='';return}
