@@ -688,9 +688,24 @@ async function bkGet(id,cb){
 }
 function bkAuto(){bkList(function(a){if(a===null)return;if(!a.length||Date.now()-a[0].t>20*36e5)bkMake('Otomatik')})}
 function bkDate(t){var d=new Date(t);return d.getDate()+' '+MONS[d.getMonth()]+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+var NIL={id:null,days:{}},nilTick=0;
+function isoD(w,d){var x=wkDt(w,d);return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2)}
+async function loadNil(){
+ if(!sb)return;
+ try{
+  if(!NIL.id){var r=await sb.from('staff').select('id').ilike('name','Nilgün Gül').limit(1);if(r.error)throw r.error;if(!r.data||!r.data.length)return;NIL.id=r.data[0].id}
+  var r2=await sb.from('leaves').select('day').eq('staff_id',NIL.id);
+  if(r2.error)throw r2.error;
+  var m={};(r2.data||[]).forEach(function(x){m[x.day]=1});
+  var changed=Object.keys(m).sort().join()!==Object.keys(NIL.days).sort().join();
+  NIL.days=m;
+  var a=document.activeElement;
+  if(changed&&authed&&tab==='gv'&&!(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)))buildGV();
+ }catch(e){}
+}
 function startPoll(){
  if(pollOn)return;pollOn=true;
- function tick(){if(document.hidden||!authed)return;if(dirty)pushNow();else loadRemote(false).catch(function(){})}
+ function tick(){if(document.hidden||!authed)return;if(dirty)pushNow();else loadRemote(false).catch(function(){});if(++nilTick%3===0)loadNil()}
  setInterval(tick,10000);
  document.addEventListener('visibilitychange',tick);
 }
@@ -705,7 +720,7 @@ async function enter(p,fromSaved){
  pw=p;try{localStorage.setItem('cizelge_pw',p)}catch(e){}
  authed=true;hideLogin();setSt('Bağlanıyor…');
  try{await loadRemote(true)}catch(e){setSt('Çevrimdışı — cihazdaki kayıt gösteriliyor')}
- startPoll();setTimeout(bkAuto,1500);
+ startPoll();setTimeout(bkAuto,1500);loadNil();
  return null
 }
 window.addEventListener('load',async function(){
@@ -1191,7 +1206,8 @@ function buildText(w,d){
   if(r===0)L.push(ctr('-- '+rn(0).toLocaleUpperCase('tr')+' --'));
   blocks.forEach(function(b){if(b.head)L.push(b.head);b.body.forEach(function(x){L.push(x)});L.push('')});any=true});
  if(any)L.unshift('🏫OKULLARDA GÖREVLİ EKİPLER 🏫','');
- L.push('*🏍️KARTALLAR EKİP LİSTESİ🏍️*','',' *VARDİYA KOMİSERİ*','  30/60 Nilgün GÜL','');
+ L.push('*🏍️KARTALLAR EKİP LİSTESİ🏍️*','');
+ if(!NIL.days[isoD(w,d)])L.push(' *VARDİYA KOMİSERİ*','  30/60 Nilgün GÜL','');
  var onPt={};[0,1].forEach(function(r){(S.gl[lkey(w,d,'t',r)]||[]).forEach(function(n){gpl(w,d,'t',r,n).forEach(function(p){onPt[p]=1})})});
  [0,1].forEach(function(r){
   var ps=[];for(var p=0;p<N;p++)if(S.w[w][p][d]===String(r+1)&&(!onPt[p]||S.rv[w+'|'+d+'|'+p])&&codeOf(p)!=='30/60')ps.push(p);
