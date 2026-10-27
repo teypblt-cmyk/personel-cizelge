@@ -556,8 +556,8 @@ function pdfBytes(imgs,W,H){
  obj(2,'<< /Type /Pages /Kids ['+kids.join(' ')+'] /Count '+n+' >>');
  imgs.forEach(function(im,i){var a=3+3*i,c=4+3*i,p=5+3*i;
   offs[a]=off;push(a+' 0 obj\n<< /Type /XObject /Subtype /Image /Width '+im.w+' /Height '+im.h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+im.b.length+' >>\nstream\n');push(im.b);push('\nendstream\nendobj\n');
-  var cs='q '+W+' 0 0 '+H+' 0 0 cm /Im'+i+' Do Q';obj(c,'<< /Length '+cs.length+' >>\nstream\n'+cs+'\nendstream');
-  obj(p,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+W+' '+H+'] /Resources << /XObject << /Im'+i+' '+a+' 0 R >> >> /Contents '+c+' 0 R >>')});
+  var pw=im.pw||W,ph=im.ph||H,cs='q '+pw+' 0 0 '+ph+' 0 0 cm /Im'+i+' Do Q';obj(c,'<< /Length '+cs.length+' >>\nstream\n'+cs+'\nendstream');
+  obj(p,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+pw+' '+ph+'] /Resources << /XObject << /Im'+i+' '+a+' 0 R >> >> /Contents '+c+' 0 R >>')});
  var tot=3+3*n,xr=off;push('xref\n0 '+tot+'\n0000000000 65535 f \n');
  for(var k=1;k<tot;k++)push(('0000000000'+offs[k]).slice(-10)+' 00000 n \n');
  push('trailer\n<< /Size '+tot+' /Root 1 0 R >>\nstartxref\n'+xr+'\n%%EOF');
@@ -567,20 +567,34 @@ function pdfT(){var P=PRES[S.pk]||PRES[0],hx=function(c){c=String(c||'#000').rep
 function pdfReport(){
  var T=pdfT();var tb=document.querySelector('#pv table');if(!tb)return null;
  var P=S.pv,rows=[].map.call(tb.querySelectorAll('tr'),function(tr){return [].map.call(tr.children,function(c){return {t:c.textContent.replace(/\s+/g,' ').trim(),n:c.classList.contains('n')}})});
- var W=842,H=595,SC=2,M=28,top=78,bot=30,FS=11,RH=20,PAD=9,f=FS+'px '+T.ff,
+ // Sayfa boyutu tablonun boyutuna göre hesaplanır: küçük tablo küçük sayfada, büyük tablo büyük sayfada
+ var SC=2,M=28,bot=30,FS=11,RH=20,PAD=9,MINW=300,MAXW=1190,MAXH=1190,f=FS+'px '+T.ff,
   mc=document.createElement('canvas'),mx=mc.getContext('2d');mx.font='600 '+f;
  var ncol=Math.max.apply(null,rows.map(function(r){return r.length})),cw=[];
  for(var c=0;c<ncol;c++){var w0=40;rows.forEach(function(r){if(r[c])w0=Math.max(w0,mx.measureText(r[c].t).width+PAD*2)});cw.push(w0)}
- var tw=cw.reduce(function(a,b){return a+b},0),s=Math.min(1,(W-2*M)/tw),rh=RH*s,perPage=Math.max(3,Math.floor((H-top-bot)/rh)-1),body=rows.slice(1),pages=Math.max(1,Math.ceil(body.length/perPage));
+ var tw=cw.reduce(function(a,b){return a+b},0),W=Math.min(MAXW,Math.max(MINW,Math.ceil(tw+2*M))),s=Math.min(1,(W-2*M)/tw),rh=RH*s;
+ var title='Personel Çizelgesi — Özet Raporu',d0=new Date(),ds=d0.toLocaleDateString('tr-TR')+' '+d0.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+ var tsz=20;mx.font='700 '+tsz+'px '+T.hf;var tW=mx.measureText(title).width;
+ if(tW>W-2*M){tsz=Math.max(12,Math.floor(20*(W-2*M)/tW));mx.font='700 '+tsz+'px '+T.hf;tW=mx.measureText(title).width}
+ mx.font='11px '+T.ff;var dW=mx.measureText(ds).width,dInline=tW+dW+24<=W-2*M;
+ var desc=['Satırlar: '+(P.rows.map(pvName).join(' › ')||'—'),'Sütunlar: '+(P.cols.map(pvName).join(' › ')||'—')];
+ if(P.fl.length)desc.push('Filtre: '+P.fl.map(function(id){return pvName(id)+' = '+((P.fv[id]&&P.fv[id].length)?P.fv[id].join(', '):'Tümü')}).join(', '));
+ var lines=[],cur='',mxw=W-2*M;
+ function wrapSeg(seg){var ws=seg.split(' '),ln='';ws.forEach(function(w){var t=ln?ln+' '+w:w;if(mx.measureText(t).width<=mxw||!ln)ln=t;else{lines.push(ln);ln=w}});return ln}
+ desc.forEach(function(seg){var t=cur?cur+'   '+seg:seg;if(mx.measureText(t).width<=mxw)cur=t;else{if(cur)lines.push(cur);cur=mx.measureText(seg).width<=mxw?seg:wrapSeg(seg)}});
+ if(cur)lines.push(cur);
+ var descY=dInline?54:72,top=Math.ceil(descY+(lines.length-1)*15+22);
+ var body=rows.slice(1),perPage=Math.max(3,Math.floor((MAXH-top-bot)/rh)-1),pages=Math.max(1,Math.ceil(body.length/perPage));
  var nums=[];body.forEach(function(r){r.forEach(function(c){var v=parseInt(c.t,10);if(!c.n&&!isNaN(v))nums.push(v)})});var vmax=Math.max.apply(null,nums.concat([1]));
- var desc='Satırlar: '+(P.rows.map(pvName).join(' › ')||'—')+'   Sütunlar: '+(P.cols.map(pvName).join(' › ')||'—')+(P.fl.length?'   Filtre: '+P.fl.map(function(id){return pvName(id)+' = '+((P.fv[id]&&P.fv[id].length)?P.fv[id].join(', '):'Tümü')}).join(', '):'');
- var d0=new Date(),ds=d0.toLocaleDateString('tr-TR')+' '+d0.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}),imgs=[];
+ var imgs=[];
  for(var pg=0;pg<pages;pg++){
+  var chunk=[rows[0]].concat(body.slice(pg*perPage,(pg+1)*perPage)),H=Math.ceil(top+chunk.length*rh+bot);
   var cv=document.createElement('canvas');cv.width=W*SC;cv.height=H*SC;var x=cv.getContext('2d');x.scale(SC,SC);x.fillStyle=T.bg;x.fillRect(0,0,W,H);x.fillStyle=T.pri;x.fillRect(0,0,W,6);x.textBaseline='middle';
-  x.fillStyle=T.ink;x.font='700 20px '+T.hf;x.fillText('Personel Çizelgesi — Özet Raporu',M,34);
-  x.fillStyle=T.mut;x.font='11px '+T.ff;x.fillText(desc,M,54);x.textAlign='right';x.fillText(ds,W-M,34);x.textAlign='left';
+  x.fillStyle=T.ink;x.font='700 '+tsz+'px '+T.hf;x.fillText(title,M,34);
+  x.fillStyle=T.mut;x.font='11px '+T.ff;
+  if(dInline){x.textAlign='right';x.fillText(ds,W-M,34);x.textAlign='left'}else x.fillText(ds,M,54);
+  lines.forEach(function(ln,li){x.fillText(ln,M,descY+li*15)});
   x.save();x.translate(M,top);x.scale(s,s);
-  var chunk=[rows[0]].concat(body.slice(pg*perPage,(pg+1)*perPage));
   chunk.forEach(function(r,ri){var y=ri*RH,xx=0;
    cw.forEach(function(w1,c){var cell=r[c];
     if(ri===0){x.fillStyle=T.pri;x.fillRect(xx,y,w1,RH)}
@@ -589,10 +603,11 @@ function pdfReport(){
     if(cell){x.font=(ri===0||cell.n?'600 ':'400 ')+f;x.fillStyle=ri===0?T.onc:T.ink;
      if(cell.n||ri===0&&c===0){x.textAlign='left';x.fillText(cell.t,xx+PAD,y+RH/2+.5)}else{x.textAlign='center';x.fillText(cell.t,xx+w1/2,y+RH/2+.5)}}
     xx+=w1});});
-  x.restore();x.textAlign='left';x.fillStyle=T.mut;x.font='10px '+T.ff;x.fillText('Sayfa '+(pg+1)+' / '+pages,M,H-14);
+  x.restore();x.textAlign='left';
+  if(pages>1){x.fillStyle=T.mut;x.font='10px '+T.ff;x.fillText('Sayfa '+(pg+1)+' / '+pages,M,H-14)}
   var b64=cv.toDataURL('image/jpeg',.92).split(',')[1],bin=atob(b64),u=new Uint8Array(bin.length);for(var q=0;q<bin.length;q++)u[q]=bin.charCodeAt(q);
-  imgs.push({b:u,w:cv.width,h:cv.height})}
- return new Blob([pdfBytes(imgs,W,H)],{type:'application/pdf'})}
+  imgs.push({b:u,w:cv.width,h:cv.height,pw:W,ph:H})}
+ return new Blob([pdfBytes(imgs,W,imgs[0].ph)],{type:'application/pdf'})}
 async function sharePdf(){var m=$('pdfmsg');if(m)m.textContent='';
  try{var blob=pdfReport();if(!blob){if(m)m.textContent='Önce tablo oluşturun (Satırlar veya Sütunlar kutusuna alan taşıyın).';return}
   var nm='ozet-raporu-'+new Date().toISOString().slice(0,10)+'.pdf',fl=new File([blob],nm,{type:'application/pdf'});
@@ -1127,7 +1142,7 @@ function buildReq(){
  $('rqpdf').onclick=rqPdf}
 function rqPdf(){
  var m=$('rqm2');if(m)m.textContent='';rqInit();var T=pdfT(),mt=rqMat(),HLX=rqHl();
- var W=842,H=595,SC=2,Mg=28,NW=150,top=84,RH=22,cw=(W-2*Mg-NW)/7;
+ var W=842,SC=2,Mg=28,NW=150,top=84,RH=22,H=(top-14)+34+N*RH+87,cw=(W-2*Mg-NW)/7;
  var cv=document.createElement('canvas');cv.width=W*SC;cv.height=H*SC;var x=cv.getContext('2d');x.scale(SC,SC);x.fillStyle=T.bg;x.fillRect(0,0,W,H);x.fillStyle=T.pri;x.fillRect(0,0,W,6);x.textBaseline='middle';
  var col={g:'#2fbf84',y:'#f2b705',r:'#e5546a'},F=T.ff;
  function rr(px,py,w,h,r){x.beginPath();x.moveTo(px+r,py);x.arcTo(px+w,py,px+w,py+h,r);x.arcTo(px+w,py+h,px,py+h,r);x.arcTo(px,py+h,px,py,r);x.arcTo(px,py,px+w,py,r);x.closePath()}
