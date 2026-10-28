@@ -637,6 +637,11 @@ html[data-pre="2"] .wbox{border:1.5px solid var(--gold);border-radius:8px;backgr
 .agr{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-top:1px dashed var(--line);font-size:13px}
 .agr em{font-style:normal;text-align:right;color:var(--mute)}
 .agr em i{font-style:normal;opacity:.7}
+.agsub{margin-top:8px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute)}
+.agit{margin-top:4px;padding:6px 8px;border-radius:8px;background:var(--fld,rgba(127,127,127,.08))}
+.agit>b{display:block;font-size:13px}
+.agit>b small{opacity:.7}
+.agr.empty{color:#ff9a3d}
 .agw2{margin-top:8px;font-size:13px;color:#ff9a3d;display:flex;flex-direction:column;gap:3px}
 .agok2{margin-top:6px;font-size:13px;color:#2ecc71}
 .agbtns{display:flex;gap:8px;position:sticky;bottom:0;padding-top:6px}
@@ -1715,12 +1720,20 @@ function agOpen(d){
   var m=ov.querySelector('input[name=agm]:checked');if(m)A.mode=m.value;
   ov.querySelectorAll('.agpn').forEach(function(i){A.pn[i.dataset.id]=Math.max(0,+i.value||0)});save();
   return {sef:A.sef.slice(),nB:A.nB,nY:A.nY,sefOn:A.sefOn,mode:A.mode,pn:A.pn,nos:A.nos,pairs:A.pairs}}
- $a('.agpv').onclick=function(){var o=read();plan=agPlan(d,o);_cw=wk;_cd=d;var pv='';
-  [0,1].forEach(function(r){var k2=String(r+1),ps=plan.avail.filter(function(q){return plan.reg[q]===k2}).sort(cmpP);
-   pv+='<div class="agreg g'+k2+'"><b>'+esc(rn(r))+' ('+ps.length+')</b>'+ps.map(function(q){var c=codeD(wk,d,q),tk=(plan.tasks[q]||[]).slice();
-    ['s','t'].forEach(function(k){(S.gl[lkey(wk,d,k,r)]||[]).forEach(function(id){if(gpl(wk,d,k,r,id).indexOf(q)>-1)tk.push('<i>sabit</i> '+(k==='s'?'🏫 ':'📍 ')+agName(k,r,id))})});
-    var ch=(o.sef[r]===q)?' ★':'';
-    return '<div class="agr"><span>'+(c?'<small>'+esc(c)+'</small> ':'')+esc(pn(q))+ch+'</span><em>'+(tk.length?tk.join(' · '):'bölge listesi')+'</em></div>'}).join('')+'</div>'});
+ $a('.agpv').onclick=function(){var o=read();plan=agPlan(d,o);_cw=wk;_cd=d;var pv='',pl=plan;
+  [0,1].forEach(function(r){var k2=String(r+1),ps=pl.avail.filter(function(q){return pl.reg[q]===k2}),inTask={},dbl={},sec='';
+   [['s','Okullar','🏫'],['t','Noktalar','📍']].forEach(function(K){var k=K[0],ex=S.gl[lkey(wk,d,k,r)]||[],nw=pl.gl[lkey(wk,d,k,r)]||[],ac=agItems(d,k,r);
+    var ids=S.gi[k][r].map(function(x){return x.id}).filter(function(id){return ex.indexOf(id)>-1||nw.indexOf(id)>-1||ac.indexOf(id)>-1});
+    if(!ids.length)return;
+    var rows=[];ids.forEach(function(id){var pk=pkey(wk,d,k,r,id),old=gpl(wk,d,k,r,id),nw2=pl.gp[pk]||[];
+     var all=old.concat(nw2.filter(function(q){return old.indexOf(q)<0}));all.forEach(function(q){inTask[q]=1;if(k==='s')dbl[q]=(dbl[q]||0)+1});
+     rows.push({id:id,old:old,all:all.sort(cmpP)})});
+    sec+='<div class="agsub">'+K[2]+' '+K[1]+'</div>'+rows.map(function(x){
+     return '<div class="agit"><b>'+esc(agName(k,r,x.id))+' <small>('+x.all.length+')</small></b>'+(x.all.length?x.all.map(function(q){var c=codeD(wk,d,q);
+      return '<div class="agr"><span>'+(c?'<small>'+esc(c)+'</small> ':'')+esc(pn(q))+(o.sef[r]===q?' ★':'')+'</span><em>'+(x.old.indexOf(q)>-1?'<i>sabit</i>':(k==='s'&&dbl[q]>1?'çift okul':''))+'</em></div>'}).join(''):'<div class="agr empty"><span>kimse yok</span></div>')+'</div>'}).join('')});
+   var free=ps.filter(function(q){return !inTask[q]}).sort(cmpP);
+   if(free.length)sec+='<div class="agsub">Bölge listesi (görevsiz)</div><div class="agit">'+free.map(function(q){var c=codeD(wk,d,q);return '<div class="agr"><span>'+(c?'<small>'+esc(c)+'</small> ':'')+esc(pn(q))+(o.sef[r]===q?' ★':'')+'</span><em></em></div>'}).join('')+'</div>';
+   pv+='<div class="agreg g'+k2+'"><b>'+esc(rn(r))+' ('+ps.length+')</b>'+sec+'</div>'});
   if(plan.warn.length)pv+='<div class="agw2">'+plan.warn.map(function(x){return '<div>⚠ '+esc(x)+'</div>'}).join('')+'</div>';
   else pv+='<div class="agok2">Eksik ya da çakışma yok.</div>';
   $a('.agprev').innerHTML=pv;$a('.agok').disabled=false;ov.querySelector('.agb').scrollTop=ov.querySelector('.agb').scrollHeight};
