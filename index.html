@@ -1785,7 +1785,7 @@ function agOpen(d){
   var YN=function(a2,q){return '<button type="button" data-a="'+a2+'y">Evet</button><button type="button" data-a="'+a2+'n">Hayır</button>'};
   [0,1].forEach(function(r){var bx=$a('.agfix[data-r="'+r+'"]');if(!bx)return;var st=fxs[r];
    var chief=null;L.forEach(function(f){if(f.r===r&&f.chief)chief=f});
-   var line=function(f){var i=L.indexOf(f);return '<div class="agfr"><span>'+(f.chief?'★ ':'')+esc(pn(f.p))+' · '+(f.s?(f.sid?esc(agName('s',f.sr,f.sid)):'okul otomatik'):'okul yok')+' · '+(f.id?esc(agName('t',r,f.id)):'nokta hayır')+'</span><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'};
+   var line=function(f){var i=L.indexOf(f);return '<div class="agfr"><span>'+(f.chief?'★ ':'')+esc(pn(f.p))+' · '+(d>=5?'':(f.s?(f.sid?esc(agName('s',f.sr,f.sid)):'okul otomatik'):'okul yok')+' · ')+(f.id?esc(agName('t',r,f.id)):'nokta hayır')+'</span><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'};
    var h2='';
    if(chief)h2+=line(chief);
    else if(!(st&&st.chief))h2+='<div class="agrow"><label>Şef</label><select data-a="chief"><option value="">— seç —</option>'+avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}).map(function(q){return '<option value="'+q+'">'+esc(pn(q))+'</option>'}).join('')+'</select></div>';
@@ -1806,10 +1806,10 @@ function agOpen(d){
     if(a2==='new')fxs[r]={p:null,step:'p'};else if(a2==='x')fxs[r]=null;
     else if(a2==='sy'||a2==='sn'){fxs[r].s=a2==='sy';fxs[r].step=a2==='sy'?'sid':'t'}
     else if(a2==='tn'){return done(null)}else if(a2==='ty'){fxs[r].step='id'}
-    else if(a2==='pick'){var v=b.dataset.v;if(fxs[r].step==='p'){fxs[r].p=+v;fxs[r].step='s'}else if(fxs[r].step==='sid'){if(v!=='auto'){var pr=v.split('|');fxs[r].sr=+pr[0];fxs[r].sid=pr[1]}fxs[r].step='t'}else return done(v)}
+    else if(a2==='pick'){var v=b.dataset.v;if(fxs[r].step==='p'){fxs[r].p=+v;fxs[r].step=d<5?'s':'t';fxs[r].s=false}else if(fxs[r].step==='sid'){if(v!=='auto'){var pr=v.split('|');fxs[r].sr=+pr[0];fxs[r].sid=pr[1]}fxs[r].step='t'}else return done(v)}
     fixUI()}});
    bx.querySelectorAll('select[data-a]').forEach(function(e){e.onchange=function(){if(!e.value)return;var t=e.dataset.a;
-    if(t==='chief')fxs[r]={p:+e.value,chief:true,step:'s'};else if(t==='p'){fxs[r].p=+e.value;fxs[r].step='s'}
+    if(t==='chief')fxs[r]={p:+e.value,chief:true,step:d<5?'s':'t',s:false};else if(t==='p'){fxs[r].p=+e.value;fxs[r].step='s'}
     else if(t==='sid'){if(e.value!=='auto'){var pr=e.value.split('|');fxs[r].sr=+pr[0];fxs[r].sid=pr[1]}fxs[r].step='t'}
     else return done(e.value);fixUI()}})})}
  fixUI();
