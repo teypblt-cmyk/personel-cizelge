@@ -638,6 +638,11 @@ html[data-pre="2"] .wbox{border:1.5px solid var(--gold);border-radius:8px;backgr
 .agq{flex-wrap:wrap;gap:8px!important}.agq>span{flex:1 0 100%;font-size:14px;font-weight:600}
 .agq button{flex:1}
 .agfix .agadd{width:100%}
+.agpick{display:flex;flex-direction:column;gap:6px}.agpick>b{font-size:14px}
+.agfix .agpick button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit}
+.agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
+.agpk-h{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-top:4px}
+.agfix .agpick .agx{justify-content:center;opacity:.8}
 .agpr{padding:7px 10px!important;font-size:13px!important;border-radius:10px!important}
 .agbtns button{min-height:42px;font-size:15px;border-radius:12px}
 .agbtns{padding:8px 0 2px!important;background:var(--bg)}
@@ -1780,11 +1785,11 @@ function agOpen(d){
    if(st){var nm=st.p===null?'':esc(pn(st.p));
     if(st.step==='p')h2+='<div class="agrow"><select data-a="p"><option value="">Kim?</option>'+avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}).map(function(q){return '<option value="'+q+'">'+esc(pn(q))+'</option>'}).join('')+'</select><button type="button" data-a="x">İptal</button></div>';
     else if(st.step==='s')h2+='<div class="agrow agq"><span>'+(st.chief?'★ ':'')+nm+' okula gitsin mi?</span>'+YN('s')+'</div>';
-    else if(st.step==='sid'){h2+='<div class="agrow"><select data-a="sid"><option value="">'+nm+' hangi okula?</option><option value="auto">Otomatik (en az giden)</option>';
-     [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;h2+='<optgroup label="'+esc(rn(sr))+'">'+sids.map(function(id){var c=CN.C[id+'|'+st.p]||0;return '<option value="'+sr+'|'+id+'">'+esc(agName('s',sr,id))+' · '+c+' kez</option>'}).join('')+'</optgroup>'});
-     h2+='</select><button type="button" data-a="x">İptal</button></div>'}
+    else if(st.step==='sid'){h2+='<div class="agpick"><b>'+nm+' hangi okula?</b><button type="button" data-a="pick" data-v="auto">Otomatik (en az giden)</button>';
+     [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;h2+='<div class="agpk-h">'+esc(rn(sr))+'</div>'+sids.map(function(id){var c=CN.C[id+'|'+st.p]||0;return '<button type="button" data-a="pick" data-v="'+sr+'|'+id+'"><span>'+esc(agName('s',sr,id))+'</span><em>'+c+' kez</em></button>'}).join('')});
+     h2+='<button type="button" data-a="x" class="agx">İptal</button></div>'}
     else if(st.step==='t')h2+='<div class="agrow agq"><span>'+nm+' noktaya gitsin mi?</span>'+YN('t')+'</div>';
-    else h2+='<div class="agrow"><select data-a="id"><option value="">'+nm+' hangi noktaya?</option>'+agItems(d,'t',r).map(function(id){return '<option value="'+id+'">'+esc(agName('t',r,id))+' · '+(CN.C[id+'|'+st.p]||0)+' kez</option>'}).join('')+'</select><button type="button" data-a="x">İptal</button></div>'}
+    else h2+='<div class="agpick"><b>'+nm+' hangi noktaya?</b>'+agItems(d,'t',r).map(function(id){return '<button type="button" data-a="pick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(CN.C[id+'|'+st.p]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>'}
    else h2+='<button type="button" class="agadd" data-a="new">+ Personel ekle</button>';
    bx.innerHTML=h2;
    var done=function(id){L.push({p:fxs[r].p,r:r,s:fxs[r].s,sid:fxs[r].sid||null,sr:fxs[r].sr,id:id,chief:!!fxs[r].chief});fxs[r]=null;save();lock();fixUI()};
@@ -1793,6 +1798,7 @@ function agOpen(d){
     if(a2==='new')fxs[r]={p:null,step:'p'};else if(a2==='x')fxs[r]=null;
     else if(a2==='sy'||a2==='sn'){fxs[r].s=a2==='sy';fxs[r].step=a2==='sy'?'sid':'t'}
     else if(a2==='tn'){return done(null)}else if(a2==='ty'){fxs[r].step='id'}
+    else if(a2==='pick'){var v=b.dataset.v;if(fxs[r].step==='sid'){if(v!=='auto'){var pr=v.split('|');fxs[r].sr=+pr[0];fxs[r].sid=pr[1]}fxs[r].step='t'}else return done(v)}
     fixUI()}});
    bx.querySelectorAll('select[data-a]').forEach(function(e){e.onchange=function(){if(!e.value)return;var t=e.dataset.a;
     if(t==='chief')fxs[r]={p:+e.value,chief:true,step:'s'};else if(t==='p'){fxs[r].p=+e.value;fxs[r].step='s'}
