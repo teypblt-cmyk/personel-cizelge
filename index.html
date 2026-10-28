@@ -622,8 +622,10 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agb select.agpn{flex:0 0 auto;width:62px;height:34px;font-size:14px;padding:0 6px;text-align:center;text-align-last:center;border-radius:9px}
 .agb .agpt{min-height:0}.agb .agpt label{font-size:13px;line-height:1.25}
 .agfix>.agrow>label:first-child{font-size:13px;font-weight:700;letter-spacing:.08em;color:inherit}.agfl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex:1;min-width:0}.agnm{font-weight:600}.agsf{font-size:11px;letter-spacing:.1em;padding:3px 9px;border-radius:8px;background:var(--grad,var(--pri));color:var(--onc,#fff)}.agch{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.07)}.agch.no{opacity:.55}.agfr button{display:flex!important;align-items:center;justify-content:center;width:32px;height:32px;padding:0!important;line-height:1;flex:0 0 auto;align-self:center}
-.agbox.r0,.agsec.r0{border-color:var(--ac1)}.agbox.r1,.agsec.r1{border-color:var(--ac2)}
-.agbox.r0{background:var(--a)}.agbox.r1{background:var(--b)}.agbox.r0>span,.agbox.r1>span{color:var(--rgt,#fff)}
+.agsec.r0{border-color:var(--ac1)}.agsec.r1{border-color:var(--ac2)}
+.agtt{font-weight:800;background:linear-gradient(90deg,#ff3b5c,#ff9d00,#ffe600,#2ee66b,#19c3ff,#5b6bff,#b84dff,#ff3b5c);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:agrb 4s linear infinite}
+@keyframes agrb{to{background-position:300% 0}}
+@media (prefers-reduced-motion:reduce){.agtt{animation:none}}
 .agsec.r0>.agst2,.agsec.r1>.agst2{margin:-10px -10px 2px;padding:10px 12px;border-radius:13px 13px 0 0;color:var(--rgt,#fff)}
 .agsec.r0>.agst2{background:var(--a)}.agsec.r1>.agst2{background:var(--b)}
 .agpick{display:flex;flex-direction:column;gap:6px}.agpick>b{font-size:14px}
@@ -1732,7 +1734,7 @@ function agOpen(d){
  var avail=[];for(var q=0;q<N;q++)if(!isLv(S.w[wk][q][d]))avail.push(q);
  var cB=0,cY=0;for(var q2=0;q2<N;q2++){var v=S.w[wk][q2][d];if(v==='1')cB++;if(v==='2')cY++}
  var nB=cB||A.nB||3,nY=cY||A.nY||Math.max(0,avail.length-nB);
- var h='<div class="css card"><div class="csh"><b>Otosaki · '+FD[d]+' '+dFull(wk,d)+'</b><button type="button" class="csx" aria-label="Kapat">×</button></div><div class="csl agb">';
+ var h='<div class="css card"><div class="csh"><b><span class="agtt">Otosaki</span> · '+FD[d]+' '+dFull(wk,d)+'</b><button type="button" class="csx" aria-label="Kapat">×</button></div><div class="csl agb">';
  var tot=avail.length;nB=Math.min(nB,tot);nY=tot-nB;
  var cbox=function(r,id,v){return '<div class="agbox r'+r+'"><span>'+esc(rn(r))+'</span><div class="agst"><button type="button" data-st="'+r+'" data-dl="-1" aria-label="Azalt">−</button><input id="'+id+'" type="number" inputmode="numeric" min="0" max="'+tot+'" value="'+v+'"><button type="button" data-st="'+r+'" data-dl="1" aria-label="Arttır">+</button></div></div>'};
  h+='<div class="agcnt">'+cbox(0,'agnb',nB)+cbox(1,'agny',nY)+'</div>';
@@ -1741,7 +1743,7 @@ function agOpen(d){
   ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'})}
   h+='</div>'});
  if(d<5){h+='<div class="agsec"><div class="agst2">Aynı kişiye giden okullar</div><div class="agpairs"></div></div>'}
- h+='<div class="agprev"></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled>Uygula</button><button type="button" class="agun" style="display:none">Geri al</button></div></div></div>';
+ h+='<div class="agprev"></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled>Zbam !</button><button type="button" class="agun" style="display:none">Geri al</button></div></div></div>';
  ov.innerHTML=h;document.body.appendChild(ov);
  var $a=function(x){return ov.querySelector(x)};
  function close(){ov.remove()}
