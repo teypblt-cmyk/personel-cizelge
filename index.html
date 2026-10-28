@@ -624,10 +624,9 @@ html[data-pre="2"] .wbox{border:1.5px solid var(--gold);border-radius:8px;backgr
 .agrow label.agw{flex:1;white-space:normal;color:inherit}
 .agrow select{flex:1;min-width:0}
 .agrow input[type=number]{width:64px;flex:0 0 auto;text-align:center}
-.agck,.agmode label{display:flex;align-items:center;gap:8px;font-size:14px}
-.agmode{display:flex;gap:14px;flex-wrap:wrap}
+.agck{display:flex;align-items:center;gap:8px;font-size:14px}
 .agpairs{display:flex;flex-direction:column;gap:6px}
-.agpr{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:4px 8px;border:1px solid var(--line);border-radius:8px}
+.agpr{display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 8px;border:1px solid var(--line);border-radius:8px}
 .agpr button{padding:0 6px;min-width:0;height:22px}
 .agchips{display:flex;flex-wrap:wrap;gap:6px}
 .agp{padding:6px 10px;font-size:13px;border-radius:999px}
@@ -1696,7 +1695,7 @@ function agOpen(d){
  h+='<label class="agck"><input type="checkbox" id="agso"'+(A.sefOn?' checked':'')+'> Şefler de okul/nokta görevi alsın</label>';
  [0,1].forEach(function(r){var ids=agItems(d,'t',r);if(!ids.length)return;h+='<div class="sub">'+esc(rn(r))+' noktaları · kaçar kişi</div>';
   ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><input type="number" class="agpn" data-id="'+id+'" min="0" max="'+N+'" value="'+(A.pn[id]!==undefined?A.pn[id]:1)+'"></div>'})});
- if(d<5){h+='<div class="sub">Aynı kişiye iki okul (komşu okul çifti)</div><div class="agmode">'+[['gerekirse','Gerekirse birleştir'],['ayri','Hep ayrı'],['cift','Hep çift']].map(function(m){return '<label><input type="radio" name="agm" value="'+m[0]+'"'+(A.mode===m[0]?' checked':'')+'> '+m[1]+'</label>'}).join('')+'</div>';
+ if(d<5){h+='<div class="sub">Bu gün aynı kişiye gidecek okullar</div>';
   h+='<div class="agpairs"></div>'}
  h+='<div class="sub">Okula yazılmasın</div><div class="agchips">'+avail.map(function(q){return '<button type="button" class="agp'+(A.nos[q]?' on':'')+'" data-p="'+q+'">'+esc(pn(q).split(' ')[0]+(pn(q).split(' ').length>1?' '+pn(q).split(' ').pop().charAt(0)+'.':''))+'</button>'}).join('')+'</div>';
  h+='<div class="agprev"></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled>Uygula</button><button type="button" class="agun" style="display:none">Geri al</button></div></div></div>';
@@ -1706,10 +1705,13 @@ function agOpen(d){
  ov.onclick=function(e){if(e.target===ov)close()};$a('.csx').onclick=close;
  function pairsUI(){var bx=$a('.agpairs');if(!bx)return;
   var all=[];[0,1].forEach(function(r){agItems(d,'s',r).forEach(function(id){all.push({id:id,r:r})})});
-  bx.innerHTML=A.pairs.map(function(pr,i){var a=agFindItem(pr[0]),b=agFindItem(pr[1]);if(!a||!b||a.it.off||b.it.off)return '';return '<span class="agpr">'+esc(agName('s',a.r,pr[0]))+' + '+esc(agName('s',b.r,pr[1]))+' <button type="button" data-i="'+i+'" aria-label="Çifti sil">×</button></span>'}).join('')+
+  var key=wk+'|'+d,dp=(A.dp=A.dp||{})[key]||[];
+  bx.innerHTML=A.pairs.map(function(pr,i){var a=agFindItem(pr[0]),b=agFindItem(pr[1]);if(!a||!b||a.it.off||b.it.off)return '';
+   return '<label class="agpr"><input type="checkbox" data-i="'+i+'"'+(dp.indexOf(pr[0]+'+'+pr[1])>-1?' checked':'')+'> '+esc(agName('s',a.r,pr[0]))+' + '+esc(agName('s',b.r,pr[1]))+' <button type="button" data-i="'+i+'" aria-label="Çifti sil">×</button></label>'}).join('')+
    '<div class="agrow"><select id="agpa"><option value="">Okul…</option>'+all.map(function(o){return '<option value="'+o.id+'">'+esc(agName('s',o.r,o.id))+'</option>'}).join('')+'</select><select id="agpb"><option value="">Eşi…</option>'+all.map(function(o){return '<option value="'+o.id+'">'+esc(agName('s',o.r,o.id))+'</option>'}).join('')+'</select><button type="button" class="agpadd">Çift ekle</button></div>';
-  bx.querySelectorAll('.agpr button').forEach(function(b){b.onclick=function(){A.pairs.splice(+b.dataset.i,1);save();pairsUI()}});
-  bx.querySelector('.agpadd').onclick=function(){var a=$a('#agpa').value,b=$a('#agpb').value;if(!a||!b||a===b)return;A.pairs.push([a,b]);save();pairsUI()}}
+  bx.querySelectorAll('.agpr input').forEach(function(c){c.onchange=function(){var pr=A.pairs[+c.dataset.i],id=pr[0]+'+'+pr[1],l=(A.dp[key]=A.dp[key]||[]),ix=l.indexOf(id);if(c.checked&&ix<0)l.push(id);if(!c.checked&&ix>-1)l.splice(ix,1);save();lock()}});
+  bx.querySelectorAll('.agpr button').forEach(function(b){b.onclick=function(e){e.preventDefault();A.pairs.splice(+b.dataset.i,1);save();pairsUI()}});
+  bx.querySelector('.agpadd').onclick=function(){var a=$a('#agpa').value,b=$a('#agpb').value;if(!a||!b||a===b)return;A.pairs.push([a,b]);(A.dp[wk+'|'+d]=A.dp[wk+'|'+d]||[]).push(a+'+'+b);save();pairsUI()}}
  pairsUI();
  ov.querySelectorAll('.agp').forEach(function(b){b.onclick=function(){var q=+b.dataset.p;if(A.nos[q])delete A.nos[q];else A.nos[q]=1;b.classList.toggle('on',!!A.nos[q]);save();lock()}});
  var plan=null;
@@ -1717,9 +1719,9 @@ function agOpen(d){
  ov.querySelectorAll('input,select').forEach(function(e){e.addEventListener('change',lock)});
  function read(){var sb=$a('#agsb').value,sy=$a('#agsy').value;
   A.sef=[sb===''?null:+sb,sy===''?null:+sy];A.nB=+$a('#agnb').value||0;A.nY=+$a('#agny').value||0;A.sefOn=$a('#agso').checked;
-  var m=ov.querySelector('input[name=agm]:checked');if(m)A.mode=m.value;
+  
   ov.querySelectorAll('.agpn').forEach(function(i){A.pn[i.dataset.id]=Math.max(0,+i.value||0)});save();
-  return {sef:A.sef.slice(),nB:A.nB,nY:A.nY,sefOn:A.sefOn,mode:A.mode,pn:A.pn,nos:A.nos,pairs:A.pairs}}
+  var dpl=(A.dp||{})[wk+'|'+d]||[];return {sef:A.sef.slice(),nB:A.nB,nY:A.nY,sefOn:A.sefOn,mode:'cift',pn:A.pn,nos:A.nos,pairs:A.pairs.filter(function(pr){return dpl.indexOf(pr[0]+'+'+pr[1])>-1})}}
  $a('.agpv').onclick=function(){var o=read();plan=agPlan(d,o);_cw=wk;_cd=d;var pv='',pl=plan;
   [0,1].forEach(function(r){var k2=String(r+1),ps=pl.avail.filter(function(q){return pl.reg[q]===k2}),inTask={},dbl={},sec='';
    [['s','Okullar','🏫'],['t','Noktalar','📍']].forEach(function(K){var k=K[0],ex=S.gl[lkey(wk,d,k,r)]||[],nw=pl.gl[lkey(wk,d,k,r)]||[],ac=agItems(d,k,r);
