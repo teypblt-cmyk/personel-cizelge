@@ -636,7 +636,7 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agpr{padding:7px 10px!important;font-size:13px!important;border-radius:10px!important}
 .agbtns button{min-height:42px;font-size:15px;border-radius:12px}
 .agbtns{padding:8px 0 2px!important;background:var(--bg)}
-.agbtns button{background:var(--bg)}.agbtns .agok{background:var(--grad,var(--pri))}
+.agbtns button{background:var(--bg)}.agov .agbtns button.agok,.agov .agbtns button.agok.on{background:var(--bg)!important;border:1px solid var(--line)!important;box-shadow:none!important;font-size:17px;font-weight:800}
 .agb{padding:4px 2px 10px;display:flex;flex-direction:column;gap:8px;max-height:72vh;overflow:auto}
 .agrow{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
 .agrow label{font-size:13px;color:var(--mute);white-space:nowrap}
@@ -1743,7 +1743,7 @@ function agOpen(d){
   ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'})}
   h+='</div>'});
  if(d<5){h+='<div class="agsec"><div class="agst2">Aynı kişiye giden okullar</div><div class="agpairs"></div></div>'}
- h+='<div class="agprev"></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled>Zbam !</button><button type="button" class="agun" style="display:none">Geri al</button></div></div></div>';
+ h+='<div class="agprev"></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled><span class="agtt">Zbam !</span></button><button type="button" class="agun" style="display:none">Geri al</button></div></div></div>';
  ov.innerHTML=h;document.body.appendChild(ov);
  var $a=function(x){return ov.querySelector(x)};
  function close(){ov.remove()}
