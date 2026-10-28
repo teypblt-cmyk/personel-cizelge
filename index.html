@@ -628,6 +628,8 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 @media (prefers-reduced-motion:reduce){.agtt{animation:none}}
 .agsec.r0>.agst2,.agsec.r1>.agst2{margin:-10px -10px 2px;padding:10px 12px;border-radius:13px 13px 0 0;color:var(--rgt,#fff)}
 .agsec.r0>.agst2{background:var(--a)}.agsec.r1>.agst2{background:var(--b)}
+.agov .agb{max-height:none;flex:1 1 auto;min-height:0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.agov .css{overscroll-behavior:contain}
+.agov .agbtns{position:static;background:transparent;padding:10px 0 0;flex:0 0 auto}
 .agpick{display:flex;flex-direction:column;gap:6px}.agpick>b{font-size:14px}
 .agfix .agpick button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
@@ -1743,7 +1745,7 @@ function agOpen(d){
   ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'})}
   h+='</div>'});
  if(d<5){h+='<div class="agsec"><div class="agst2">Aynı kişiye giden okullar</div><div class="agpairs"></div></div>'}
- h+='<div class="agprev"></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled><span class="agtt">Zbam !</span></button><button type="button" class="agun" style="display:none">Geri al</button></div></div></div>';
+ h+='<div class="agprev"></div></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled><span class="agtt">Zbam !</span></button><button type="button" class="agun" style="display:none">Geri al</button></div></div>';
  ov.innerHTML=h;document.body.appendChild(ov);
  var $a=function(x){return ov.querySelector(x)};
  function close(){ov.remove()}
@@ -1825,18 +1827,15 @@ function agOpen(d){
    var free=ps.filter(function(q){return !inTask[q]}).sort(cmpP);
    if(free.length)sec+='<div class="agsub">Bölge listesi (görevsiz)</div><div class="agit">'+free.map(function(q){var c=codeD(wk,d,q);return '<div class="agr"><span>'+(c?'<small>'+esc(c)+'</small> ':'')+esc(pn(q))+(o.sef[r]===q?' ★':'')+'</span><em></em></div>'}).join('')+'</div>';
    pv+='<div class="agreg g'+k2+'"><b>'+esc(rn(r))+' ('+ps.length+')</b>'+sec+'</div>'});
-  var ex=[],fxl=(o.fix||[]);
-  if(fxl.length)ex.push('Sizin seçtikleriniz sabit: '+fxl.map(function(f){return (f.chief?'★ ':'')+pn(f.p).split(' ')[0]}).join(', ')+'.');
-  ex.push('Noktalar: sabitler dışında kalan yerleri o noktada en az çalışana verdim, eşitse en uzun süredir gitmeyene.');
-  if(d<5){ex.push('Okullar: aynı kural, o okula en az giden, eşitse en uzun süredir gitmeyen.');
-   if(o.pairs.length)ex.push('Aynı kişiye giden okullar (sizin tikledikleriniz): '+o.pairs.map(function(pr){var a=agFindItem(pr[0]),b=agFindItem(pr[1]);return agName('s',a.r,pr[0])+' + '+agName('s',b.r,pr[1])}).join('; ')+'.')}
-  var bw=Object.keys(plan.borrow).filter(function(q){return !plan.fixed[q]});if(bw.length)ex.push('Diğer bölgeden gelenler: '+bw.map(function(q){return pn(+q).split(' ')[0]}).join(', ')+' (kendi bölgesinde okul için kişi yetmedi).');
-  pv+='<div class="agexp">'+ex.map(function(x){return '<div>'+esc(x)+'</div>'}).join('')+'</div>';
   if(plan.warn.length)pv+='<div class="agw2">'+plan.warn.map(function(x){return '<div>⚠ '+esc(x)+'</div>'}).join('')+'</div>';
   else pv+='<div class="agok2">Eksik ya da çakışma yok.</div>';
   $a('.agprev').innerHTML=pv;$a('.agok').disabled=false;ov.querySelector('.agb').scrollTop=ov.querySelector('.agb').scrollHeight};
  $a('.agok').onclick=function(){if(!plan)return;agApply(d,plan);$a('.agprev').insertAdjacentHTML('afterbegin','<div class="agok2">Uygulandı.</div>');$a('.agok').disabled=true;$a('.agun').style.display='';buildGV()};
  $a('.agun').onclick=function(){if(!agSnapMem)return;agRestore(agSnapMem);agSnapMem=null;$a('.agun').style.display='none';$a('.agprev').innerHTML='<div class="agok2">Geri alındı.</div>';buildGV()}}
+(function(){var lk=false,sy=0;function chk(){var on=!!document.querySelector('.csov,.wdlg'),b=document.body.style;
+ if(on&&!lk){lk=true;sy=window.scrollY;b.position='fixed';b.top=(-sy)+'px';b.left='0';b.right='0';b.width='100%'}
+ else if(!on&&lk){lk=false;b.position='';b.top='';b.left='';b.right='';b.width='';window.scrollTo(0,sy)}}
+ new MutationObserver(chk).observe(document.body,{childList:true})})();
 function buildDay(d){
  var c=document.createElement('div');c.className='card day';
  var ptSet={};[0,1].forEach(function(r){(S.gl[lkey(wk,d,'t',r)]||[]).forEach(function(n){gpl(wk,d,'t',r,n).forEach(function(p){ptSet[p]=1})})});
