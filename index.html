@@ -621,6 +621,7 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agst input{height:40px!important;width:50px!important;font-size:20px!important}
 .agb select.agpn{flex:0 0 auto;width:62px;height:34px;font-size:14px;padding:0 6px;text-align:center;text-align-last:center;border-radius:9px}
 .agb .agpt{min-height:0}.agb .agpt label{font-size:13px;line-height:1.25}
+.agfr.agfc{font-size:16px!important;font-weight:700}.agfix>.agrow>label:first-child{font-size:16px;font-weight:700;color:inherit}.agfix>.agrow>select[data-a=chief]{font-size:16px;height:44px}
 .agpick{display:flex;flex-direction:column;gap:6px}.agpick>b{font-size:14px}
 .agfix .agpick button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
@@ -1732,7 +1733,7 @@ function agOpen(d){
  var cbox=function(r,id,v){return '<div class="agbox"><span>'+esc(rn(r))+'</span><div class="agst"><button type="button" data-st="'+r+'" data-dl="-1" aria-label="Azalt">−</button><input id="'+id+'" type="number" inputmode="numeric" min="0" max="'+tot+'" value="'+v+'"><button type="button" data-st="'+r+'" data-dl="1" aria-label="Arttır">+</button></div></div>'};
  h+='<div class="agcnt">'+cbox(0,'agnb',nB)+cbox(1,'agny',nY)+'</div>';
  [0,1].forEach(function(r){h+='<div class="agsec"><div class="agst2">'+esc(rn(r))+'</div><div class="agfix" data-r="'+r+'"></div>';
-  var ids=agItems(d,'t',r);if(ids.length){h+='<div class="sub">Noktalar · kaçar kişi</div>';
+  var ids=agItems(d,'t',r);if(ids.length){
   ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'})}
   h+='</div>'});
  if(d<5){h+='<div class="agsec"><div class="agst2">Aynı kişiye giden okullar</div><div class="agpairs"></div></div>'}
@@ -1764,7 +1765,7 @@ function agOpen(d){
   var YN=function(a2,q){return '<button type="button" data-a="'+a2+'y">Evet</button><button type="button" data-a="'+a2+'n">Hayır</button>'};
   [0,1].forEach(function(r){var bx=$a('.agfix[data-r="'+r+'"]');if(!bx)return;var st=fxs[r];
    var chief=null;L.forEach(function(f){if(f.r===r&&f.chief)chief=f});
-   var line=function(f){var i=L.indexOf(f);return '<div class="agfr"><span>'+(f.chief?'★ ':'')+esc(pn(f.p))+' · '+(d>=5?'':(f.s?(f.sid?esc(agName('s',f.sr,f.sid)):'okul otomatik'):'okul yok')+' · ')+(f.id?esc(agName('t',r,f.id)):'nokta hayır')+'</span><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'};
+   var line=function(f){var i=L.indexOf(f);return '<div class="agfr'+(f.chief?' agfc':'')+'"><span>'+(f.chief?'★ ':'')+esc(pn(f.p))+' · '+(d>=5?'':(f.s?(f.sid?esc(agName('s',f.sr,f.sid)):'okul otomatik'):'okul yok')+' · ')+(f.id?esc(agName('t',r,f.id)):'nokta hayır')+'</span><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'};
    var h2='';
    if(chief)h2+=line(chief);
    else if(!(st&&st.chief))h2+='<div class="agrow"><label>Şef</label><select data-a="chief"><option value="">— seç —</option>'+avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}).map(function(q){return '<option value="'+q+'">'+esc(pn(q))+'</option>'}).join('')+'</select></div>';
@@ -1803,7 +1804,7 @@ function agOpen(d){
  $a('.agpv').onclick=function(){var o=read();plan=agPlan(d,o);_cw=wk;_cd=d;var pv='',pl=plan;
   var inTask={},dbl={};[0,1].forEach(function(r){['s','t'].forEach(function(k){var ex=S.gl[lkey(wk,d,k,r)]||[],nw=pl.gl[lkey(wk,d,k,r)]||[];ex.concat(nw).forEach(function(id){var old=gpl(wk,d,k,r,id),n2=pl.gp[pkey(wk,d,k,r,id)]||[],al=old.concat(n2.filter(function(q){return old.indexOf(q)<0}));al.forEach(function(q){inTask[q]=1;if(k==='s')dbl[q]=(dbl[q]||0)+1})})})});
   [0,1].forEach(function(r){var k2=String(r+1),ps=pl.avail.filter(function(q){return pl.reg[q]===k2}),sec='';
-   [['s','Okullar','🏫'],['t','Noktalar','📍']].forEach(function(K){var k=K[0],ex=S.gl[lkey(wk,d,k,r)]||[],nw=pl.gl[lkey(wk,d,k,r)]||[],ac=agItems(d,k,r);
+   [['s','Okullar','🏫'],['t','Noktalar','📍']].forEach(function(K){if(K[0]==='s'&&d>=5)return;var k=K[0],ex=S.gl[lkey(wk,d,k,r)]||[],nw=pl.gl[lkey(wk,d,k,r)]||[],ac=agItems(d,k,r);
     var ids=S.gi[k][r].map(function(x){return x.id}).filter(function(id){return ex.indexOf(id)>-1||nw.indexOf(id)>-1||ac.indexOf(id)>-1});
     if(!ids.length)return;
     var rows=[];ids.forEach(function(id){var pk=pkey(wk,d,k,r,id),old=gpl(wk,d,k,r,id),nw2=pl.gp[pk]||[];
