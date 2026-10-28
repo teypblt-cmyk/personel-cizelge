@@ -621,7 +621,7 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agst input{height:40px!important;width:50px!important;font-size:20px!important}
 .agb select.agpn{flex:0 0 auto;width:62px;height:34px;font-size:14px;padding:0 6px;text-align:center;text-align-last:center;border-radius:9px}
 .agb .agpt{min-height:0}.agb .agpt label{font-size:13px;line-height:1.25}
-.agfr.agfc{font-size:16px!important;font-weight:700}.agfix>.agrow>label:first-child{font-size:16px;font-weight:700;color:inherit}.agfix>.agrow>select[data-a=chief]{font-size:16px;height:44px}
+.agfix>.agrow>label:first-child{font-size:13px;font-weight:700;letter-spacing:.08em;color:inherit}.agfl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex:1;min-width:0}.agnm{font-weight:600}.agsf{font-size:11px;letter-spacing:.1em;padding:3px 9px;border-radius:8px;background:var(--grad,var(--pri));color:var(--onc,#fff)}.agch{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.07)}.agch.no{opacity:.55}.agfr button{display:flex!important;align-items:center;justify-content:center;width:32px;height:32px;padding:0!important;line-height:1;flex:0 0 auto;align-self:center}
 .agpick{display:flex;flex-direction:column;gap:6px}.agpick>b{font-size:14px}
 .agfix .agpick button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
@@ -1765,10 +1765,13 @@ function agOpen(d){
   var YN=function(a2,q){return '<button type="button" data-a="'+a2+'y">Evet</button><button type="button" data-a="'+a2+'n">Hayır</button>'};
   [0,1].forEach(function(r){var bx=$a('.agfix[data-r="'+r+'"]');if(!bx)return;var st=fxs[r];
    var chief=null;L.forEach(function(f){if(f.r===r&&f.chief)chief=f});
-   var line=function(f){var i=L.indexOf(f);return '<div class="agfr'+(f.chief?' agfc':'')+'"><span>'+(f.chief?'★ ':'')+esc(pn(f.p))+' · '+(d>=5?'':(f.s?(f.sid?esc(agName('s',f.sr,f.sid)):'okul otomatik'):'okul yok')+' · ')+(f.id?esc(agName('t',r,f.id)):'nokta hayır')+'</span><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'};
+   var line=function(f){var i=L.indexOf(f);var ch='';
+    if(d<5)ch+='<span class="agch'+(f.s?'':' no')+'">'+(f.s?(f.sid?'Okul · '+esc(agName('s',f.sr,f.sid)):'Okul · otomatik'):'okul yok')+'</span>';
+    ch+='<span class="agch'+(f.id?'':' no')+'">'+(f.id?esc(agName('t',r,f.id)):'nokta yok')+'</span>';
+    return '<div class="agfr"><div class="agfl">'+(f.chief?'<b class="agsf">ŞEF</b>':'')+'<span class="agnm">'+esc(pn(f.p))+'</span>'+ch+'</div><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'};
    var h2='';
    if(chief)h2+=line(chief);
-   else if(!(st&&st.chief))h2+='<div class="agrow"><label>Şef</label><select data-a="chief"><option value="">— seç —</option>'+avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}).map(function(q){return '<option value="'+q+'">'+esc(pn(q))+'</option>'}).join('')+'</select></div>';
+   else if(!(st&&st.chief))h2+='<div class="agrow"><label>ŞEF</label><select data-a="chief"><option value="">— seç —</option>'+avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}).map(function(q){return '<option value="'+q+'">'+esc(pn(q))+'</option>'}).join('')+'</select></div>';
    L.forEach(function(f){if(f.r===r&&!f.chief)h2+=line(f)});
    if(st){var nm=st.p===null?'':esc(pn(st.p));
     if(st.step==='p')h2+='<div class="agpick"><b>Kim?</b>'+agSort(avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}),function(q){var l=CN.RL[String(r+1)+'|'+q];return [CN.RC[String(r+1)+'|'+q]||0,l===undefined?-1:l]}).map(function(q){return '<button type="button" data-a="pick" data-v="'+q+'"><span>'+esc(pn(q))+'</span><em>B '+(CN.RC['1|'+q]||0)+' · Y '+(CN.RC['2|'+q]||0)+'</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>';
