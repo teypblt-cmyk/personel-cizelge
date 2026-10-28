@@ -1701,7 +1701,7 @@ function agOpen(d){
  ov.onclick=function(e){if(e.target===ov)close()};$a('.csx').onclick=close;
  function pairsUI(){var bx=$a('.agpairs');if(!bx)return;
   var all=[];[0,1].forEach(function(r){agItems(d,'s',r).forEach(function(id){all.push({id:id,r:r})})});
-  bx.innerHTML=A.pairs.filter(function(pr){return agFindItem(pr[0])&&agFindItem(pr[1])}).map(function(pr,i){var a=agFindItem(pr[0]),b=agFindItem(pr[1]);return '<span class="agpr">'+esc(agName('s',a.r,pr[0]))+' + '+esc(agName('s',b.r,pr[1]))+' <button type="button" data-i="'+i+'" aria-label="Çifti sil">×</button></span>'}).join('')+
+  bx.innerHTML=A.pairs.map(function(pr,i){var a=agFindItem(pr[0]),b=agFindItem(pr[1]);if(!a||!b||a.it.off||b.it.off)return '';return '<span class="agpr">'+esc(agName('s',a.r,pr[0]))+' + '+esc(agName('s',b.r,pr[1]))+' <button type="button" data-i="'+i+'" aria-label="Çifti sil">×</button></span>'}).join('')+
    '<div class="agrow"><select id="agpa"><option value="">Okul…</option>'+all.map(function(o){return '<option value="'+o.id+'">'+esc(agName('s',o.r,o.id))+'</option>'}).join('')+'</select><select id="agpb"><option value="">Eşi…</option>'+all.map(function(o){return '<option value="'+o.id+'">'+esc(agName('s',o.r,o.id))+'</option>'}).join('')+'</select><button type="button" class="agpadd">Çift ekle</button></div>';
   bx.querySelectorAll('.agpr button').forEach(function(b){b.onclick=function(){A.pairs.splice(+b.dataset.i,1);save();pairsUI()}});
   bx.querySelector('.agpadd').onclick=function(){var a=$a('#agpa').value,b=$a('#agpb').value;if(!a||!b||a===b)return;A.pairs.push([a,b]);save();pairsUI()}}
