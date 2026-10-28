@@ -610,6 +610,12 @@ html[data-pre="2"] .itms{border-color:rgba(216,187,120,.6);border-radius:8px}
 html[data-pre="2"] .itms .lb{border:1px solid var(--gold);border-radius:6px;font-family:var(--hf);letter-spacing:.06em;color:var(--goldl)}
 html[data-pre="2"] .sub{font-family:var(--hf);color:var(--goldl);letter-spacing:.07em}
 html[data-pre="2"] .wbox{border:1.5px solid var(--gold);border-radius:8px;background-color:rgba(8,14,44,.85);color:var(--ink)}
+
+.izsy{font-size:12px;color:var(--mute);margin:0 0 8px;display:flex;align-items:center;gap:6px}
+.izsy::before{content:'';width:8px;height:8px;border-radius:50%;background:#2ecc71;box-shadow:0 0 6px #2ecc71}
+.izsy.bad::before{background:#e67e22;box-shadow:0 0 6px #e67e22}
+.lv.rm{position:relative}
+.lv.rm::after{content:'';position:absolute;top:3px;right:3px;width:5px;height:5px;border-radius:50%;background:#fff;opacity:.85;box-shadow:0 0 3px rgba(0,0,0,.4)}
 </style></head><body>
 <div id="login" role="dialog" aria-modal="true" aria-labelledby="ltitle">
 <div class="lbg"><i></i><i></i><i></i></div>
@@ -642,6 +648,7 @@ html[data-pre="2"] .wbox{border:1.5px solid var(--gold);border-radius:8px;backgr
  <div class="card"><div style="display:flex;gap:8px;align-items:flex-start"><p class="mute" style="margin:0 0 8px;flex:1">İzinli olduğu günün hücresine dokun. İzinli kişiler o gün bölge listesinde çıkmaz.</p><button id="lk" style="flex:0 0 auto;width:38px;height:38px;padding:0;display:flex;align-items:center;justify-content:center"></button></div>
   <input type="text" id="micin" placeholder="Sesli Komut" enterkeyhint="done" autocomplete="off" style="margin-bottom:8px">
   <div id="micmsg" class="sm" style="margin-bottom:8px"></div>
+  <div id="izsy" class="izsy">İzin uygulamasıyla eşleşiyor…</div>
   <div id="lvtypes" style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px"></div>
   <div class="wrap"><table id="lvt"></table></div></div>
  <details class="card dd" id="rqd"><summary>İzin Öncelik Listesi</summary><div id="rq"></div></details>
@@ -855,7 +862,7 @@ function migrateItems(){
    return id})});
  S.gl=gl2;S.gp=gp2;delete S.gd;
 }
-function ens(){if(!S.nl)S.nl={};if(!S.gl)S.gl={};if(!S.gp)S.gp={};if(!S.co)S.co={};if(!S.rv)S.rv={};if(!S.codes)S.codes=[];while(S.codes.length<N)S.codes.push('');if(!S.gi)migrateItems();if(!S.pv)S.pv=pvDef();if(!ens.d){wk=Math.max(0,Math.min(S.w.length-1,curWk()));ens.d=1}if(wk>=S.w.length)wk=Math.max(0,S.w.length-1)}
+function ens(){if(!S.ri)S.ri={};if(!S.nl)S.nl={};if(!S.gl)S.gl={};if(!S.gp)S.gp={};if(!S.co)S.co={};if(!S.rv)S.rv={};if(!S.codes)S.codes=[];while(S.codes.length<N)S.codes.push('');if(!S.gi)migrateItems();if(!S.pv)S.pv=pvDef();if(!ens.d){wk=Math.max(0,Math.min(S.w.length-1,curWk()));ens.d=1}if(wk>=S.w.length)wk=Math.max(0,S.w.length-1)}
 var CFG={URL:'https://wogswssxyfotwkeflycl.supabase.co',KEY:'sb_publishable_PbxaNErJXA0kll1lcF-Zbg_uwkW638W'};
 var sb=null,pw=null,authed=false,dirty=false,lastJson='',pushT=null,pollOn=false;
 try{pw=localStorage.getItem('cizelge_pw')||null}catch(e){}
@@ -909,6 +916,7 @@ async function loadRemote(first){
  if(d&&d.ok){
   if(d.json){if(first)lastJson='';applyRemote(d.json);if(!dirty)setSt('Senkronize ✓')}
   else if(first)pushNow();
+  izinSync();if(first)izinCanli();
  }else if(d&&isAuthErr(d.error)){lockOut('Şifre değişmiş. Yeniden giriş yapın.')}
 }
 async function bkList(cb){
@@ -927,6 +935,93 @@ async function bkGet(id,cb){
 }
 function bkAuto(){bkList(function(a){if(a===null)return;if(!a.length||Date.now()-a[0].t>20*36e5)bkMake('Otomatik')})}
 function bkDate(t){var d=new Date(t);return d.getDate()+' '+MONS[d.getMonth()]+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+
+/* ===== İzin uygulamasıyla canlı eşleşme (aynı Supabase deposu, salt okunur) =====
+   Personelin izin uygulamasında işaretlediği izinler burada İzin tablosuna yansır. Normal izinde kontenjan/öncelik
+   hesabı izin uygulamasındakiyle aynıdır: yalnızca ONAYLI olanlar gelir, bekleyenler (⏳) gelmez.
+   Mazeretli → İzin, Yıllık → Yıl., Rapor → Rap. Yansıyan hücreler S.ri içinde işaretlenir; kaynakta kalkarsa burada da kalkar. */
+var RSY={t:0,err:'',busy:false,again:false,ch:null,tm:0};
+function dnumS(x){var a=x.split('-');return Math.floor(Date.UTC(+a[0],+a[1]-1,+a[2])/864e5)}
+function dstrN(n){var x=new Date(n*864e5);return x.getUTCFullYear()+'-'+('0'+(x.getUTCMonth()+1)).slice(-2)+'-'+('0'+x.getUTCDate()).slice(-2)}
+function wdN(n){return ((n+3)%7+7)%7}
+function wkN(n){return Math.floor((n+3)/7)}
+function cmpH(a,b){var L=Math.max(a.length,b.length);for(var i=0;i<L;i++){var x=i<a.length?a[i]:-1,y=i<b.length?b[i]:-1;if(x!==y)return x-y}return 0}
+function tsN(x){return Date.parse(String(x).replace(' ','T').replace(/\+00$/,'Z'))||0}
+async function fAll(t,cols,o1,o2){var o=[],f=0,st=1000;for(;;){var q=sb.from(t).select(cols).order(o1);if(o2)q=q.order(o2);var r=await q.range(f,f+st-1);if(r.error)throw r.error;o=o.concat(r.data||[]);if(!r.data||r.data.length<st)break;f+=st}return o}
+var DEFQ2=[5,4,5,5,5,5,5];
+// izin uygulamasındaki compute() ile birebir: bir haftanın (pazartesi gün numarası M) 7 günü için onaylı izin kümeleri
+function izinHafta(staff,leaves,rules,M){
+ var byId={};staff.forEach(function(x){byId[x.id]=x});
+ var top=function(x){return x.name==='Nilgün Gül'};
+ var uses={};staff.forEach(function(x){uses[x.id]=[[],[],[],[],[],[],[]]});
+ leaves.forEach(function(l){if((l.type!=='I'&&l.type!=='M')||!uses[l.staff_id])return;var n=dnumS(l.day);uses[l.staff_id][wdN(n)].push(wkN(n))});
+ var wk0=wkN(M),pct={};staff.forEach(function(x){pct[x.id]=[]});
+ for(var d=0;d<7;d++){
+  var cnt={},hs={},m=0;
+  staff.forEach(function(x){var h=uses[x.id][d].filter(function(w){return w<wk0}).sort(function(a,b){return b-a});cnt[x.id]=h.length;hs[x.id]=h;if(h.length>m&&!top(x))m=h.length});
+  var step=100/(m+1);
+  staff.forEach(function(x){
+   var ks=[];staff.forEach(function(q){if(!top(q)&&cnt[q.id]===cnt[x.id]&&!ks.some(function(k){return cmpH(k,hs[q.id])===0}))ks.push(hs[q.id])});
+   ks.sort(cmpH);var r=0;for(var t=0;t<ks.length;t++)if(cmpH(ks[t],hs[x.id])===0){r=t;break}
+   pct[x.id][d]=Math.round(100*(1-cnt[x.id]/(m+1))-(ks.length>1?r/ks.length*step*.5:0))})}
+ var by={};leaves.forEach(function(l){if(!byId[l.staff_id])return;(by[l.day]=by[l.day]||[]).push(l)});
+ var nm=function(l){return byId[l.staff_id].name},res=[];
+ for(var i=0;i<7;i++){
+  var ds=dstrN(M+i),rows=by[ds]||[],fixed=[],req=[];
+  rows.forEach(function(l){(l.type==='I'?req:fixed).push(l)});
+  req.sort(function(a,b){return (pct[b.staff_id][i]-pct[a.staff_id][i])||(tsN(a.created_at)-tsN(b.created_at))||nm(a).localeCompare(nm(b),'tr')});
+  var rule=rules[ds]||{},q=(rule.quota!=null)?rule.quota:DEFQ2[i];
+  var fx=req.filter(function(l){return byId[l.staff_id].exempt}),rq=req.filter(function(l){return !byId[l.staff_id].exempt});
+  var slots=(q==null)?rq.length:Math.max(0,q-fixed.length);
+  var ok=fx.concat(rq.slice(0,slots));
+  res.push({ds:ds,fixed:fixed,ok:ok})}
+ return res}
+var RMT={M:'I',I:'I',Y:'Y',R:'R'};
+function izinBirlestir(staff,leaves,rules){
+ var idx={};for(var p=0;p<N;p++)idx[nz(pn(p))]=p;
+ var nilId=0;staff.forEach(function(x){if(x.name==='Nilgün Gül')nilId=x.id});
+ var want={};   // anahtar -> tür
+ for(var w=0;w<S.w.length;w++){
+  var M=dnumS(isoD(w,0)),hf=izinHafta(staff,leaves,rules,M);
+  hf.forEach(function(g,d){
+   g.fixed.concat(g.ok).forEach(function(l){
+    var t=RMT[l.type];if(!t)return;
+    var nmx=null;staff.forEach(function(x){if(x.id===l.staff_id)nmx=x.name});
+    if(l.staff_id===nilId&&nilId){want['n|'+g.ds]=t;return}
+    var p=idx[nz(nmx)];if(p===undefined)return;
+    want[w+'|'+p+'|'+d]=t})}) }
+ if(!S.ri)S.ri={};
+ var ch=false,keys={};Object.keys(want).forEach(function(k){keys[k]=1});Object.keys(S.ri).forEach(function(k){keys[k]=1});
+ Object.keys(keys).forEach(function(k){
+  var r=want[k]||'',old=S.ri[k]||'',a=k.split('|'),cur;
+  if(a[0]==='n'){if(!S.nl)S.nl={};cur=S.nl[a[1]]||''}
+  else{var rw=S.w[+a[0]];if(!rw||!rw[+a[1]])return;cur=rw[+a[1]][+a[2]]}
+  var nu=cur;
+  if(r){nu=r;if(S.ri[k]!==r){S.ri[k]=r;ch=true}}
+  else if(old){if(cur===old)nu='';delete S.ri[k];ch=true}
+  if(nu!==cur){ch=true;if(a[0]==='n'){if(nu)S.nl[a[1]]=nu;else delete S.nl[a[1]]}else S.w[+a[0]][+a[1]][+a[2]]=nu}});
+ return ch}
+async function izinSync(){
+ if(!sb||!authed||RSY.busy){if(RSY.busy)RSY.again=true;return}
+ RSY.busy=true;
+ try{
+  var a=await Promise.all([fAll('staff','id,name,active,exempt','id'),fAll('leaves','staff_id,day,type,created_at','day','staff_id'),fAll('day_rules','day,quota,locked','day')]);
+  var staff=a[0].filter(function(x){return x.active}),rules={};a[2].forEach(function(x){rules[x.day]=x});
+  if(!staff.length)throw new Error('personel listesi boş');
+  var ch=izinBirlestir(staff,a[1],rules);
+  RSY.t=Date.now();RSY.err='';
+  if(ch){save();if(tab==='izin'||tab==='gv'||tab==='ozet')show()}
+  izinNote()
+ }catch(e){RSY.err=(e&&e.message)||'hata';izinNote()}
+ RSY.busy=false;if(RSY.again){RSY.again=false;izinSync()}}
+function izinNote(){var e=$('izsy');if(!e)return;
+ if(RSY.err&&!RSY.t){e.textContent='İzin uygulamasına ulaşılamadı — son bilinen durum gösteriliyor';e.className='izsy bad'}
+ else if(RSY.t){var d=new Date(RSY.t);e.textContent='İzin uygulamasıyla canlı eşleşiyor · '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+(RSY.err?' (son deneme başarısız)':'');e.className='izsy'}
+ else{e.textContent='İzin uygulamasıyla eşleşiyor…';e.className='izsy'}}
+function izinCanli(){
+ if(RSY.ch||!sb||!sb.channel)return;
+ try{RSY.ch=sb.channel('cizelge-izin').on('postgres_changes',{event:'*',schema:'public',table:'leaves'},kick).on('postgres_changes',{event:'*',schema:'public',table:'day_rules'},kick).subscribe()}catch(e){RSY.ch=null}
+ function kick(){clearTimeout(RSY.tm);RSY.tm=setTimeout(izinSync,700)}}
 function startPoll(){
  if(pollOn)return;pollOn=true;
  function tick(){if(document.hidden||!authed)return;if(dirty)pushNow();else loadRemote(false).catch(function(){})}
@@ -1340,15 +1435,17 @@ function buildLeave(){
  var h='<tr><th>Personel</th>'+DAYS.map(function(d,i){return '<th>'+d+'<br><small>'+dShort(wk,i)+'</small></th>'}).join('')+'<th>İzin</th><th>Yıl.</th><th>Rap.</th></tr>';
  h+='<tr class="nilr"><td class="n">Nilgün Gül</td>';
  for(var nd=0;nd<7;nd++){var nk=isoD(wk,nd),nv=(S.nl||{})[nk],non=isLv(nv);
-  h+='<td><button class="lv'+(non?' on t'+nv:'')+'" data-iso="'+nk+'">'+(non?LVS[nv]:'')+'</button></td>'}
+  var nrm=S.ri&&S.ri['n|'+nk]&&non;
+  h+='<td><button class="lv'+(non?' on t'+nv:'')+(nrm?' rm':'')+'" data-iso="'+nk+'"'+(nrm?' title="İzin uygulamasından"':'')+'>'+(non?LVS[nv]:'')+'</button></td>'}
  h+='<td>'+ncnt('I')+'</td><td>'+ncnt('Y')+'</td><td>'+ncnt('R')+'</td></tr>';
  for(var p=0;p<N;p++){h+='<tr><td class="n">'+esc(pn(p))+'</td>';
-  for(var d=0;d<7;d++){var v=S.w[wk][p][d],on=isLv(v);
-   h+='<td><button class="lv'+(on?' on t'+v:'')+'" data-p="'+p+'" data-d="'+d+'">'+(on?LVS[v]:'')+'</button></td>'}
+  for(var d=0;d<7;d++){var v=S.w[wk][p][d],on=isLv(v),rmk=on&&S.ri&&S.ri[wk+'|'+p+'|'+d]===v;
+   h+='<td><button class="lv'+(on?' on t'+v:'')+(rmk?' rm':'')+'" data-p="'+p+'" data-d="'+d+'"'+(rmk?' title="İzin uygulamasından"':'')+'>'+(on?LVS[v]:'')+'</button></td>'}
   h+='<td>'+lcnt(p,'I')+'</td><td>'+lcnt(p,'Y')+'</td><td>'+lcnt(p,'R')+'</td></tr>'}
  var t=$('lvt');t.innerHTML=h;
  t.querySelectorAll('.lv').forEach(function(b){b.onclick=function(){
   if(S.ilk)return;
+  if(b.classList.contains('rm')){micMsg('Bu izin, izin uygulamasından geliyor; oradan değiştirilir',false);return}
   if(b.dataset.iso){var k=b.dataset.iso;if(!S.nl)S.nl={};if(S.nl[k]===lvType)delete S.nl[k];else S.nl[k]=lvType;save();buildLeave();return}
   var p=+b.dataset.p,d=+b.dataset.d,v=S.w[wk][p][d];S.w[wk][p][d]=(v===lvType)?'':lvType;save();buildLeave()}});
  if(S.ilk){t.querySelectorAll('.lv').forEach(function(b){b.disabled=true;b.style.opacity='.6'});tb.querySelectorAll('button').forEach(function(b){b.disabled=true})}
