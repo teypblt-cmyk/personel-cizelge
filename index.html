@@ -638,6 +638,14 @@ html[data-pre="2"] .wbox{border:1.5px solid var(--gold);border-radius:8px;backgr
 .agq{flex-wrap:wrap;gap:8px!important}.agq>span{flex:1 0 100%;font-size:14px;font-weight:600}
 .agq button{flex:1}
 .agfix .agadd{width:100%}
+.agbox{align-items:center;text-align:center;padding:8px 6px}
+.agst{justify-content:center;width:100%}
+.agst input{-moz-appearance:textfield;appearance:textfield;padding:0;line-height:1}
+.agst input::-webkit-outer-spin-button,.agst input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.agst button{display:flex;align-items:center;justify-content:center;padding:0;width:34px;height:40px;font-size:20px}
+.agst input{height:40px!important;width:50px!important;font-size:20px!important}
+.agb select.agpn{flex:0 0 auto;width:62px;height:34px;font-size:14px;padding:0 6px;text-align:center;text-align-last:center;border-radius:9px}
+.agb .agpt{min-height:0}.agb .agpt label{font-size:13px;line-height:1.25}
 .agpick{display:flex;flex-direction:column;gap:6px}.agpick>b{font-size:14px}
 .agfix .agpick button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
@@ -1746,7 +1754,7 @@ function agOpen(d){
  h+='<div class="agcnt">'+cbox(0,'agnb',nB)+cbox(1,'agny',nY)+'</div>';
  [0,1].forEach(function(r){h+='<div class="agsec"><div class="agst2">'+esc(rn(r))+'</div><div class="agfix" data-r="'+r+'"></div>';
   var ids=agItems(d,'t',r);if(ids.length){h+='<div class="sub">Noktalar · kaçar kişi</div>';
-  ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><input type="number" inputmode="numeric" class="agpn" data-id="'+id+'" min="0" max="'+N+'" value="'+(A.pn[id]!==undefined?A.pn[id]:1)+'"></div>'})}
+  ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'})}
   h+='</div>'});
  if(d<5){h+='<div class="agsec"><div class="agst2">Aynı kişiye giden okullar</div><div class="agpairs"></div></div>'}
  h+='<div class="agprev"></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled>Uygula</button><button type="button" class="agun" style="display:none">Geri al</button></div></div></div>';
