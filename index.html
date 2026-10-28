@@ -109,7 +109,7 @@ h1,.day h3,.reg h4,details summary{font-family:var(--hf,inherit);font-variant:va
 #tabs button svg,#tabs2 button svg{width:var(--is,20px);height:var(--is,20px);padding:var(--ip,0);border-radius:var(--ir,0);background:var(--ibg,none);border:var(--ib,0);box-sizing:content-box}
 .day h3{background-image:var(--hbg,var(--pat),var(--grad));background-size:var(--hsz,var(--patsz),auto);color:var(--hc,var(--onc,#fff));text-shadow:var(--ts,none);border-bottom:var(--hb,0)}
 html[data-sty] #tabs button,html[data-sty] #tabs2 button{font-size:12.5px}
-.day h3 .hq{display:flex;gap:10px;align-items:center}.qc{padding:4px 8px;font-size:15px}.clq{font-size:12px;color:#e67e22;white-space:nowrap}.qc.arm{border-color:#e67e22!important;color:#e67e22!important}
+.day h3 .hq{display:flex;gap:10px;align-items:center}.pvpr{flex-wrap:wrap;margin-bottom:6px}.pvpr button{flex:1 1 auto;white-space:nowrap}.qc{padding:4px 8px;font-size:15px}.clq{font-size:12px;color:#e67e22;white-space:nowrap}.qc.arm{border-color:#e67e22!important;color:#e67e22!important}
 .bdg{position:absolute;top:1px;right:5px;font-size:10px;font-style:normal}
 
 .dd>summary{padding:2px 0;font-size:17px;font-weight:700}
@@ -873,6 +873,10 @@ function buildPivot(){
  if(selF){var tb=document.createElement('div');tb.className='pvtb';tb.innerHTML='<b>'+esc(pvName(selF))+':</b>';
   [['rows','Satır'],['cols','Sütun'],['fl','Filtre'],['pool','Çıkar']].forEach(function(x){var b=document.createElement('button');b.textContent=x[1];b.onclick=function(){moveField(selF,x[0],null)};tb.appendChild(b)});
   host.appendChild(tb)}
+ var PRS=[['Bölge dengesi',{rows:['kisi'],cols:['bolge'],fl:['tur'],fv:{tur:['Bölge çalışması']}}],['Okul dağılımı',{rows:['kisi'],cols:['okul'],fl:['tur'],fv:{tur:['Okul']}}],['Nokta dağılımı',{rows:['kisi'],cols:['nokta'],fl:['tur'],fv:{tur:['Nokta']}}],['İzin takibi',{rows:['kisi'],cols:['hgun'],fl:['tur'],fv:{tur:['İzin','Yıllık izin','Raporlu']}}]];
+ var pr=document.createElement('div');pr.className='weeks pvpr';
+ PRS.forEach(function(x){var b=document.createElement('button');b.textContent=x[0];b.onclick=function(){S.pv=JSON.parse(JSON.stringify(x[1]));S.pv.m='n';selF=null;pvSort={r:null,c:null};save();buildPivot()};pr.appendChild(b)});
+ host.appendChild(pr);
  var mb=document.createElement('div');mb.className='weeks';
  var rs=document.createElement('button');rs.textContent='Sıfırla';rs.onclick=function(){S.pv={rows:[],cols:[],fl:[],fv:{}};selF=null;pvSort={r:null,c:null};save();buildPivot()};mb.appendChild(rs);
  var pb=document.createElement('button');pb.innerHTML=IC('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>');pb.title='PDF olarak WhatsApp’a gönder';pb.setAttribute('aria-label',pb.title);pb.style.cssText='flex:0 0 auto;padding:9px 14px';pb.onclick=sharePdf;mb.appendChild(pb);host.appendChild(mb);
