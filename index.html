@@ -618,6 +618,28 @@ html[data-pre="2"] .wbox{border:1.5px solid var(--gold);border-radius:8px;backgr
 .lv.rm::after{content:'';position:absolute;top:3px;right:3px;width:5px;height:5px;border-radius:50%;background:#fff;opacity:.85;box-shadow:0 0 3px rgba(0,0,0,.4)}
 
 .agov .css{max-width:560px;width:calc(100% - 24px)}
+.agb{gap:14px!important;overflow-x:hidden!important}.agb *{box-sizing:border-box}.agb>*{min-width:0;flex-shrink:0}
+.agcnt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.agbox{border:1px solid var(--line);border-radius:18px;padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:10px;background:rgba(255,255,255,.04)}
+.agbox>span{font-size:15px;font-weight:700}
+.agst{display:flex;align-items:center;gap:6px}
+.agst button{width:38px;height:44px;flex:0 0 auto;border-radius:14px;border:1px solid var(--line);background:transparent;color:inherit;font-size:24px;line-height:1;cursor:pointer}
+.agst input{width:56px!important;min-width:0;height:52px;font-size:28px;font-weight:700;text-align:center;border-radius:14px}
+.agsec{border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:12px;background:rgba(255,255,255,.03)}
+.agst2{font-size:16px;font-weight:700}
+.agb .sub{margin:2px 0 0}
+.agb select{height:48px;font-size:16px;border-radius:14px;padding:0 12px}
+.agb .agrow input[type=number]{height:48px;font-size:18px;width:72px;border-radius:14px}
+.agb .agpt{padding:2px 0;gap:12px}.agb .agpt label{font-size:15px}
+.agfix{display:flex;flex-direction:column;gap:10px}
+.agfr{padding:12px 14px!important;font-size:15px!important;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.05)}
+.agfr button{min-width:36px;height:36px;font-size:22px!important}
+.agfix button[data-a]{min-height:48px;padding:10px 18px!important;border-radius:14px!important;font-size:15px!important;margin:0!important}
+.agq{flex-wrap:wrap;gap:10px!important}.agq>span{flex:1 0 100%;font-size:16px;font-weight:600}
+.agq button{flex:1}
+.agfix .agadd{width:100%}
+.agpr{padding:10px 12px!important;font-size:14px!important;border-radius:12px!important}
+.agbtns button{min-height:50px;font-size:16px;border-radius:14px}.agbtns{padding:10px 0 4px!important;background:var(--bg)}.agbtns button{background:var(--bg)}.agbtns .agok{background:var(--grad,var(--pri))}
 .agb{padding:4px 2px 10px;display:flex;flex-direction:column;gap:8px;max-height:72vh;overflow:auto}
 .agrow{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
 .agrow label{font-size:13px;color:var(--mute);white-space:nowrap}
@@ -1708,14 +1730,14 @@ function agOpen(d){
  var cB=0,cY=0;for(var q2=0;q2<N;q2++){var v=S.w[wk][q2][d];if(v==='1')cB++;if(v==='2')cY++}
  var nB=cB||A.nB||3,nY=cY||A.nY||Math.max(0,avail.length-nB);
  var h='<div class="css card"><div class="csh"><b>Otomatik dağıt · '+FD[d]+' '+dFull(wk,d)+'</b><button type="button" class="csx" aria-label="Kapat">×</button></div><div class="csl agb">';
- h+='<p class="sm">Elle yazdıkların sabit kalır, yalnızca boş yerler doldurulur. Müsait: <b>'+avail.length+'</b> kişi.</p>';
- var opt=function(sel){return '<option value="">— seçme —</option>'+avail.map(function(q){return '<option value="'+q+'"'+(sel===q?' selected':'')+'>'+esc(pn(q))+'</option>'}).join('')};
- h+='<div class="agrow"><label>'+esc(rn(0))+' kişi</label><input id="agnb" type="number" min="0" max="'+N+'" value="'+nB+'"><label>'+esc(rn(1))+' kişi</label><input id="agny" type="number" min="0" max="'+N+'" value="'+nY+'"></div>';
- [0,1].forEach(function(r){h+='<div class="sub">'+esc(rn(r))+'</div><div class="agfix" data-r="'+r+'"></div>'});
- [0,1].forEach(function(r){var ids=agItems(d,'t',r);if(!ids.length)return;h+='<div class="sub">'+esc(rn(r))+' noktaları · kaçar kişi</div>';
-  ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><input type="number" class="agpn" data-id="'+id+'" min="0" max="'+N+'" value="'+(A.pn[id]!==undefined?A.pn[id]:1)+'"></div>'})});
- if(d<5){h+='<div class="sub">Bu gün aynı kişiye gidecek okullar</div>';
-  h+='<div class="agpairs"></div>'}
+ var tot=avail.length;nB=Math.min(nB,tot);nY=tot-nB;
+ var cbox=function(r,id,v){return '<div class="agbox"><span>'+esc(rn(r))+'</span><div class="agst"><button type="button" data-st="'+r+'" data-dl="-1" aria-label="Azalt">−</button><input id="'+id+'" type="number" inputmode="numeric" min="0" max="'+tot+'" value="'+v+'"><button type="button" data-st="'+r+'" data-dl="1" aria-label="Arttır">+</button></div></div>'};
+ h+='<div class="agcnt">'+cbox(0,'agnb',nB)+cbox(1,'agny',nY)+'</div>';
+ [0,1].forEach(function(r){h+='<div class="agsec"><div class="agst2">'+esc(rn(r))+'</div><div class="agfix" data-r="'+r+'"></div>';
+  var ids=agItems(d,'t',r);if(ids.length){h+='<div class="sub">Noktalar · kaçar kişi</div>';
+  ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><input type="number" inputmode="numeric" class="agpn" data-id="'+id+'" min="0" max="'+N+'" value="'+(A.pn[id]!==undefined?A.pn[id]:1)+'"></div>'})}
+  h+='</div>'});
+ if(d<5){h+='<div class="agsec"><div class="agst2">Aynı kişiye giden okullar</div><div class="agpairs"></div></div>'}
  h+='<div class="agprev"></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled>Uygula</button><button type="button" class="agun" style="display:none">Geri al</button></div></div></div>';
  ov.innerHTML=h;document.body.appendChild(ov);
  var $a=function(x){return ov.querySelector(x)};
@@ -1731,6 +1753,10 @@ function agOpen(d){
   bx.querySelectorAll('.agpr button').forEach(function(b){b.onclick=function(e){e.preventDefault();A.pairs.splice(+b.dataset.i,1);save();pairsUI()}});
   bx.querySelector('.agpadd').onclick=function(){var a=$a('#agpa').value,b=$a('#agpb').value;if(!a||!b||a===b)return;A.pairs.push([a,b]);(A.dp[wk+'|'+d]=A.dp[wk+'|'+d]||[]).push(a+'+'+b);save();pairsUI()}}
  pairsUI();
+
+ function setCnt(r,v){v=Math.max(0,Math.min(tot,v|0));$a(r?'#agny':'#agnb').value=v;$a(r?'#agnb':'#agny').value=tot-v;lock()}
+ ov.querySelectorAll('[data-st]').forEach(function(b){b.onclick=function(){var r=+b.dataset.st;setCnt(r,(+$a(r?'#agny':'#agnb').value||0)+(+b.dataset.dl))}});
+ $a('#agnb').oninput=function(){setCnt(0,+this.value||0)};$a('#agny').oninput=function(){setCnt(1,+this.value||0)};
 
  var fxs=[null,null];
  function fixUI(){var key=wk+'|'+d,L=(A.fx=A.fx||{})[key]=(A.fx[key]||[]);
