@@ -621,6 +621,7 @@ html[data-pre="2"] .wbox{border:1.5px solid var(--gold);border-radius:8px;backgr
 .agb{padding:4px 2px 10px;display:flex;flex-direction:column;gap:8px;max-height:72vh;overflow:auto}
 .agrow{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
 .agrow label{font-size:13px;color:var(--mute);white-space:nowrap}
+.agsc{flex-wrap:wrap;gap:6px 14px}.agsc>span{font-size:13px;min-width:120px}
 .agrow label.agw{flex:1;white-space:normal;color:inherit}
 .agrow select{flex:1;min-width:0}
 .agrow input[type=number]{width:64px;flex:0 0 auto;text-align:center}
@@ -1626,7 +1627,7 @@ function copyText(v,b){var h=b.innerHTML;function done(){b.textContent='✓';set
    Okul/nokta: o okulda/noktada en az çalışan seçilir, eşitse oraya en uzun süredir gitmeyen. Kişi azsa komşu okullar tek kişide birleşir. */
 var agSnapMem=null;
 function agFindItem(id){for(var r=0;r<2;r++){var x=S.gi.s[r].filter(function(i){return i.id===id})[0];if(x)return {it:x,r:r}}return null}
-function agInit(){if(!S.ag)S.ag={};var a=S.ag;if(!a.nos)a.nos={};if(!a.pn)a.pn={};if(!a.mode)a.mode='gerekirse';if(a.sefOn===undefined)a.sefOn=true;if(!a.sef)a.sef=[null,null];
+function agInit(){if(!S.ag)S.ag={};var a=S.ag;if(!a.nos)a.nos={};if(!a.pn)a.pn={};if(!a.mode)a.mode='gerekirse';if(a.sefOn===undefined)a.sefOn=true;if(!a.sef)a.sef=[null,null];if(!a.sc)a.sc=[{s:true,t:false},{s:true,t:true}];
  if(!a.pairs){a.pairs=[];[['i1','i2'],['i28','i29'],['i3','i4'],['i7','i9']].forEach(function(x){if(agFindItem(x[0])&&agFindItem(x[1]))a.pairs.push(x)})}}
 function agItems(d,k,r){var ex=S.gl[lkey(wk,d,k,r)]||[];return S.gi[k][r].filter(function(x){return String(x.t).trim()&&(!x.off||ex.indexOf(x.id)>-1)}).map(function(x){return x.id})}
 function agName(k,r,id){var x=itm(k,r,id);var t=dn(x?x.t:id).replace(/\s*\(\d{1,2}[:.]\d{2}[^)]*\)/g,'').trim();return t.length>34?t.slice(0,33)+'…':t}
@@ -1651,8 +1652,8 @@ function agPlan(d,o){
  var add=function(k,r,id,q){var pk=pkey(wk,d,k,r,id),lk=lkey(wk,d,k,r);(gp[pk]=gp[pk]||[]).push(q);(gl[lk]=gl[lk]||[]);if(gl[lk].indexOf(id)<0)gl[lk].push(id);(tasks[q]=tasks[q]||[]).push((k==='s'?'🏫 ':'📍 ')+agName(k,r,id))};
  var used={},borrow={},X=[{},{}];
  [0,1].forEach(function(r){var k2=String(r+1),x=X[r];
-  x.people=avail.filter(function(q){return reg[q]===k2&&(o.sefOn||q!==o.sef[r])});
-  x.pplS=x.people.filter(function(q){return !busyS[q]&&(o.both||!busyT[q])});x.pplT=x.people.filter(function(q){return !busyT[q]&&(o.both||!busyS[q])});
+  x.people=avail.filter(function(q){return reg[q]===k2});
+  x.pplS=x.people.filter(function(q){return !busyS[q]&&(o.both||!busyT[q])&&!(q===o.sef[r]&&!o.sefS[r])});x.pplT=x.people.filter(function(q){return !busyT[q]&&(o.both||!busyS[q])&&!(q===o.sef[r]&&!o.sefT[r])});
   x.pt=[];agItems(d,'t',r).forEach(function(id){var have=gpl(wk,d,'t',r,id).length,n=o.pn[id]!==undefined?o.pn[id]:1;if(n-have>0)x.pt.push({id:id,need:n-have})});
   x.T=x.pt.reduce(function(a,y){return a+y.need},0);x.spool=x.pplS.filter(function(q){return !o.nos[q]});x.dropped=[]});
  var bestFor=function(pool,u){return agSort(pool,function(q){var sum=0,lm=-1;u.forEach(function(id){sum+=st.C[id+'|'+q]||0;var l=st.L[id+'|'+q];if(l!==undefined&&l>lm)lm=l});return [sum,lm]})};
@@ -1701,7 +1702,7 @@ function agOpen(d){
  var opt=function(sel){return '<option value="">— seçme —</option>'+avail.map(function(q){return '<option value="'+q+'"'+(sel===q?' selected':'')+'>'+esc(pn(q))+'</option>'}).join('')};
  h+='<div class="agrow"><label>'+esc(rn(0))+' şefi</label><select id="agsb">'+opt(A.sef[0])+'</select><label>kişi</label><input id="agnb" type="number" min="0" max="'+N+'" value="'+nB+'"></div>';
  h+='<div class="agrow"><label>'+esc(rn(1))+' şefi</label><select id="agsy">'+opt(A.sef[1])+'</select><label>kişi</label><input id="agny" type="number" min="0" max="'+N+'" value="'+nY+'"></div>';
- h+='<label class="agck"><input type="checkbox" id="agso"'+(A.sefOn?' checked':'')+'> Şefler de okul/nokta görevi alsın</label>';
+ [0,1].forEach(function(r){h+='<div class="agrow agsc"><span>'+esc(rn(r))+' şefi:</span><label class="agck"><input type="checkbox" id="agsc'+r+'s"'+(A.sc[r].s?' checked':'')+'> okula yazılsın</label><label class="agck"><input type="checkbox" id="agsc'+r+'t"'+(A.sc[r].t?' checked':'')+'> noktaya geçsin</label></div>'});
  h+='<label class="agck"><input type="checkbox" id="agbo"'+(A.both!==false?' checked':'')+'> Okul görevlileri okuldan sonra noktaya da geçebilsin</label>';
  [0,1].forEach(function(r){var ids=agItems(d,'t',r);if(!ids.length)return;h+='<div class="sub">'+esc(rn(r))+' noktaları · kaçar kişi</div>';
   ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><input type="number" class="agpn" data-id="'+id+'" min="0" max="'+N+'" value="'+(A.pn[id]!==undefined?A.pn[id]:1)+'"></div>'})});
@@ -1728,10 +1729,10 @@ function agOpen(d){
  function lock(){plan=null;$a('.agok').disabled=true;$a('.agprev').innerHTML=''}
  ov.querySelectorAll('input,select').forEach(function(e){e.addEventListener('change',lock)});
  function read(){var sb=$a('#agsb').value,sy=$a('#agsy').value;
-  A.sef=[sb===''?null:+sb,sy===''?null:+sy];A.nB=+$a('#agnb').value||0;A.nY=+$a('#agny').value||0;A.sefOn=$a('#agso').checked;A.both=$a('#agbo').checked;
+  A.sef=[sb===''?null:+sb,sy===''?null:+sy];A.nB=+$a('#agnb').value||0;A.nY=+$a('#agny').value||0;A.sc=[0,1].map(function(r){return {s:$a('#agsc'+r+'s').checked,t:$a('#agsc'+r+'t').checked}});A.both=$a('#agbo').checked;
   
   ov.querySelectorAll('.agpn').forEach(function(i){A.pn[i.dataset.id]=Math.max(0,+i.value||0)});save();
-  var dpl=(A.dp||{})[wk+'|'+d]||[];return {sef:A.sef.slice(),nB:A.nB,nY:A.nY,sefOn:A.sefOn,both:A.both!==false,mode:'cift',pn:A.pn,nos:A.nos,pairs:A.pairs.filter(function(pr){return dpl.indexOf(pr[0]+'+'+pr[1])>-1})}}
+  var dpl=(A.dp||{})[wk+'|'+d]||[];return {sef:A.sef.slice(),nB:A.nB,nY:A.nY,sefS:[A.sc[0].s,A.sc[1].s],sefT:[A.sc[0].t,A.sc[1].t],both:A.both!==false,mode:'cift',pn:A.pn,nos:A.nos,pairs:A.pairs.filter(function(pr){return dpl.indexOf(pr[0]+'+'+pr[1])>-1})}}
  $a('.agpv').onclick=function(){var o=read();plan=agPlan(d,o);_cw=wk;_cd=d;var pv='',pl=plan;
   var inTask={},dbl={};[0,1].forEach(function(r){['s','t'].forEach(function(k){var ex=S.gl[lkey(wk,d,k,r)]||[],nw=pl.gl[lkey(wk,d,k,r)]||[];ex.concat(nw).forEach(function(id){var old=gpl(wk,d,k,r,id),n2=pl.gp[pkey(wk,d,k,r,id)]||[],al=old.concat(n2.filter(function(q){return old.indexOf(q)<0}));al.forEach(function(q){inTask[q]=1;if(k==='s')dbl[q]=(dbl[q]||0)+1})})})});
   [0,1].forEach(function(r){var k2=String(r+1),ps=pl.avail.filter(function(q){return pl.reg[q]===k2}),sec='';
