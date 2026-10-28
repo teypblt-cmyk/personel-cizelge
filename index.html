@@ -621,7 +621,7 @@ html[data-pre="2"] .wbox{border:1.5px solid var(--gold);border-radius:8px;backgr
 .agb{padding:4px 2px 10px;display:flex;flex-direction:column;gap:8px;max-height:72vh;overflow:auto}
 .agrow{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
 .agrow label{font-size:13px;color:var(--mute);white-space:nowrap}
-.agsc{flex-wrap:wrap;gap:6px 14px}.agsc>span{font-size:13px;min-width:90px}.agsc .agck{font-size:12px;white-space:nowrap}
+.agsc{flex-wrap:wrap;gap:6px 14px}.agfr{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;padding:4px 0}.agfr button{border:0;background:none;font-size:18px;color:inherit;cursor:pointer}.agfix button[data-a]{margin:2px 4px 2px 0;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:transparent;color:inherit;font-size:13px}.agsc>span{font-size:13px;min-width:90px}.agsc .agck{font-size:12px;white-space:nowrap}
 .agrow label.agw{flex:1;white-space:normal;color:inherit}
 .agrow select{flex:1;min-width:0}
 .agrow input[type=number]{width:64px;flex:0 0 auto;text-align:center}
@@ -1642,6 +1642,12 @@ function agPlan(d,o){
  for(var p=0;p<N;p++){var v=S.w[wk][p][d];reg[p]=v;if(!isLv(v))avail.push(p)}
  var busyS={},busyT={};[0,1].forEach(function(r){['s','t'].forEach(function(k){(S.gl[lkey(wk,d,k,r)]||[]).forEach(function(id){gpl(wk,d,k,r,id).forEach(function(q){(k==='s'?busyS:busyT)[q]=1})})})});
  [0,1].forEach(function(r){var c=o.sef[r];if(c===null||c===undefined||c==='')return;if(isLv(reg[c]))warn.push(pn(c)+' izinli, '+rn(r)+' şefi atanamadı');else reg[c]=String(r+1)});
+ var fixed={},forceS={},nos=Object.assign({},o.nos);
+ (o.fix||[]).forEach(function(f){var q=f.p,r=f.r;if(isLv(S.w[wk][q][d])){warn.push(pn(q)+' izinli, sabit nokta atanamadı');return}
+  if(agItems(d,'t',r).indexOf(f.id)<0){warn.push(agName('t',r,f.id)+' bugün açık değil, '+pn(q)+' için sabit uygulanmadı');return}
+  reg[q]=String(r+1);fixed[q]=1;
+  var pk=pkey(wk,d,'t',r,f.id),lk=lkey(wk,d,'t',r);(gp[pk]=gp[pk]||[]);if(gp[pk].indexOf(q)<0)gp[pk].push(q);(gl[lk]=gl[lk]||[]);if(gl[lk].indexOf(f.id)<0)gl[lk].push(f.id);(tasks[q]=tasks[q]||[]).push('📍 '+agName('t',r,f.id));
+  busyT[q]=1;if(f.sch==='e')forceS[q]=1;if(f.sch==='h')nos[q]=1});
  var cntR=function(r){var n=0;avail.forEach(function(q){if(reg[q]===String(r+1))n++});return n};
  var pool=avail.filter(function(q){return reg[q]===''});
  [0,1].forEach(function(r){var need=(r===0?o.nB:o.nY)-cntR(r);if(need<0){warn.push(rn(r)+': istediğin sayıdan '+(-need)+' kişi fazla (elle yazılanlar korundu)');return}
@@ -1654,19 +1660,19 @@ function agPlan(d,o){
  [0,1].forEach(function(r){var k2=String(r+1),x=X[r];
   x.people=avail.filter(function(q){return reg[q]===k2});
   x.chief=(o.sef[r]!==null&&o.sef[r]!==undefined&&x.people.indexOf(o.sef[r])>-1)?o.sef[r]:-1;
-  x.pplS=x.people.filter(function(q){return !busyS[q]&&(o.both[r]||!busyT[q])&&!(q===x.chief&&!o.sefS[r])});x.pplT=x.people.filter(function(q){return !busyT[q]&&(o.both[r]||!busyS[q])&&!(q===x.chief&&!o.sefT[r])});
-  x.pt=[];agItems(d,'t',r).forEach(function(id){var have=gpl(wk,d,'t',r,id).length,n=o.pn[id]!==undefined?o.pn[id]:1;if(n-have>0)x.pt.push({id:id,need:n-have})});
-  x.T=x.pt.reduce(function(a,y){return a+y.need},0);x.spool=x.pplS.filter(function(q){return !o.nos[q]});x.dropped=[]});
+  x.pplS=x.people.filter(function(q){return !busyS[q]&&(o.both[r]||!busyT[q]||forceS[q])&&(forceS[q]||!(q===x.chief&&!o.sefS[r]))});x.pplT=x.people.filter(function(q){return !busyT[q]&&(o.both[r]||!busyS[q])&&!(q===x.chief&&!o.sefT[r])});
+  x.pt=[];agItems(d,'t',r).forEach(function(id){var have=gpl(wk,d,'t',r,id).length+((gp[pkey(wk,d,'t',r,id)]||[]).filter(function(z){return gpl(wk,d,'t',r,id).indexOf(z)<0}).length),n=o.pn[id]!==undefined?o.pn[id]:1;if(n-have>0)x.pt.push({id:id,need:n-have})});
+  x.T=x.pt.reduce(function(a,y){return a+y.need},0);x.spool=x.pplS.filter(function(q){return !nos[q]});x.dropped=[]});
  var bestFor=function(pool,u){return agSort(pool,function(q){var sum=0,lm=-1;u.forEach(function(id){sum+=st.C[id+'|'+q]||0;var l=st.L[id+'|'+q];if(l!==undefined&&l>lm)lm=l});return [sum,lm]})};
  if(d<5){
   [0,1].forEach(function(r){var x=X[r];
    var sch=agItems(d,'s',r).filter(function(id){return !gpl(wk,d,'s',r,id).length});
-   var cap=Math.max(0,o.both[r]?x.spool.length:Math.min(x.spool.length,x.pplT.length-x.T)),units=sch.map(function(id){return [id]});
+   var fc=x.spool.filter(function(q){return forceS[q]}).length,cap=Math.max(fc,o.both[r]?x.spool.length:Math.min(x.spool.length,x.pplT.length-x.T)),units=sch.map(function(id){return [id]});
    var merge=function(a,b){var ia=-1,ib=-1;units.forEach(function(u,i){if(u.length===1&&u[0]===a)ia=i;if(u.length===1&&u[0]===b)ib=i});if(ia<0||ib<0)return false;units[ia]=[a,b];units.splice(ib,1);return true};
    if(o.mode==='cift')o.pairs.forEach(function(pr){merge(pr[0],pr[1])});
    else if(o.mode==='gerekirse')o.pairs.forEach(function(pr){if(units.length>cap)merge(pr[0],pr[1])});
    x.dropped=units.slice(cap);units=units.slice(0,cap);
-   units.forEach(function(u){var cand=bestFor(x.spool.filter(function(q){return !used[q]}),u);
+   units.forEach(function(u){var sp=x.spool.filter(function(q){return !used[q]}),fp=sp.filter(function(q){return forceS[q]});var cand=bestFor(fp.length?fp:sp,u);
     if(!cand.length){x.dropped.push(u);return}var q=cand[0];used[q]=1;u.forEach(function(id){add('s',r,id,q)})})});
   [0,1].forEach(function(r){var x=X[r],o2=X[1-r],left=[];
    x.dropped.forEach(function(u){
@@ -1684,7 +1690,8 @@ function agPlan(d,o){
     if(!cand.length){warn.push(rn(r)+': '+agName('t',r,y.id)+' için '+(y.need-i)+' kişi eksik');break}
     var q=cand[0];rest=rest.filter(function(z){return z!==q});add('t',r,y.id,q)}});
   var idle=rest.filter(function(q){return !hasS(q)});if(idle.length)warn.push(rn(r)+': görevsiz kalan: '+idle.map(pn).join(', '))});
- return {reg:reg,gl:gl,gp:gp,tasks:tasks,warn:warn,avail:avail,borrow:borrow}}
+ (o.fix||[]).forEach(function(f){if(forceS[f.p]&&!used[f.p]&&!busyS[f.p]&&fixed[f.p])warn.push(pn(f.p)+': okula yazılamadı (boş okul yok)')});
+ return {reg:reg,gl:gl,gp:gp,tasks:tasks,warn:warn,avail:avail,borrow:borrow,fixed:fixed}}
 function agSnap(d){var pre=wk+'|'+d+'|',s={wk:wk,d:d,w:[],gl:{},gp:{}};for(var q=0;q<N;q++)s.w[q]=S.w[wk][q][d];
  Object.keys(S.gl).forEach(function(k){if(k.indexOf(pre)===0)s.gl[k]=(S.gl[k]||[]).slice()});Object.keys(S.gp).forEach(function(k){if(k.indexOf(pre)===0)s.gp[k]=(S.gp[k]||[]).slice()});return s}
 function agRestore(s){var pre=s.wk+'|'+s.d+'|';for(var q=0;q<N;q++)S.w[s.wk][q][s.d]=s.w[q];
@@ -1702,9 +1709,9 @@ function agOpen(d){
  var h='<div class="css card"><div class="csh"><b>Otomatik dağıt · '+FD[d]+' '+dFull(wk,d)+'</b><button type="button" class="csx" aria-label="Kapat">×</button></div><div class="csl agb">';
  h+='<p class="sm">Elle yazdıkların sabit kalır, yalnızca boş yerler doldurulur. Müsait: <b>'+avail.length+'</b> kişi.</p>';
  var opt=function(sel){return '<option value="">— seçme —</option>'+avail.map(function(q){return '<option value="'+q+'"'+(sel===q?' selected':'')+'>'+esc(pn(q))+'</option>'}).join('')};
- h+='<div class="agrow"><label>'+esc(rn(0))+' şefi</label><select id="agsb">'+opt(A.sef[0])+'</select><label>kişi</label><input id="agnb" type="number" min="0" max="'+N+'" value="'+nB+'"></div>';
- h+='<div class="agrow"><label>'+esc(rn(1))+' şefi</label><select id="agsy">'+opt(A.sef[1])+'</select><label>kişi</label><input id="agny" type="number" min="0" max="'+N+'" value="'+nY+'"></div>';
- [0,1].forEach(function(r){h+='<div class="agrow agsc"><span>'+esc(rn(r))+':</span><label class="agck"><input type="checkbox" id="agsc'+r+'s"'+(A.sc2[r].s?' checked':'')+'> şef okula</label><label class="agck"><input type="checkbox" id="agsc'+r+'t"'+(A.sc2[r].t?' checked':'')+'> şef noktaya</label><label class="agck"><input type="checkbox" id="agbo'+r+'"'+(A.both[r]?' checked':'')+'> okul→nokta</label></div>'});
+ h+='<div class="agrow"><label>'+esc(rn(0))+' kişi</label><input id="agnb" type="number" min="0" max="'+N+'" value="'+nB+'"><label>'+esc(rn(1))+' kişi</label><input id="agny" type="number" min="0" max="'+N+'" value="'+nY+'"></div>';
+ [0,1].forEach(function(r){h+='<div class="sub">'+esc(rn(r))+'</div><div class="agrow"><label>Şef</label><select id="'+(r?'agsy':'agsb')+'">'+opt(A.sef[r])+'</select></div>'+
+  '<div class="agrow agsc"><label class="agck"><input type="checkbox" id="agsc'+r+'s"'+(A.sc2[r].s?' checked':'')+'> şef okula</label><label class="agck"><input type="checkbox" id="agsc'+r+'t"'+(A.sc2[r].t?' checked':'')+'> şef noktaya</label><label class="agck"><input type="checkbox" id="agbo'+r+'"'+(A.both[r]?' checked':'')+'> okul→nokta</label></div><div class="agfix" data-r="'+r+'"></div>'});
  [0,1].forEach(function(r){var ids=agItems(d,'t',r);if(!ids.length)return;h+='<div class="sub">'+esc(rn(r))+' noktaları · kaçar kişi</div>';
   ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><input type="number" class="agpn" data-id="'+id+'" min="0" max="'+N+'" value="'+(A.pn[id]!==undefined?A.pn[id]:1)+'"></div>'})});
  if(d<5){h+='<div class="sub">Bu gün aynı kişiye gidecek okullar</div>';
@@ -1725,6 +1732,24 @@ function agOpen(d){
   bx.querySelectorAll('.agpr button').forEach(function(b){b.onclick=function(e){e.preventDefault();A.pairs.splice(+b.dataset.i,1);save();pairsUI()}});
   bx.querySelector('.agpadd').onclick=function(){var a=$a('#agpa').value,b=$a('#agpb').value;if(!a||!b||a===b)return;A.pairs.push([a,b]);(A.dp[wk+'|'+d]=A.dp[wk+'|'+d]||[]).push(a+'+'+b);save();pairsUI()}}
  pairsUI();
+
+ var fxs=[null,null];
+ function fixUI(){var key=wk+'|'+d,L=(A.fx=A.fx||{})[key]=(A.fx[key]||[]);
+  var taken={};[0,1].forEach(function(r){['s','t'].forEach(function(k){agItems(d,k,r).forEach(function(id){gpl(wk,d,k,r,id).forEach(function(q){taken[q]=1})})})});
+  L.forEach(function(f){taken[f.p]=1});
+  [0,1].forEach(function(r){var bx=$a('.agfix[data-r="'+r+'"]');if(!bx)return;var st=fxs[r];
+   var h2=L.map(function(f,i){return f.r!==r?'':'<div class="agfr"><span>'+esc(pn(f.p))+' → '+esc(agName('t',r,f.id))+' · '+({e:'okula da gider',h:'okula gitmez',a:'okul fark etmez'})[f.sch]+'</span><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'}).join('');
+   if(!st)h2+='<button type="button" class="agadd" data-a="new">+ Kişi ekle</button>';
+   else if(st.p===null)h2+='<div class="agrow"><select data-a="p"><option value="">Kim?</option>'+avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}).map(function(q){return '<option value="'+q+'">'+esc(pn(q))+'</option>'}).join('')+'</select><button type="button" data-a="x">İptal</button></div>';
+   else if(st.id===null)h2+='<div class="agrow"><select data-a="id"><option value="">'+esc(pn(st.p))+' hangi noktaya?</option>'+agItems(d,'t',r).map(function(id){return '<option value="'+id+'">'+esc(agName('t',r,id))+'</option>'}).join('')+'</select><button type="button" data-a="x">İptal</button></div>';
+   else h2+='<div class="agrow"><span class="sm">'+esc(pn(st.p))+' okula gitsin mi?</span><button type="button" data-a="e">Gitsin</button><button type="button" data-a="h">Gitmesin</button><button type="button" data-a="a">Fark etmez</button></div>';
+   bx.innerHTML=h2;
+   bx.querySelectorAll('[data-del]').forEach(function(b){b.onclick=function(){L.splice(+b.dataset.del,1);save();lock();fixUI()}});
+   bx.querySelectorAll('button[data-a]').forEach(function(b){b.onclick=function(){var a2=b.dataset.a;
+    if(a2==='new')fxs[r]={p:null,id:null};else if(a2==='x')fxs[r]=null;
+    else{L.push({p:fxs[r].p,r:r,id:fxs[r].id,sch:a2});fxs[r]=null;save();lock()}fixUI()}});
+   bx.querySelectorAll('select[data-a]').forEach(function(e){e.onchange=function(){if(!e.value)return;if(e.dataset.a==='p')fxs[r].p=+e.value;else fxs[r].id=e.value;fixUI()}})})}
+ fixUI();
  ov.querySelectorAll('.agp').forEach(function(b){b.onclick=function(){var q=+b.dataset.p;if(A.nos[q])delete A.nos[q];else A.nos[q]=1;b.classList.toggle('on',!!A.nos[q]);save();lock()}});
  var plan=null;
  function lock(){plan=null;$a('.agok').disabled=true;$a('.agprev').innerHTML=''}
@@ -1733,7 +1758,7 @@ function agOpen(d){
   A.sef=[sb===''?null:+sb,sy===''?null:+sy];A.nB=+$a('#agnb').value||0;A.nY=+$a('#agny').value||0;A.both=[$a('#agbo0').checked,$a('#agbo1').checked];A.sc2=[0,1].map(function(r){return {s:$a('#agsc'+r+'s').checked,t:$a('#agsc'+r+'t').checked}});
   
   ov.querySelectorAll('.agpn').forEach(function(i){A.pn[i.dataset.id]=Math.max(0,+i.value||0)});save();
-  var dpl=(A.dp||{})[wk+'|'+d]||[];return {sef:A.sef.slice(),nB:A.nB,nY:A.nY,sefS:[A.sc2[0].s,A.sc2[1].s],sefT:[A.sc2[0].t,A.sc2[1].t],both:A.both.slice(),mode:'cift',pn:A.pn,nos:A.nos,pairs:A.pairs.filter(function(pr){return dpl.indexOf(pr[0]+'+'+pr[1])>-1})}}
+  var dpl=(A.dp||{})[wk+'|'+d]||[];return {sef:A.sef.slice(),nB:A.nB,nY:A.nY,sefS:[A.sc2[0].s,A.sc2[1].s],sefT:[A.sc2[0].t,A.sc2[1].t],both:A.both.slice(),mode:'cift',fix:((A.fx||{})[wk+'|'+d]||[]).slice(),pn:A.pn,nos:A.nos,pairs:A.pairs.filter(function(pr){return dpl.indexOf(pr[0]+'+'+pr[1])>-1})}}
  $a('.agpv').onclick=function(){var o=read();plan=agPlan(d,o);_cw=wk;_cd=d;var pv='',pl=plan;
   var inTask={},dbl={};[0,1].forEach(function(r){['s','t'].forEach(function(k){var ex=S.gl[lkey(wk,d,k,r)]||[],nw=pl.gl[lkey(wk,d,k,r)]||[];ex.concat(nw).forEach(function(id){var old=gpl(wk,d,k,r,id),n2=pl.gp[pkey(wk,d,k,r,id)]||[],al=old.concat(n2.filter(function(q){return old.indexOf(q)<0}));al.forEach(function(q){inTask[q]=1;if(k==='s')dbl[q]=(dbl[q]||0)+1})})})});
   [0,1].forEach(function(r){var k2=String(r+1),ps=pl.avail.filter(function(q){return pl.reg[q]===k2}),sec='';
@@ -1745,7 +1770,7 @@ function agOpen(d){
      rows.push({id:id,old:old,all:all.sort(cmpP)})});
     sec+='<div class="agsub">'+K[2]+' '+K[1]+'</div>'+rows.map(function(x){
      return '<div class="agit"><b>'+esc(agName(k,r,x.id))+' <small>('+x.all.length+')</small></b>'+(x.all.length?x.all.map(function(q){var c=codeD(wk,d,q);
-      return '<div class="agr"><span>'+(c?'<small>'+esc(c)+'</small> ':'')+esc(pn(q))+(o.sef[r]===q?' ★':'')+'</span><em>'+(x.old.indexOf(q)>-1?'<i>sabit</i> ':'')+(k==='s'&&pl.borrow[q]?'<i>'+esc(rn(r===0?1:0))+'</i> ':'')+(k==='s'&&dbl[q]>1?'çift okul':(k==='t'&&dbl[q]?'okuldan sonra':''))+'</em></div>'}).join(''):'<div class="agr empty"><span>kimse yok</span></div>')+'</div>'}).join('')});
+      return '<div class="agr"><span>'+(c?'<small>'+esc(c)+'</small> ':'')+esc(pn(q))+(o.sef[r]===q?' ★':'')+'</span><em>'+((x.old.indexOf(q)>-1||(k==='t'&&pl.fixed[q]))?'<i>sabit</i> ':'')+(k==='s'&&pl.borrow[q]?'<i>'+esc(rn(r===0?1:0))+'</i> ':'')+(k==='s'&&dbl[q]>1?'çift okul':(k==='t'&&dbl[q]?'okuldan sonra':''))+'</em></div>'}).join(''):'<div class="agr empty"><span>kimse yok</span></div>')+'</div>'}).join('')});
    var free=ps.filter(function(q){return !inTask[q]}).sort(cmpP);
    if(free.length)sec+='<div class="agsub">Bölge listesi (görevsiz)</div><div class="agit">'+free.map(function(q){var c=codeD(wk,d,q);return '<div class="agr"><span>'+(c?'<small>'+esc(c)+'</small> ':'')+esc(pn(q))+(o.sef[r]===q?' ★':'')+'</span><em></em></div>'}).join('')+'</div>';
    pv+='<div class="agreg g'+k2+'"><b>'+esc(rn(r))+' ('+ps.length+')</b>'+sec+'</div>'});
