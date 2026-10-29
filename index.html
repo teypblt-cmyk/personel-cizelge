@@ -630,6 +630,7 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agsec.r0>.agst2{background:var(--a)}.agsec.r1>.agst2{background:var(--b)}
 .agov .agb{max-height:none;flex:1 1 auto;min-height:0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.agov .css{overscroll-behavior:contain}
 .agov .agbtns{position:static;background:transparent;padding:10px 0 0;flex:0 0 auto}
+.agit.tp>b,.agpt label,.agfl .agch.pt,.agpick button.ptb span{font-weight:800;font-style:italic}
 .agpick{display:flex;flex-direction:column;gap:6px}.agpick>b{font-size:14px}
 .agfix .agpick button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
@@ -1719,7 +1720,7 @@ function agPlan(d,o){
     var cand=agSort(rest,function(q){var l=st.L[y.id+'|'+q];return [hasS(q),st.C[y.id+'|'+q]||0,l===undefined?-1:l]});
     if(!cand.length){warn.push(rn(r)+': '+agName('t',r,y.id)+' için '+(y.need-i)+' kişi eksik');break}
     var q=cand[0];rest=rest.filter(function(z){return z!==q});add('t',r,y.id,q)}});
-  var idle=rest.filter(function(q){return !hasS(q)});if(idle.length)warn.push(rn(r)+': görevsiz kalan: '+idle.map(pn).join(', '))});
+  });
  (o.fix||[]).forEach(function(f){if(forceS[f.p]&&!used[f.p]&&!busyS[f.p]&&fixed[f.p])warn.push(pn(f.p)+': okula yazılamadı (boş okul yok)')});
  return {reg:reg,gl:gl,gp:gp,tasks:tasks,warn:warn,avail:avail,borrow:borrow,fixed:fixed}}
 function agSnap(d){var pre=wk+'|'+d+'|',s={wk:wk,d:d,w:[],gl:{},gp:{}};for(var q=0;q<N;q++)s.w[q]=S.w[wk][q][d];
@@ -1775,7 +1776,7 @@ function agOpen(d){
    var chief=null;L.forEach(function(f){if(f.r===r&&f.chief)chief=f});
    var line=function(f){var i=L.indexOf(f);var ch='';
     if(d<5)ch+='<span class="agch'+(f.s?'':' no')+'">'+(f.s?(f.sid?'Okul · '+esc(agName('s',f.sr,f.sid)):'Okul · otomatik'):'okul yok')+'</span>';
-    ch+='<span class="agch'+(f.id?'':' no')+'">'+(f.id?esc(agName('t',r,f.id)):'nokta yok')+'</span>';
+    ch+='<span class="agch pt'+(f.id?'':' no')+'">'+(f.id?esc(agName('t',r,f.id)):'nokta yok')+'</span>';
     return '<div class="agfr"><div class="agfl">'+(f.chief?'<b class="agsf">ŞEF</b>':'')+'<span class="agnm">'+esc(pn(f.p))+'</span>'+ch+'</div><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'};
    var h2='';
    if(chief)h2+=line(chief);
@@ -1788,7 +1789,7 @@ function agOpen(d){
      [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;h2+='<div class="agpk-h">'+esc(rn(sr))+'</div>'+sids.map(function(id){var c=CN.C[id+'|'+st.p]||0;return '<button type="button" data-a="pick" data-v="'+sr+'|'+id+'"><span>'+esc(agName('s',sr,id))+'</span><em>'+c+' kez</em></button>'}).join('')});
      h2+='<button type="button" data-a="x" class="agx">İptal</button></div>'}
     else if(st.step==='t')h2+='<div class="agrow agq"><span>'+nm+' noktaya gitsin mi?</span>'+YN('t')+'</div>';
-    else h2+='<div class="agpick"><b>'+nm+' hangi noktaya?</b>'+agItems(d,'t',r).map(function(id){return '<button type="button" data-a="pick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(CN.C[id+'|'+st.p]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>'}
+    else h2+='<div class="agpick"><b>'+nm+' hangi noktaya?</b>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="pick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(CN.C[id+'|'+st.p]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>'}
    else h2+='<button type="button" class="agadd" data-a="new">+ Personel ekle</button>';
    bx.innerHTML=h2;
    var done=function(id){L.push({p:fxs[r].p,r:r,s:fxs[r].s,sid:fxs[r].sid||null,sr:fxs[r].sr,id:id,chief:!!fxs[r].chief});fxs[r]=null;save();lock();fixUI()};
@@ -1822,7 +1823,7 @@ function agOpen(d){
      var all=old.concat(nw2.filter(function(q){return old.indexOf(q)<0}));
      rows.push({id:id,old:old,all:all.sort(cmpP)})});
     sec+='<div class="agsub">'+K[2]+' '+K[1]+'</div>'+rows.map(function(x){
-     return '<div class="agit"><b>'+esc(agName(k,r,x.id))+' <small>('+x.all.length+')</small></b>'+(x.all.length?x.all.map(function(q){var c=codeD(wk,d,q);
+     return '<div class="agit'+(k==='t'?' tp':'')+'"><b>'+esc(agName(k,r,x.id))+' <small>('+x.all.length+')</small></b>'+(x.all.length?x.all.map(function(q){var c=codeD(wk,d,q);
       return '<div class="agr"><span>'+(c?'<small>'+esc(c)+'</small> ':'')+esc(pn(q))+(o.sef[r]===q?' ★':'')+'</span><em>'+((x.old.indexOf(q)>-1||(k==='t'&&pl.fixed[q]))?'<i>sabit</i> ':'')+(k==='s'&&pl.borrow[q]?'<i>'+esc(rn(r===0?1:0))+'</i> ':'')+(k==='s'&&dbl[q]>1?'çift okul':(k==='t'&&dbl[q]?'okuldan sonra':''))+'</em></div>'}).join(''):'<div class="agr empty"><span>kimse yok</span></div>')+'</div>'}).join('')});
    var free=ps.filter(function(q){return !inTask[q]}).sort(cmpP);
    if(free.length)sec+='<div class="agsub">Bölge listesi (görevsiz)</div><div class="agit">'+free.map(function(q){var c=codeD(wk,d,q);return '<div class="agr"><span>'+(c?'<small>'+esc(c)+'</small> ':'')+esc(pn(q))+(o.sef[r]===q?' ★':'')+'</span><em></em></div>'}).join('')+'</div>';
