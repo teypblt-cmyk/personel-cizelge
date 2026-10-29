@@ -1685,17 +1685,17 @@ function agPlan(d,o){
  for(var p=0;p<N;p++){var v=S.w[wk][p][d];reg[p]=v;if(!isLv(v))avail.push(p)}
  var busyS={},busyT={};[0,1].forEach(function(r){['s','t'].forEach(function(k){(S.gl[lkey(wk,d,k,r)]||[]).forEach(function(id){gpl(wk,d,k,r,id).forEach(function(q){(k==='s'?busyS:busyT)[q]=1})})})});
  [0,1].forEach(function(r){var c=o.sef[r];if(c===null||c===undefined||c==='')return;if(isLv(reg[c]))warn.push(pn(c)+' izinli, '+rn(r)+' şefi atanamadı');else reg[c]=String(r+1)});
- var borrow={},fixed={},forceS={},nos=Object.assign({},o.nos);
+ var borrow={},fixed={},forceS={},forceT={},nos=Object.assign({},o.nos);
  (o.fix||[]).forEach(function(f){var q=f.p,r=f.r,sc=f.s!==undefined?f.s:(f.sch==='e'?true:f.sch==='h'?false:null);
   if(isLv(S.w[wk][q][d])){warn.push(pn(q)+' izinli, atanamadı');return}
   reg[q]=String(r+1);fixed[q]=1;
-  if(f.id){if(agItems(d,'t',r).indexOf(f.id)<0){warn.push(agName('t',r,f.id)+' bugün açık değil, '+pn(q)+' noktaya yazılamadı')}
+  if(f.id&&f.id!=='auto'){if(agItems(d,'t',r).indexOf(f.id)<0){warn.push(agName('t',r,f.id)+' bugün açık değil, '+pn(q)+' noktaya yazılamadı')}
    else{var pk=pkey(wk,d,'t',r,f.id),lk=lkey(wk,d,'t',r);(gp[pk]=gp[pk]||[]);if(gp[pk].indexOf(q)<0)gp[pk].push(q);(gl[lk]=gl[lk]||[]);if(gl[lk].indexOf(f.id)<0)gl[lk].push(f.id);(tasks[q]=tasks[q]||[]).push('📍 '+agName('t',r,f.id))}}
   if(sc===true&&f.sid){var sr=f.sr!==undefined?f.sr:r;
    if(agItems(d,'s',sr).indexOf(f.sid)<0)warn.push(agName('s',sr,f.sid)+' bugün açık değil, '+pn(q)+' okula yazılamadı');
    else if(gpl(wk,d,'s',sr,f.sid).length)warn.push(agName('s',sr,f.sid)+' zaten dolu, '+pn(q)+' okula yazılamadı');
    else{var pk2=pkey(wk,d,'s',sr,f.sid),lk2=lkey(wk,d,'s',sr);(gp[pk2]=gp[pk2]||[]).push(q);(gl[lk2]=gl[lk2]||[]);if(gl[lk2].indexOf(f.sid)<0)gl[lk2].push(f.sid);(tasks[q]=tasks[q]||[]).push('🏫 '+agName('s',sr,f.sid));busyS[q]=1;if(sr!==r)borrow[q]=1;sc=null}}
-  busyT[q]=1;if(sc===true)forceS[q]=1;if(sc===false)nos[q]=1});
+  if(f.id==='auto')forceT[q]=1;else busyT[q]=1;if(sc===true)forceS[q]=1;if(sc===false)nos[q]=1});
  var cntR=function(r){var n=0;avail.forEach(function(q){if(reg[q]===String(r+1))n++});return n};
  var pool=avail.filter(function(q){return reg[q]===''});
  [0,1].forEach(function(r){var need=(r===0?o.nB:o.nY)-cntR(r);if(need<0){warn.push(rn(r)+': istediğin sayıdan '+(-need)+' kişi fazla (elle yazılanlar korundu)');return}
@@ -1733,7 +1733,7 @@ function agPlan(d,o){
   var hasS=function(q){return (used[q]||busyS[q])?1:0};
   var slots=[];x.pt.forEach(function(y){for(var i=0;i<y.need;i++)slots.push(y.id)});
   var np=rest.length,ns=slots.length;
-  if(ns){var mat=slots.map(function(id,i){var row=rest.map(function(q){var l=st.L[id+'|'+q];return hasS(q)*1e6+(st.C[id+'|'+q]||0)*1000+(l===undefined?0:l+1)+q/1000});for(var k=0;k<ns;k++)row.push(k===i?1e9:1e12);return row});
+  if(ns){var mat=slots.map(function(id,i){var row=rest.map(function(q){var l=st.L[id+'|'+q];return (forceT[q]?-1e8:0)+hasS(q)*1e6+(st.C[id+'|'+q]||0)*1000+(l===undefined?0:l+1)+q/1000});for(var k=0;k<ns;k++)row.push(k===i?1e9:1e12);return row});
    var rs=agHung(mat),miss={};
    slots.forEach(function(id,i){var j=rs[i];if(j===undefined||j>=np){miss[id]=(miss[id]||0)+1;return}add('t',r,id,rest[j])});
    Object.keys(miss).forEach(function(id){warn.push(rn(r)+': '+agName('t',r,id)+' için '+miss[id]+' kişi eksik')})}
@@ -1883,12 +1883,12 @@ function agOpen(d){
    var chief=null;L.forEach(function(f){if(f.r===r&&f.chief)chief=f});
    var line=function(f){var i=L.indexOf(f),ch='',e=ed[r],sp='';
     if(d<5)ch+='<button type="button" class="agch sc'+(f.s?'':' no')+'" data-ed="'+i+'|s">🏫 '+(f.s?(f.sid?esc(agName('s',f.sr,f.sid)):'Okul · otomatik'):'okul yok')+' ▾</button>';
-    ch+='<button type="button" class="agch pt'+(f.id?'':' no')+'" data-ed="'+i+'|t">📍 '+(f.id?esc(agName('t',r,f.id)):'nokta yok')+' ▾</button>';
+    ch+='<button type="button" class="agch pt'+(f.id?'':' no')+'" data-ed="'+i+'|t">📍 '+(f.id==='auto'?'Nokta · otomatik':f.id?esc(agName('t',r,f.id)):'nokta yok')+' ▾</button>';
     if(e&&e.i===i){var cs=CN.C,pc=f.p;
      if(e.f==='s'){sp='<div class="agpick"><b>'+esc(pn(f.p))+' · okul</b><button type="button" data-a="epick" data-v="n">Okul yok</button><button type="button" data-a="epick" data-v="a">Otomatik (en az giden)</button>';
       [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;sp+='<div class="agpk-h">'+esc(rn(sr))+'</div>'+sids.map(function(id){return '<button type="button" data-a="epick" data-v="'+sr+'|'+id+'"><span>'+esc(agName('s',sr,id))+'</span><em>'+(cs[id+'|'+pc]||0)+' kez</em></button>'}).join('')});
       sp+='<button type="button" data-a="x" class="agx">Vazgeç</button></div>'}
-     else{sp='<div class="agpick"><b>'+esc(pn(f.p))+' · nokta</b><button type="button" data-a="epick" data-v="n">Nokta yok</button>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="epick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(cs[id+'|'+pc]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">Vazgeç</button></div>'}}
+     else{sp='<div class="agpick"><b>'+esc(pn(f.p))+' · nokta</b><button type="button" data-a="epick" data-v="n">Nokta yok</button><button type="button" data-a="epick" data-v="auto">Otomatik (en az giden)</button>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="epick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(cs[id+'|'+pc]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">Vazgeç</button></div>'}}
     return '<div class="agfr"><div class="agfl">'+(f.chief?'<b class="agsf">ŞEF</b>':'')+'<span class="agnm">'+esc(pn(f.p))+'</span>'+ch+'</div><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'+sp};
    var h2='';
    if(chief)h2+=line(chief);
@@ -1901,7 +1901,7 @@ function agOpen(d){
      [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;h2+='<div class="agpk-h">'+esc(rn(sr))+'</div>'+sids.map(function(id){var c=CN.C[id+'|'+st.p]||0;return '<button type="button" data-a="pick" data-v="'+sr+'|'+id+'"><span>'+esc(agName('s',sr,id))+'</span><em>'+c+' kez</em></button>'}).join('')});
      h2+='<button type="button" data-a="x" class="agx">İptal</button></div>'}
     else if(st.step==='t')h2+='<div class="agrow agq"><span>'+nm+' noktaya gitsin mi?</span>'+YN('t')+'</div>';
-    else h2+='<div class="agpick"><b>'+nm+' hangi noktaya?</b>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="pick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(CN.C[id+'|'+st.p]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>'}
+    else h2+='<div class="agpick"><b>'+nm+' hangi noktaya?</b><button type="button" data-a="pick" data-v="auto">Otomatik (en az giden)</button>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="pick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(CN.C[id+'|'+st.p]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>'}
    else h2+='<button type="button" class="agadd" data-a="new">+ Personel ekle</button>';
    bx.innerHTML=h2;
    var done=function(id){L.push({p:fxs[r].p,r:r,s:fxs[r].s,sid:fxs[r].sid||null,sr:fxs[r].sr,id:id,chief:!!fxs[r].chief});fxs[r]=null;if(pq.length){var nx=pq.shift();fxs[nx.r]=nx}save();lock();fixUI()};
