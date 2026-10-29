@@ -1584,7 +1584,7 @@ function buildText(w,d){
  if([0,1].some(function(r){return (S.gl[lkey(w,d,'t',r)]||[]).length}))L.push('*📍NOKTA GÖREVLERİ📍*','');
  [0,1].forEach(function(r){if(r===1&&(S.gl[lkey(w,d,'t',0)]||[]).length&&(S.gl[lkey(w,d,'t',1)]||[]).length)L.push('              ----------','');ordIds(w,d,'t',r).forEach(function(n){
   var ps=gpl(w,d,'t',r,n).slice(),seen={},hd=[];ps.forEach(function(p){var c=codeOf(p);if(c&&!seen[c]){seen[c]=1;hd.push(c)}});
-  if(ps.length)plines(ps,true).forEach(function(x){L.push(x)});itlf('t',r,n).forEach(function(x){L.push(x)});L.push('')})});
+  if(ps.length)plines(ps).forEach(function(x){L.push(x)});itlf('t',r,n).forEach(function(x){L.push(x)});L.push('')})});
  return L.join('\n').replace(/\n+$/,'');
 }
 var OPEN={};
@@ -1759,6 +1759,7 @@ function agApply(d,pl){agSnapMem=agSnap(d);agStrip(d);var rec={gp:{},gl:{},m:{}}
  for(var q=0;q<N;q++)if(pl.avail.indexOf(q)>-1&&pl.reg[q]!==S.w[wk][q][d]){if(S.w[wk][q][d]==='')rec.m[q]=pl.reg[q];S.w[wk][q][d]=pl.reg[q]}
  Object.keys(pl.gp).forEach(function(pk){var cur=S.gp[pk]||[],ad=pl.gp[pk].filter(function(q){return cur.indexOf(q)<0});if(ad.length)rec.gp[pk]=ad;S.gp[pk]=cur.concat(ad)});
  Object.keys(pl.gl).forEach(function(lk){var l=S.gl[lk]||[],ad=[];pl.gl[lk].forEach(function(id){if(l.indexOf(id)<0){l.push(id);ad.push(id)}});if(ad.length)rec.gl[lk]=ad;S.gl[lk]=l});
+ _cw=wk;_cd=d;Object.keys(S.gp).forEach(function(k){if(k.indexOf(wk+'|'+d+'|')===0&&S.gp[k].length>1)S.gp[k]=S.gp[k].slice().sort(cmpP)});
  agAu()[wk+'|'+d]=rec;save()}
 /* ===== Otosaki sesli/yazılı komut çözümleyici ===== */
 function agN(x){return String(x||'').toLocaleLowerCase('tr').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ı/g,'i').replace(/ö/g,'o').replace(/ş/g,'s').replace(/ü/g,'u').replace(/[’'`´]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim()}
