@@ -1680,7 +1680,17 @@ function agHung(a){var n=a.length,m=a[0].length,u=[],v=[],p=[],way=[],i,j;for(j=
    j0=j1}while(p[j0]!==0);
   do{var jb=way[j0];p[j0]=p[jb];j0=jb}while(j0)}
  var res=[];for(j=1;j<=m;j++)if(p[j])res[p[j]-1]=j-1;return res}
-function agPlan(d,o){
+function agAu(){S.ag=S.ag||{};return S.ag.au=S.ag.au||{}}
+function agStrip(d){var rec=agAu()[wk+'|'+d];if(!rec)return;
+ Object.keys(rec.gp||{}).forEach(function(pk){var cur=S.gp[pk];if(!cur)return;S.gp[pk]=cur.filter(function(q){return rec.gp[pk].indexOf(q)<0});if(!S.gp[pk].length)delete S.gp[pk]});
+ Object.keys(rec.gl||{}).forEach(function(lk){var l=S.gl[lk];if(!l)return;S.gl[lk]=l.filter(function(id){return rec.gl[lk].indexOf(id)<0||(S.gp[lk+'|'+id]||[]).length});if(!S.gl[lk].length)delete S.gl[lk]});
+ Object.keys(rec.m||{}).forEach(function(q){if(S.w[wk][q][d]===rec.m[q])S.w[wk][q][d]=''})}
+function agIsAuto(d,k,r,id,q){var rec=agAu()[wk+'|'+d];return !!(rec&&rec.gp&&(rec.gp[pkey(wk,d,k,r,id)]||[]).indexOf(q)>-1)}
+function agRestoreQ(sn){var pre=sn.wk+'|'+sn.d+'|';for(var q=0;q<N;q++)S.w[sn.wk][q][sn.d]=sn.w[q];
+ Object.keys(S.gl).forEach(function(k){if(k.indexOf(pre)===0)delete S.gl[k]});Object.keys(S.gp).forEach(function(k){if(k.indexOf(pre)===0)delete S.gp[k]});
+ Object.keys(sn.gl).forEach(function(k){S.gl[k]=sn.gl[k]});Object.keys(sn.gp).forEach(function(k){S.gp[k]=sn.gp[k]})}
+function agPlan(d,o){var sn=agSnap(d),pl;agStrip(d);try{pl=agPlan0(d,o)}finally{agRestoreQ(sn)}return pl}
+function agPlan0(d,o){
  var st=agStats(d),warn=[],reg={},gl={},gp={},tasks={},avail=[];
  for(var p=0;p<N;p++){var v=S.w[wk][p][d];reg[p]=v;if(!isLv(v))avail.push(p)}
  var busyS={},busyT={};[0,1].forEach(function(r){['s','t'].forEach(function(k){(S.gl[lkey(wk,d,k,r)]||[]).forEach(function(id){gpl(wk,d,k,r,id).forEach(function(q){(k==='s'?busyS:busyT)[q]=1})})})});
@@ -1745,10 +1755,11 @@ function agSnap(d){var pre=wk+'|'+d+'|',s={wk:wk,d:d,w:[],gl:{},gp:{}};for(var q
 function agRestore(s){var pre=s.wk+'|'+s.d+'|';for(var q=0;q<N;q++)S.w[s.wk][q][s.d]=s.w[q];
  Object.keys(S.gl).forEach(function(k){if(k.indexOf(pre)===0)delete S.gl[k]});Object.keys(S.gp).forEach(function(k){if(k.indexOf(pre)===0)delete S.gp[k]});
  Object.keys(s.gl).forEach(function(k){S.gl[k]=s.gl[k]});Object.keys(s.gp).forEach(function(k){S.gp[k]=s.gp[k]});save()}
-function agApply(d,pl){agSnapMem=agSnap(d);
- for(var q=0;q<N;q++)if(pl.avail.indexOf(q)>-1&&pl.reg[q]!==S.w[wk][q][d])S.w[wk][q][d]=pl.reg[q];
- Object.keys(pl.gp).forEach(function(pk){var cur=S.gp[pk]||[];S.gp[pk]=cur.concat(pl.gp[pk].filter(function(q){return cur.indexOf(q)<0}))});
- Object.keys(pl.gl).forEach(function(lk){var l=S.gl[lk]||[];pl.gl[lk].forEach(function(id){if(l.indexOf(id)<0)l.push(id)});S.gl[lk]=l});save()}
+function agApply(d,pl){agSnapMem=agSnap(d);agStrip(d);var rec={gp:{},gl:{},m:{}};
+ for(var q=0;q<N;q++)if(pl.avail.indexOf(q)>-1&&pl.reg[q]!==S.w[wk][q][d]){if(S.w[wk][q][d]==='')rec.m[q]=pl.reg[q];S.w[wk][q][d]=pl.reg[q]}
+ Object.keys(pl.gp).forEach(function(pk){var cur=S.gp[pk]||[],ad=pl.gp[pk].filter(function(q){return cur.indexOf(q)<0});if(ad.length)rec.gp[pk]=ad;S.gp[pk]=cur.concat(ad)});
+ Object.keys(pl.gl).forEach(function(lk){var l=S.gl[lk]||[],ad=[];pl.gl[lk].forEach(function(id){if(l.indexOf(id)<0){l.push(id);ad.push(id)}});if(ad.length)rec.gl[lk]=ad;S.gl[lk]=l});
+ agAu()[wk+'|'+d]=rec;save()}
 /* ===== Otosaki sesli/yazılı komut çözümleyici ===== */
 function agN(x){return String(x||'').toLocaleLowerCase('tr').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ı/g,'i').replace(/ö/g,'o').replace(/ş/g,'s').replace(/ü/g,'u').replace(/[’'`´]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim()}
 function agED(a,b){if(a===b)return 0;var m=a.length,n=b.length;if(Math.abs(m-n)>2)return 3;var p=[],i,j;for(j=0;j<=n;j++)p[j]=j;for(i=1;i<=m;i++){var c=[i];for(j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a.charAt(i-1)===b.charAt(j-1)?0:1));p=c}return p[n]}
@@ -1875,7 +1886,7 @@ function agOpen(d){
 
  var fxs=[null,null],pq=[],ed=[null,null];
  function fixUI(){var key=wk+'|'+d,L=(A.fx=A.fx||{})[key]=(A.fx[key]||[]);
-  var taken={};[0,1].forEach(function(r){['s','t'].forEach(function(k){agItems(d,k,r).forEach(function(id){gpl(wk,d,k,r,id).forEach(function(q){taken[q]=1})})})});
+  var taken={};[0,1].forEach(function(r){['s','t'].forEach(function(k){agItems(d,k,r).forEach(function(id){gpl(wk,d,k,r,id).forEach(function(q){if(!agIsAuto(d,k,r,id,q))taken[q]=1})})})});
   L.forEach(function(f){taken[f.p]=1});
   var CN=agStats(d);
   var YN=function(a2,q){return '<button type="button" data-a="'+a2+'y">Evet</button><button type="button" data-a="'+a2+'n">Hayır</button>'};
@@ -1967,7 +1978,7 @@ function agOpen(d){
   
   ov.querySelectorAll('.agpn').forEach(function(i){A.pn[i.dataset.id]=Math.max(0,+i.value||0)});save();
   var dpl=(A.dp||{})[wk+'|'+d]||[];return {sef:sf,nB:A.nB,nY:A.nY,sefS:[true,true],sefT:[true,true],both:[true,true],mode:'cift',fix:FX,pn:A.pn,nos:{},pairs:A.pairs.filter(function(pr){return dpl.indexOf(pr[0]+'+'+pr[1])>-1})}}
- $a('.agpv').onclick=function(){var o=read();plan=agPlan(d,o);_cw=wk;_cd=d;var pv='',pl=plan;
+ $a('.agpv').onclick=function(){var o=read(),sn0=agSnap(d);agStrip(d);try{plan=agPlan(d,o);_cw=wk;_cd=d;var pv='',pl=plan;
   var inTask={},dbl={};[0,1].forEach(function(r){['s','t'].forEach(function(k){var ex=S.gl[lkey(wk,d,k,r)]||[],nw=pl.gl[lkey(wk,d,k,r)]||[];ex.concat(nw).forEach(function(id){var old=gpl(wk,d,k,r,id),n2=pl.gp[pkey(wk,d,k,r,id)]||[],al=old.concat(n2.filter(function(q){return old.indexOf(q)<0}));al.forEach(function(q){inTask[q]=1;if(k==='s')dbl[q]=(dbl[q]||0)+1})})})});
   [0,1].forEach(function(r){var k2=String(r+1),ps=pl.avail.filter(function(q){return pl.reg[q]===k2}),sec='';
    [['s','Okullar','🏫'],['t','Noktalar','📍']].forEach(function(K){if(K[0]==='s'&&d>=5)return;var k=K[0],ex=S.gl[lkey(wk,d,k,r)]||[],nw=pl.gl[lkey(wk,d,k,r)]||[],ac=agItems(d,k,r);
@@ -1984,7 +1995,7 @@ function agOpen(d){
    pv+='<div class="agreg g'+k2+'"><b>'+esc(rn(r))+' ('+ps.length+')</b>'+sec+'</div>'});
   if(plan.warn.length)pv+='<div class="agw2">'+plan.warn.map(function(x){return '<div>⚠ '+esc(x)+'</div>'}).join('')+'</div>';
   else pv+='<div class="agok2">Eksik ya da çakışma yok.</div>';
-  $a('.agprev').innerHTML=pv;$a('.agok').disabled=false;ov.querySelector('.agb').scrollTop=ov.querySelector('.agb').scrollHeight};
+  $a('.agprev').innerHTML=pv;$a('.agok').disabled=false;ov.querySelector('.agb').scrollTop=ov.querySelector('.agb').scrollHeight}finally{agRestoreQ(sn0)}};
  $a('.agok').onclick=function(){if(!plan)return;agApply(d,plan);close();buildGV()};
 }
 (function(){var lk=false,sy=0;function chk(){var on=!!document.querySelector('.csov,.wdlg'),b=document.body.style;
