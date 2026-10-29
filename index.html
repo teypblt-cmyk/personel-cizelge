@@ -1745,6 +1745,7 @@ var AG_STOP={okulu:1,ortaokulu:1,ilkokulu:1,ilkokul:1,ortaokul:1,lisesi:1,imam:1
 var AG_NEG=/^(gonderme\w*|yazma\w*|koyma\w*|ekleme\w*|atma\w*|gitme\w*|yapma\w*|olmasin\w*|istemiyor\w*|yok|hayir|degil|haric|disinda|gonderilmesin\w*|yazilmasin\w*|koyulmasin\w*|gitmiyor\w*|cikma\w*)$/;
 var AG_NUM={bir:1,iki:2,uc:3,dort:4,bes:5,alti:6,yedi:7,sekiz:8,dokuz:9,on:10};
 function agParse(d,text){
+ text=String(text).replace(/\.\s*(?=görev)/gi,' nokta ').replace(/(^|\s)\.(?=\s+\S)/g,'$1nokta');
  var W=agN(text).split(' ').filter(Boolean),n=W.length,used=[],notes=[],i,j,k;for(i=0;i<n;i++)used[i]=false;
  var out={cmds:[],counts:[],removes:[],notes:notes,asked:[]};if(!n)return out;
  // bölgeler
@@ -1830,7 +1831,7 @@ function agOpen(d){
  var cB=0,cY=0;for(var q2=0;q2<N;q2++){var v=S.w[wk][q2][d];if(v==='1')cB++;if(v==='2')cY++}
  var nB=cB||A.nB||3,nY=cY||A.nY||Math.max(0,avail.length-nB);
  var h='<div class="css card"><div class="csh"><b><span class="agtt">Otosaki</span> · '+FD[d]+' '+dFull(wk,d)+'</b><button type="button" class="csx" aria-label="Kapat">×</button></div><div class="csl agb">';
- h+='<div class="agvoice"><input id="agvt" type="text" autocomplete="off" placeholder="Konuş ya da yaz…"><button type="button" class="agmic" aria-label="Konuş"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button type="button" class="agsend" aria-label="Gönder">→</button></div><div class="agvm"></div>';
+ h+='<div class="agvoice"><input id="agvt" type="text" autocomplete="off" placeholder="Konuş ya da yaz…"><button type="button" class="agsend" aria-label="Gönder">→</button></div><div class="agvm"></div>';
  var tot=avail.length;nB=Math.min(nB,tot);nY=tot-nB;
  var cbox=function(r,id,v){return '<div class="agbox r'+r+'"><span>'+esc(rn(r))+'</span><div class="agst"><button type="button" data-st="'+r+'" data-dl="-1" aria-label="Azalt">−</button><input id="'+id+'" type="number" inputmode="numeric" min="0" max="'+tot+'" value="'+v+'"><button type="button" data-st="'+r+'" data-dl="1" aria-label="Arttır">+</button></div></div>'};
  h+='<div class="agcnt">'+cbox(0,'agnb',nB)+cbox(1,'agny',nY)+'</div>';
@@ -1919,7 +1920,7 @@ function agOpen(d){
   applyCmds(res);vt.value=''}
  vt.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();runCmd(vt.value)}};
  $a('.agsend').onclick=function(){runCmd(vt.value)};
- if(!SRC){mic.style.display='none'}
+ if(!mic||!SRC){}
  else{var lastT='',ran=false,wd=null;
   var micReset=function(){clearTimeout(wd);rec=null;mic.classList.remove('on')};
   var kill=function(r0){if(!r0)return;r0.dead=true;try{r0.abort()}catch(e){}};
