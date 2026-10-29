@@ -620,6 +620,7 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agst button{display:flex;align-items:center;justify-content:center;padding:0;width:34px;height:40px;font-size:20px}
 .agst input{height:40px!important;width:50px!important;font-size:20px!important}
 .agb select.agpn{flex:0 0 auto;width:62px;height:34px;font-size:14px;padding:0 6px;text-align:center;text-align-last:center;border-radius:9px}
+.agb .agpt label.agsb{display:flex;align-items:center;gap:5px;flex:0 0 auto;font-size:12.5px;font-weight:600;font-style:normal;white-space:nowrap}.agb .agpt label.agsb input{width:18px;height:18px;margin:0}
 .agb .agpt{min-height:0}.agb .agpt label{font-size:13px;line-height:1.25}
 .agfix>.agrow>label:first-child{font-size:13px;font-weight:700;letter-spacing:.08em;color:inherit}.agfl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex:1;min-width:0}.agnm{font-weight:600}.agsf{font-size:11px;letter-spacing:.1em;padding:3px 9px;border-radius:8px;background:var(--grad,var(--pri));color:var(--onc,#fff)}.agch{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.07)}.agch.no{opacity:.55}.agfr>button[data-del]{display:flex!important;align-items:center;justify-content:center;width:32px;height:32px;padding:0!important;line-height:1;flex:0 0 auto;align-self:center}
 .agsec.r0{border-color:var(--ac1)}.agsec.r1{border-color:var(--ac2)}
@@ -1662,7 +1663,7 @@ function copyText(v,b){var h=b.innerHTML;function done(){b.textContent='✓';set
    Okul/nokta: o okulda/noktada en az çalışan seçilir, eşitse oraya en uzun süredir gitmeyen. Kişi azsa komşu okullar tek kişide birleşir. */
 var agSnapMem=null;
 function agFindItem(id){for(var r=0;r<2;r++){var x=S.gi.s[r].filter(function(i){return i.id===id})[0];if(x)return {it:x,r:r}}return null}
-function agInit(){if(!S.ag)S.ag={};var a=S.ag;if(!a.nos)a.nos={};if(!a.pn)a.pn={};if(!a.mode)a.mode='gerekirse';if(a.sefOn===undefined)a.sefOn=true;if(!a.sef)a.sef=[null,null];if(!Array.isArray(a.both)){var bv=a.both!==false;a.both=[bv,bv]}if(!a.sc2)a.sc2=[{s:true,t:true},{s:true,t:true}];
+function agInit(){if(!S.ag)S.ag={};var a=S.ag;if(!a.nos)a.nos={};if(!a.pn)a.pn={};if(!a.ps)a.ps={};if(!a.mode)a.mode='gerekirse';if(a.sefOn===undefined)a.sefOn=true;if(!a.sef)a.sef=[null,null];if(!Array.isArray(a.both)){var bv=a.both!==false;a.both=[bv,bv]}if(!a.sc2)a.sc2=[{s:true,t:true},{s:true,t:true}];
  if(!a.pairs){a.pairs=[];[['i1','i2'],['i28','i29'],['i3','i4'],['i7','i9']].forEach(function(x){if(agFindItem(x[0])&&agFindItem(x[1]))a.pairs.push(x)})}}
 function agItems(d,k,r){var ex=S.gl[lkey(wk,d,k,r)]||[];return S.gi[k][r].filter(function(x){return String(x.t).trim()&&(!x.off||ex.indexOf(x.id)>-1)}).map(function(x){return x.id})}
 function agName(k,r,id){var x=itm(k,r,id);var t=dn(x?x.t:id).replace(/\s*\(\d{1,2}[:.]\d{2}[^)]*\)/g,'').trim();return t.length>34?t.slice(0,33)+'…':t}
@@ -1714,6 +1715,11 @@ function agPlan0(d,o){
   sel.forEach(function(q){reg[q]=k2});pool=pool.filter(function(q){return sel.indexOf(q)<0})});
  if(pool.length)warn.push('Bölgesiz kalan: '+pool.map(pn).join(', '));
  var add=function(k,r,id,q){var pk=pkey(wk,d,k,r,id),lk=lkey(wk,d,k,r);(gp[pk]=gp[pk]||[]).push(q);(gl[lk]=gl[lk]||[]);if(gl[lk].indexOf(id)<0)gl[lk].push(id);(tasks[q]=tasks[q]||[]).push((k==='s'?'🏫 ':'📍 ')+agName(k,r,id))};
+ [0,1].forEach(function(r){agItems(d,'t',r).forEach(function(id){if(!(o.ps&&o.ps[id]))return;
+  gpl(wk,d,'t',r,id).concat(gp[pkey(wk,d,'t',r,id)]||[]).forEach(function(q){nos[q]=1});
+  var have=gpl(wk,d,'t',r,id).length+((gp[pkey(wk,d,'t',r,id)]||[]).filter(function(z){return gpl(wk,d,'t',r,id).indexOf(z)<0}).length),n=o.pn[id]!==undefined?o.pn[id]:1,ch=o.sef[r];
+  var cand=agSort(avail.filter(function(q){return reg[q]===String(r+1)&&!busyT[q]&&!busyS[q]&&!fixed[q]&&!(q===ch&&!o.sefT[r])}),function(q){var l=st.L[id+'|'+q];return [st.C[id+'|'+q]||0,l===undefined?-1:l]});
+  for(var i=0;i<n-have&&i<cand.length;i++){var q=cand[i];add('t',r,id,q);busyT[q]=1;nos[q]=1}})});
  var used={},lefts=[[],[]],X=[{},{}];
  [0,1].forEach(function(r){var k2=String(r+1),x=X[r];
   x.people=avail.filter(function(q){return reg[q]===k2});
@@ -1862,7 +1868,7 @@ function agOpen(d){
  h+='<div class="agcnt">'+cbox(0,'agnb',nB)+cbox(1,'agny',nY)+'</div>';
  [0,1].forEach(function(r){h+='<div class="agsec r'+r+'"><div class="agst2">'+esc(rn(r))+'</div><div class="agfix" data-r="'+r+'"></div>';
   var ids=agItems(d,'t',r);if(ids.length){
-  ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'})}
+  ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+'</label><label class="agsb"><input type="checkbox" class="agps" data-id="'+id+'"'+(A.ps&&A.ps[id]?' checked':'')+'>Sabit</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'})}
   h+='</div>'});
  if(d<5){h+='<div class="agsec"><div class="agst2">Aynı kişiye giden okullar</div><div class="agpairs"></div></div>'}
  h+='<div class="agprev"></div></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled><span class="agtt">Zbam !</span></button></div></div>';
@@ -1977,8 +1983,8 @@ function agOpen(d){
  function read(){var FX=((A.fx||{})[wk+'|'+d]||[]).slice(),sf=[null,null];FX.forEach(function(f){if(f.chief)sf[f.r]=f.p});A.sef=sf;
   A.nB=+$a('#agnb').value||0;A.nY=+$a('#agny').value||0;A.both=[true,true];
   
-  ov.querySelectorAll('.agpn').forEach(function(i){A.pn[i.dataset.id]=Math.max(0,+i.value||0)});save();
-  var dpl=(A.dp||{})[wk+'|'+d]||[];return {sef:sf,nB:A.nB,nY:A.nY,sefS:[true,true],sefT:[true,true],both:[true,true],mode:'cift',fix:FX,pn:A.pn,nos:{},pairs:A.pairs.filter(function(pr){return dpl.indexOf(pr[0]+'+'+pr[1])>-1})}}
+  ov.querySelectorAll('.agpn').forEach(function(i){A.pn[i.dataset.id]=Math.max(0,+i.value||0)});ov.querySelectorAll('.agps').forEach(function(i){A.ps[i.dataset.id]=i.checked});save();
+  var dpl=(A.dp||{})[wk+'|'+d]||[];return {sef:sf,nB:A.nB,nY:A.nY,sefS:[true,true],sefT:[true,true],both:[true,true],mode:'cift',fix:FX,pn:A.pn,ps:A.ps,nos:{},pairs:A.pairs.filter(function(pr){return dpl.indexOf(pr[0]+'+'+pr[1])>-1})}}
  $a('.agpv').onclick=function(){var o=read(),sn0=agSnap(d);agStrip(d);try{plan=agPlan(d,o);_cw=wk;_cd=d;var pv='',pl=plan;
   var inTask={},dbl={};[0,1].forEach(function(r){['s','t'].forEach(function(k){var ex=S.gl[lkey(wk,d,k,r)]||[],nw=pl.gl[lkey(wk,d,k,r)]||[];ex.concat(nw).forEach(function(id){var old=gpl(wk,d,k,r,id),n2=pl.gp[pkey(wk,d,k,r,id)]||[],al=old.concat(n2.filter(function(q){return old.indexOf(q)<0}));al.forEach(function(q){inTask[q]=1;if(k==='s')dbl[q]=(dbl[q]||0)+1})})})});
   [0,1].forEach(function(r){var k2=String(r+1),ps=pl.avail.filter(function(q){return pl.reg[q]===k2}),sec='';
