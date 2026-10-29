@@ -631,6 +631,10 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agov .agb{max-height:none;flex:1 1 auto;min-height:0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.agov .css{overscroll-behavior:contain}
 .agov .agbtns{position:static;background:transparent;padding:10px 0 0;flex:0 0 auto}
 .agit.tp>b,.agpt label,.agfl .agch.pt,.agpick button.ptb span{font-weight:800;font-style:italic}
+.agvoice{display:flex;gap:8px;align-items:center}.agvoice input{flex:1;min-width:0;height:44px!important;font-size:15px}
+.agmic,.agsend{width:44px;height:44px;border-radius:14px;flex:0 0 auto;padding:0!important;display:flex;align-items:center;justify-content:center;font-size:20px}
+.agmic.on{animation:agpulse 1s ease-in-out infinite}@keyframes agpulse{50%{box-shadow:0 0 0 6px rgba(229,72,77,.35)}}
+.agvm{font-size:13px;line-height:1.5}.agvm:empty{display:none}.agvm .ok{color:#6fe0a8}.agvm .bad{color:#f2b134}
 .agpick{display:flex;flex-direction:column;gap:6px}.agpick>b{font-size:14px}
 .agfix .agpick button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
@@ -1732,12 +1736,101 @@ function agApply(d,pl){agSnapMem=agSnap(d);
  for(var q=0;q<N;q++)if(pl.avail.indexOf(q)>-1&&pl.reg[q]!==S.w[wk][q][d])S.w[wk][q][d]=pl.reg[q];
  Object.keys(pl.gp).forEach(function(pk){var cur=S.gp[pk]||[];S.gp[pk]=cur.concat(pl.gp[pk].filter(function(q){return cur.indexOf(q)<0}))});
  Object.keys(pl.gl).forEach(function(lk){var l=S.gl[lk]||[];pl.gl[lk].forEach(function(id){if(l.indexOf(id)<0)l.push(id)});S.gl[lk]=l});save()}
+/* ===== Otosaki sesli/yazılı komut çözümleyici ===== */
+function agN(x){return String(x||'').toLocaleLowerCase('tr').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ı/g,'i').replace(/ö/g,'o').replace(/ş/g,'s').replace(/ü/g,'u').replace(/[’'`´]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim()}
+function agED(a,b){if(a===b)return 0;var m=a.length,n=b.length;if(Math.abs(m-n)>2)return 3;var p=[],i,j;for(j=0;j<=n;j++)p[j]=j;for(i=1;i<=m;i++){var c=[i];for(j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a.charAt(i-1)===b.charAt(j-1)?0:1));p=c}return p[n]}
+function agTM(w,k){if(k.length<3||w.length<3)return false;if(w.indexOf(k)===0&&w.length-k.length<=5)return true;
+ if(k.length>=5){if(w.length>=k.length&&w.length-k.length<=5&&agED(w.slice(0,k.length),k)<=1)return true;if(agED(w,k)<=1)return true}return false}
+var AG_STOP={okulu:1,ortaokulu:1,ilkokulu:1,ilkokul:1,ortaokul:1,lisesi:1,imam:1,hatip:1,sokak:1,cadde:1,caddesi:1,nolu:1,devriye:1,kontrol:1,mahallesi:1,okul:1,nokta:1,noktasi:1};
+var AG_NEG=/^(gonderme\w*|yazma\w*|koyma\w*|ekleme\w*|atma\w*|gitme\w*|yapma\w*|olmasin\w*|istemiyor\w*|yok|hayir|degil|haric|disinda|gonderilmesin\w*|yazilmasin\w*|koyulmasin\w*|gitmiyor\w*|cikma\w*)$/;
+var AG_NUM={bir:1,iki:2,uc:3,dort:4,bes:5,alti:6,yedi:7,sekiz:8,dokuz:9,on:10};
+function agParse(d,text){
+ var W=agN(text).split(' ').filter(Boolean),n=W.length,used=[],notes=[],i,j,k;for(i=0;i<n;i++)used[i]=false;
+ var out={cmds:[],counts:[],removes:[],notes:notes,asked:[]};if(!n)return out;
+ // bölgeler
+ var regs=[];for(i=0;i<n;i++){var w=W[i];
+  if(/^bahc/.test(w)||agTM(w,'bahcelievler')){regs.push({i:i,r:0});used[i]=true}
+  else if(/^yenibosna/.test(w)||agTM(w,'yenibosna')||/^bosna/.test(w)){regs.push({i:i,r:1});used[i]=true}
+  else if(w==='yeni'&&W[i+1]&&agTM(W[i+1],'bosna')){regs.push({i:i,r:1});used[i]=true;used[i+1]=true;i++}}
+ // sayılar: "bahçelievler 6 kişi"
+ for(i=0;i<n;i++){if(/^kisi/.test(W[i])&&i>0){var v=/^\d+$/.test(W[i-1])?+W[i-1]:AG_NUM[W[i-1]];if(v!==undefined&&i>1&&AG_NUM[W[i-2]]===10&&v<10){v+=10;used[i-2]=true}if(v!==undefined){
+   var best=null,bd=9;regs.forEach(function(g){var dd=Math.abs(g.i-(i-1));if(dd<bd&&dd<=3){bd=dd;best=g}});
+   if(best){out.counts.push({r:best.r,v:v});used[i]=used[i-1]=true}}}}
+ // kişiler
+ var P=[];for(var q=0;q<N;q++){var tk=agN(pn(q)).split(' ').filter(function(t){return t.length>=3});P.push(tk)}
+ var men=[];
+ for(i=0;i<n;i++){if(used[i])continue;var c=[];for(q=0;q<N;q++){for(j=0;j<P[q].length;j++){if(agTM(W[i],P[q][j])){c.push({q:q,t:j});break}}}
+  if(!c.length)continue;
+  var cand=c.map(function(x){return x.q}),end=i;
+  var span=function(qq,from){var e=from;for(var s2=from+1;s2<=from+2&&s2<n;s2++){if(used[s2])break;var hit=false;for(var t2=0;t2<P[qq].length;t2++)if(agTM(W[s2],P[qq][t2])){hit=true;break}if(hit)e=s2;else break}return e};
+  if(cand.length>1){var sel=[];cand.forEach(function(qq){var e=span(qq,i);if(e>i)sel.push({q:qq,e:e})});
+   if(sel.length===1){men.push({i0:i,i1:sel[0].e,p:sel[0].q,amb:null});for(j=i;j<=sel[0].e;j++)used[j]=true;i=sel[0].e}
+   else{men.push({i0:i,i1:i,p:null,amb:cand});used[i]=true}}
+  else{var e2=span(cand[0],i);men.push({i0:i,i1:e2,p:cand[0],amb:null});for(j=i;j<=e2;j++)used[j]=true;i=e2}}
+ // okul/nokta kalemleri (kullanılmamış kelimeler)
+ var items=[];[0,1].forEach(function(r){['s','t'].forEach(function(kk){if(kk==='s'&&d>=5)return;agItems(d,kk,r).forEach(function(id){var it=itm(kk,r,id);if(!it)return;
+  var nm=agN(String(it.t).split('\n')[0].replace(/\s*\(\d{1,2}[:.]\d{2}[^)]*\)/g,'')),tk=nm.split(' ').filter(function(t){return t.length>=3&&!AG_STOP[t]&&!/^\d+$/.test(t)});
+  if(tk.length)items.push({k:kk,r:r,id:id,tk:tk})})})});
+ var cands=[];items.forEach(function(it){var pos=[],sc=0;it.tk.forEach(function(t){for(var jj=0;jj<n;jj++){if(!used[jj]&&pos.indexOf(jj)<0&&agTM(W[jj],t)){pos.push(jj);sc++;break}}});if(sc)cands.push({it:it,pos:pos,sc:sc})});
+ cands.sort(function(a,b){return b.sc-a.sc});
+ var imen=[];cands.forEach(function(c){var m=null;imen.forEach(function(x){if(x.pos.some(function(p2){return c.pos.indexOf(p2)>-1})&&x.sc===c.sc)m=x});
+  if(m){m.alts.push(c.it);return}
+  if(c.pos.some(function(p2){return used[p2]}))return;
+  imen.push({pos:c.pos,sc:c.sc,alts:[c.it],i:Math.min.apply(null,c.pos)});c.pos.forEach(function(p2){used[p2]=true})});
+ // anahtar kelimeler
+ var kw=[];for(i=0;i<n;i++){var x=W[i];
+  if(/^okul/.test(x))kw.push({i:i,t:'s'});else if(/^nokta|^gorev/.test(x))kw.push({i:i,t:'t'});else if(/^sef/.test(x))kw.push({i:i,t:'c'});
+  else if(/^(cikar|sil|kaldir|iptal)/.test(x)&&!/^(cikarma|silme|kaldirma)/.test(x))kw.push({i:i,t:'x'})}
+ // segmentler
+ men.sort(function(a,b){return a.i0-b.i0});
+ if(!men.length){notes.push('Hangi personel olduğunu anlayamadım.');return out}
+ var segs=men.map(function(m,ix){return {m:m,a:ix?m.i0:0,b:ix<men.length-1?men[ix+1].i0-1:n-1,regs:[],kw:[],im:[]}});
+ var segOf=function(pos){for(var s2=0;s2<segs.length;s2++)if(pos>=segs[s2].a&&pos<=segs[s2].b)return segs[s2];return segs[segs.length-1]};
+ regs.forEach(function(g){var sg=segOf(g.i),ix=segs.indexOf(sg);
+  if(ix<segs.length-1&&segs[ix+1].a-g.i<=2&&sg.regs.length&&g.i>sg.m.i1){segs[ix+1].regs.push(g)}else sg.regs.push(g)});
+ kw.forEach(function(w2){segOf(w2.i).kw.push(w2)});imen.forEach(function(m){segOf(m.i).im.push(m)});
+ // olumsuzluk: nesnenin ardından, sonraki nesneye kadar (en çok 4 kelime)
+ var neg=function(sg,pos){var marks=[];sg.kw.forEach(function(x){marks.push(x.i)});sg.im.forEach(function(x){marks.push(x.i)});marks.sort(function(a,b){return a-b});
+  var nx=sg.b+1;marks.forEach(function(x){if(x>pos&&x<nx)nx=x});var lim=Math.min(nx-1,pos+4,sg.b);
+  for(var z=pos+1;z<=lim;z++)if(AG_NEG.test(W[z]))return true;return false};
+ var lastReg=null;
+ segs.forEach(function(sg){var m=sg.m;
+  if(m.p===null){out.asked.push({names:m.amb.map(pn),word:W[m.i0]});return}
+  var r=sg.regs.length?sg.regs[0].r:null,inf=false;if(r===null){var cur=S.w[wk][m.p][d];if(cur==='1'||cur==='2')r=+cur-1;else if(lastReg!==null)r=lastReg;inf=r!==null}
+  var cmd={p:m.p,r:r};
+  if(sg.kw.some(function(x){return x.t==='x'})){out.removes.push(m.p);return}
+  if(r===null){notes.push(pn(m.p)+': hangi bölge olduğunu anlayamadım.');return}
+  lastReg=r;
+  var chiefPos=false,chiefNeg=false,sPos=false,sNeg=false,tPos=false,tNeg=false,sid=null,sr=null,tid=null,tpend=false;
+  sg.kw.forEach(function(x){var ng=neg(sg,x.i);if(x.t==='c'){if(ng)chiefNeg=true;else chiefPos=true}if(x.t==='s'){if(ng)sNeg=true;else sPos=true}if(x.t==='t'){if(ng)tNeg=true;else tPos=true}});
+  sg.im.forEach(function(it){var ng=neg(sg,it.i);
+   var near=function(t){return sg.kw.some(function(x){return x.t===t&&Math.abs(x.i-it.i)<=3})};
+   var alts=it.alts.filter(function(a){return a.k==='t'?a.r===r:true});
+   var hasS=alts.some(function(a){return a.k==='s'}),hasT=alts.some(function(a){return a.k==='t'});
+   if(hasS&&hasT){if(near('s')&&!near('t'))alts=alts.filter(function(a){return a.k==='s'});else if(near('t')&&!near('s'))alts=alts.filter(function(a){return a.k==='t'})}
+   if(alts.length>1){var same=alts.filter(function(a){return a.r===r});if(same.length&&same.length<alts.length)alts=same}
+   if(!alts.length){notes.push(pn(m.p)+': söylediğin yeri bu bölgede bulamadım.');return}
+   var kinds={};alts.forEach(function(a){kinds[a.k]=1});
+   if(alts.length===1||(Object.keys(kinds).length===1&&alts.length===1)){var a0=alts[0];
+    if(a0.k==='s'){if(ng)sNeg=true;else{sPos=true;sid=a0.id;sr=a0.r}}else{if(ng)tNeg=true;else{tPos=true;tid=a0.id}}}
+   else{var ks=Object.keys(kinds);if(ks.length===1&&ks[0]==='t'){if(ng)tNeg=true;else{tPos=true;tpend=true;notes.push(pn(m.p)+': söylediğin nokta birden fazla yere uyuyor, listeden seç.')}}
+    else if(ks.length===1){if(ng)sNeg=true;else{sPos=true;notes.push(pn(m.p)+': okul birden fazla yere uyuyor, otomatik bıraktım.')}}
+    else notes.push(pn(m.p)+': söylediğin yer hem okul hem nokta olabilir, "okul" ya da "nokta" de.')}});
+  cmd.chief=chiefPos&&!chiefNeg;cmd.unchief=chiefNeg;
+  cmd.s=d>=5?false:(sNeg?false:(sPos?true:(tNeg?true:(tPos?false:true))));
+  if(sid){cmd.sid=sid;cmd.sr=sr;cmd.s=true}
+  if(tNeg&&!tid)cmd.id=null;else if(tid)cmd.id=tid;else if(tPos||tpend)cmd.pend=true;else if(d>=5&&!sPos)cmd.pend=true;else cmd.id=null;
+  cmd.inferred=inf;cmd.defS=!sNeg&&!sPos&&!sid;
+  out.cmds.push(cmd)});
+ return out}
+
 function agOpen(d){
  agInit();var A=S.ag,ov=document.createElement('div');ov.className='csov agov';
  var avail=[];for(var q=0;q<N;q++)if(!isLv(S.w[wk][q][d]))avail.push(q);
  var cB=0,cY=0;for(var q2=0;q2<N;q2++){var v=S.w[wk][q2][d];if(v==='1')cB++;if(v==='2')cY++}
  var nB=cB||A.nB||3,nY=cY||A.nY||Math.max(0,avail.length-nB);
  var h='<div class="css card"><div class="csh"><b><span class="agtt">Otosaki</span> · '+FD[d]+' '+dFull(wk,d)+'</b><button type="button" class="csx" aria-label="Kapat">×</button></div><div class="csl agb">';
+ h+='<div class="agvoice"><input id="agvt" type="text" autocomplete="off" placeholder="Konuş ya da yaz…"><button type="button" class="agmic" aria-label="Konuş"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button type="button" class="agsend" aria-label="Gönder">→</button></div><div class="agvm"></div>';
  var tot=avail.length;nB=Math.min(nB,tot);nY=tot-nB;
  var cbox=function(r,id,v){return '<div class="agbox r'+r+'"><span>'+esc(rn(r))+'</span><div class="agst"><button type="button" data-st="'+r+'" data-dl="-1" aria-label="Azalt">−</button><input id="'+id+'" type="number" inputmode="numeric" min="0" max="'+tot+'" value="'+v+'"><button type="button" data-st="'+r+'" data-dl="1" aria-label="Arttır">+</button></div></div>'};
  h+='<div class="agcnt">'+cbox(0,'agnb',nB)+cbox(1,'agny',nY)+'</div>';
@@ -1749,7 +1842,7 @@ function agOpen(d){
  h+='<div class="agprev"></div></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled><span class="agtt">Zbam !</span></button></div></div>';
  ov.innerHTML=h;document.body.appendChild(ov);
  var $a=function(x){return ov.querySelector(x)};
- function close(){ov.remove()}
+ function close(){try{if(rec)rec.abort()}catch(e){}ov.remove()}
  ov.onclick=function(e){if(e.target===ov)close()};$a('.csx').onclick=close;
  function pairsUI(){var bx=$a('.agpairs');if(!bx)return;
   var all=[];[0,1].forEach(function(r){agItems(d,'s',r).forEach(function(id){all.push({id:id,r:r})})});
@@ -1766,7 +1859,7 @@ function agOpen(d){
  ov.querySelectorAll('[data-st]').forEach(function(b){b.onclick=function(){var r=+b.dataset.st;setCnt(r,(+$a(r?'#agny':'#agnb').value||0)+(+b.dataset.dl))}});
  $a('#agnb').oninput=function(){setCnt(0,+this.value||0)};$a('#agny').oninput=function(){setCnt(1,+this.value||0)};
 
- var fxs=[null,null];
+ var fxs=[null,null],pq=[];
  function fixUI(){var key=wk+'|'+d,L=(A.fx=A.fx||{})[key]=(A.fx[key]||[]);
   var taken={};[0,1].forEach(function(r){['s','t'].forEach(function(k){agItems(d,k,r).forEach(function(id){gpl(wk,d,k,r,id).forEach(function(q){taken[q]=1})})})});
   L.forEach(function(f){taken[f.p]=1});
@@ -1792,7 +1885,7 @@ function agOpen(d){
     else h2+='<div class="agpick"><b>'+nm+' hangi noktaya?</b>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="pick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(CN.C[id+'|'+st.p]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>'}
    else h2+='<button type="button" class="agadd" data-a="new">+ Personel ekle</button>';
    bx.innerHTML=h2;
-   var done=function(id){L.push({p:fxs[r].p,r:r,s:fxs[r].s,sid:fxs[r].sid||null,sr:fxs[r].sr,id:id,chief:!!fxs[r].chief});fxs[r]=null;save();lock();fixUI()};
+   var done=function(id){L.push({p:fxs[r].p,r:r,s:fxs[r].s,sid:fxs[r].sid||null,sr:fxs[r].sr,id:id,chief:!!fxs[r].chief});fxs[r]=null;if(pq.length){var nx=pq.shift();fxs[nx.r]=nx}save();lock();fixUI()};
    bx.querySelectorAll('[data-del]').forEach(function(b){b.onclick=function(){L.splice(+b.dataset.del,1);save();lock();fixUI()}});
    bx.querySelectorAll('button[data-a]').forEach(function(b){b.onclick=function(){var a2=b.dataset.a;
     if(a2==='new')fxs[r]={p:null,step:'p'};else if(a2==='x')fxs[r]=null;
@@ -1805,6 +1898,35 @@ function agOpen(d){
     else if(t==='sid'){if(e.value!=='auto'){var pr=e.value.split('|');fxs[r].sr=+pr[0];fxs[r].sid=pr[1]}fxs[r].step='t'}
     else return done(e.value);fixUI()}})})}
  fixUI();
+
+ var vt=$a('#agvt'),vm=$a('.agvm'),mic=$a('.agmic'),SRC=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null;
+ function vmsg(ok,bad){vm.innerHTML=ok.map(function(x){return '<div class="ok">✓ '+esc(x)+'</div>'}).join('')+bad.map(function(x){return '<div class="bad">⚠ '+esc(x)+'</div>'}).join('')}
+ function applyCmds(res){var key=wk+'|'+d,L=(A.fx=A.fx||{})[key]=(A.fx[key]||[]),ok=[],bad=res.notes.slice();
+  var drop=function(p){for(var z=L.length-1;z>=0;z--)if(L[z].p===p)L.splice(z,1)};
+  res.counts.forEach(function(c){setCnt(c.r,c.v);ok.push(rn(c.r)+': '+c.v+' kişi')});
+  res.removes.forEach(function(p){drop(p);ok.push(pn(p)+' listeden çıkarıldı')});
+  res.asked.forEach(function(a){bad.push('“'+a.word+'” birden fazla kişiye uyuyor ('+a.names.join(', ')+'), soyadını da söyle.')});
+  res.cmds.forEach(function(c){
+   if(isLv(S.w[wk][c.p][d])){bad.push(pn(c.p)+' o gün izinli, eklenmedi.');return}
+   drop(c.p);if(c.chief)for(var z=L.length-1;z>=0;z--)if(L[z].r===c.r&&L[z].chief)L.splice(z,1);
+   if(c.pend)pq.push({p:c.p,r:c.r,chief:!!c.chief,s:c.s,sid:c.sid||null,sr:c.sr,step:'id'});
+   else L.push({p:c.p,r:c.r,s:c.s,sid:c.sid||null,sr:c.sr,id:c.id||null,chief:!!c.chief});
+   ok.push(pn(c.p)+' → '+rn(c.r)+(c.chief?' · ŞEF':'')+(d<5?' · '+(c.s?(c.sid?'okul: '+agName('s',c.sr,c.sid):'okul otomatik'):'okul yok'):'')+' · '+(c.pend?'nokta: listeden seç':(c.id?'nokta: '+agName('t',c.r,c.id):'nokta yok'))+(c.inferred?' (bölgeyi tahmin ettim)':'')+(d<5&&c.defS?' (okulu söylemedin)':''))});
+  if(pq.length){var nx=pq.shift();fxs[nx.r]=nx}
+  save();lock();fixUI();vmsg(ok,bad)}
+ function runCmd(t){t=(t||'').trim();if(!t)return;var res=agParse(d,t);
+  if(!res.cmds.length&&!res.counts.length&&!res.removes.length&&!res.asked.length&&!res.notes.length){vmsg([],['Anlayamadım. Örnek: “Abdullah Şahin Bahçelievler şef, noktaya gönderme”.']);return}
+  applyCmds(res);vt.value=''}
+ vt.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();runCmd(vt.value)}};
+ $a('.agsend').onclick=function(){runCmd(vt.value)};
+ if(!SRC){mic.style.display='none'}
+ else mic.onclick=function(){
+  if(rec){try{rec.stop()}catch(e){}return}
+  rec=new SRC();rec.lang='tr-TR';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
+  rec.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;vt.value=t;if(e.results[e.results.length-1].isFinal)runCmd(t)};
+  rec.onerror=function(e){vmsg([],[e.error==='not-allowed'||e.error==='service-not-allowed'?'Mikrofon izni verilmedi.':'Mikrofon hatası: '+e.error])};
+  rec.onend=function(){rec=null;mic.classList.remove('on')};
+  try{rec.start();mic.classList.add('on');vmsg([],[]);vm.innerHTML='<div>Dinliyorum…</div>'}catch(e){rec=null}};
  var plan=null;
  function lock(){plan=null;$a('.agok').disabled=true;$a('.agprev').innerHTML=''}
  ov.querySelectorAll('input,select').forEach(function(e){e.addEventListener('change',lock)});
