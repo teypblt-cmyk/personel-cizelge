@@ -1584,7 +1584,7 @@ function buildText(w,d){
  if([0,1].some(function(r){return (S.gl[lkey(w,d,'t',r)]||[]).length}))L.push('*📍NOKTA GÖREVLERİ📍*','');
  [0,1].forEach(function(r){if(r===1&&(S.gl[lkey(w,d,'t',0)]||[]).length&&(S.gl[lkey(w,d,'t',1)]||[]).length)L.push('              ----------','');ordIds(w,d,'t',r).forEach(function(n){
   var ps=gpl(w,d,'t',r,n).slice(),seen={},hd=[];ps.forEach(function(p){var c=codeOf(p);if(c&&!seen[c]){seen[c]=1;hd.push(c)}});
-  if(ps.length)plines(ps).forEach(function(x){L.push(x)});itlf('t',r,n).forEach(function(x){L.push(x)});L.push('')})});
+  if(ps.length)plines(ps,true).forEach(function(x){L.push(x)});itlf('t',r,n).forEach(function(x){L.push(x)});L.push('')})});
  return L.join('\n').replace(/\n+$/,'');
 }
 var OPEN={};
