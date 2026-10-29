@@ -1720,11 +1720,12 @@ function agPlan(d,o){
    var merge=function(a,b){var ia=-1,ib=-1;units.forEach(function(u,i){if(u.length===1&&u[0]===a)ia=i;if(u.length===1&&u[0]===b)ib=i});if(ia<0||ib<0)return false;units[ia]=[a,b];units.splice(ib,1);return true};
    if(o.mode==='cift')o.pairs.forEach(function(pr){merge(pr[0],pr[1])});
    else if(o.mode==='gerekirse')o.pairs.forEach(function(pr){if(units.length>cap)merge(pr[0],pr[1])});
+   units=units.filter(function(u){return u.length>1}).concat(units.filter(function(u){return u.length===1}));
    x.dropped=units.slice(cap);units=units.slice(0,cap);
    var resA=matchU(units,x.spool.filter(function(q){return !used[q]}));
    units.forEach(function(u,i){var q=resA[i];if(q===undefined||q<0){x.dropped.push(u);return}used[q]=1;u.forEach(function(id){add('s',r,id,q)})})});
   [0,1].forEach(function(r){var x=X[r],o2=X[1-r],left=[];
-   var pool=o2.spool.filter(function(q){return !used[q]}),free=o2.pplT.filter(function(q){return !used[q]}).length,lim=o.both[1-r]?1e9:Math.max(0,free-o2.T),resB=matchU(x.dropped,pool);
+   var dr=[];x.dropped.forEach(function(u){if(u.length>1)u.forEach(function(id){dr.push([id])});else dr.push(u)});x.dropped=dr;var pool=o2.spool.filter(function(q){return !used[q]}),free=o2.pplT.filter(function(q){return !used[q]}).length,lim=o.both[1-r]?1e9:Math.max(0,free-o2.T),resB=matchU(x.dropped,pool);
    x.dropped.forEach(function(u,i){var q=resB[i];if(q===undefined||q<0||lim<=0){left.push(u);return}lim--;used[q]=1;borrow[q]=1;u.forEach(function(id){add('s',r,id,q)})});
    lefts[r]=left});
   [0,1].forEach(function(r){var left=lefts[r];if(left.length)warn.push(rn(r)+': '+left.map(function(u){return agName('s',r,u[0])}).join(', ')+' için kişi yok, boş kaldı')})}
