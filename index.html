@@ -1731,11 +1731,12 @@ function agPlan(d,o){
  [0,1].forEach(function(r){var x=X[r];
   var rest=o.both[r]?x.pplT.slice():x.pplT.filter(function(q){return !used[q]});
   var hasS=function(q){return (used[q]||busyS[q])?1:0};
-  x.pt.sort(function(a,b){return a.need-b.need}).forEach(function(y){
-   for(var i=0;i<y.need;i++){
-    var cand=agSort(rest,function(q){var l=st.L[y.id+'|'+q];return [hasS(q),st.C[y.id+'|'+q]||0,l===undefined?-1:l]});
-    if(!cand.length){warn.push(rn(r)+': '+agName('t',r,y.id)+' için '+(y.need-i)+' kişi eksik');break}
-    var q=cand[0];rest=rest.filter(function(z){return z!==q});add('t',r,y.id,q)}});
+  var slots=[];x.pt.forEach(function(y){for(var i=0;i<y.need;i++)slots.push(y.id)});
+  var np=rest.length,ns=slots.length;
+  if(ns){var mat=slots.map(function(id,i){var row=rest.map(function(q){var l=st.L[id+'|'+q];return hasS(q)*1e6+(st.C[id+'|'+q]||0)*1000+(l===undefined?0:l+1)+q/1000});for(var k=0;k<ns;k++)row.push(k===i?1e9:1e12);return row});
+   var rs=agHung(mat),miss={};
+   slots.forEach(function(id,i){var j=rs[i];if(j===undefined||j>=np){miss[id]=(miss[id]||0)+1;return}add('t',r,id,rest[j])});
+   Object.keys(miss).forEach(function(id){warn.push(rn(r)+': '+agName('t',r,id)+' için '+miss[id]+' kişi eksik')})}
   });
  (o.fix||[]).forEach(function(f){if(forceS[f.p]&&!used[f.p]&&!busyS[f.p]&&fixed[f.p])warn.push(pn(f.p)+': okula yazılamadı (boş okul yok)')});
  return {reg:reg,gl:gl,gp:gp,tasks:tasks,warn:warn,avail:avail,borrow:borrow,fixed:fixed}}
