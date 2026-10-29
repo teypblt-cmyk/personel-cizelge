@@ -1672,6 +1672,14 @@ function agStats(d){var cur=wk*7+d,C={},L={},RC={},RL={};
   for(var p=0;p<N;p++){var v=S.w[w][p][dy];if(v==='1'||v==='2'){var kk=v+'|'+p;RC[kk]=(RC[kk]||0)+1;if(ab<cur&&(RL[kk]===undefined||ab>RL[kk]))RL[kk]=ab}}}
  return {C:C,L:L,RC:RC,RL:RL}}
 function agSort(arr,fn){return arr.slice().sort(function(a,b){var x=fn(a),y=fn(b);for(var i=0;i<x.length;i++)if(x[i]!==y[i])return x[i]-y[i];return a-b})}
+function agHung(a){var n=a.length,m=a[0].length,u=[],v=[],p=[],way=[],i,j;for(j=0;j<=m;j++){v[j]=0;p[j]=0;way[j]=0}for(i=0;i<=n;i++)u[i]=0;
+ for(i=1;i<=n;i++){p[0]=i;var j0=0,minv=[],used=[];for(j=0;j<=m;j++){minv[j]=Infinity;used[j]=false}
+  do{used[j0]=true;var i0=p[j0],delta=Infinity,j1=0;
+   for(j=1;j<=m;j++)if(!used[j]){var cur=a[i0-1][j-1]-u[i0]-v[j];if(cur<minv[j]){minv[j]=cur;way[j]=j0}if(minv[j]<delta){delta=minv[j];j1=j}}
+   for(j=0;j<=m;j++){if(used[j]){u[p[j]]+=delta;v[j]-=delta}else minv[j]-=delta}
+   j0=j1}while(p[j0]!==0);
+  do{var jb=way[j0];p[j0]=p[jb];j0=jb}while(j0)}
+ var res=[];for(j=1;j<=m;j++)if(p[j])res[p[j]-1]=j-1;return res}
 function agPlan(d,o){
  var st=agStats(d),warn=[],reg={},gl={},gp={},tasks={},avail=[];
  for(var p=0;p<N;p++){var v=S.w[wk][p][d];reg[p]=v;if(!isLv(v))avail.push(p)}
@@ -1703,6 +1711,7 @@ function agPlan(d,o){
   x.pplS=x.people.filter(function(q){return !busyS[q]&&(o.both[r]||!busyT[q]||forceS[q])&&(forceS[q]||!(q===x.chief&&!o.sefS[r]))});x.pplT=x.people.filter(function(q){return !busyT[q]&&(o.both[r]||!busyS[q])&&!(q===x.chief&&!o.sefT[r])});
   x.pt=[];agItems(d,'t',r).forEach(function(id){var have=gpl(wk,d,'t',r,id).length+((gp[pkey(wk,d,'t',r,id)]||[]).filter(function(z){return gpl(wk,d,'t',r,id).indexOf(z)<0}).length),n=o.pn[id]!==undefined?o.pn[id]:1;if(n-have>0)x.pt.push({id:id,need:n-have})});
   x.T=x.pt.reduce(function(a,y){return a+y.need},0);x.spool=x.pplS.filter(function(q){return !nos[q]});x.dropped=[]});
+ var matchU=function(units,people){if(!units.length)return [];var m=people.length,n=units.length,a=units.map(function(u,i){var row=people.map(function(q){var sum=0,lm=-1;u.forEach(function(id){sum+=st.C[id+'|'+q]||0;var l=st.L[id+'|'+q];if(l!==undefined&&l>lm)lm=l});return sum*1000+lm+1+q/1000-(forceS[q]?1e7:0)});for(var k=0;k<n;k++)row.push(k===i?1e9:1e12);return row});return agHung(a).map(function(j){return j<m?people[j]:-1})};
  var bestFor=function(pool,u){return agSort(pool,function(q){var sum=0,lm=-1;u.forEach(function(id){sum+=st.C[id+'|'+q]||0;var l=st.L[id+'|'+q];if(l!==undefined&&l>lm)lm=l});return [sum,lm]})};
  if(d<5){
   [0,1].forEach(function(r){var x=X[r];
@@ -1712,13 +1721,11 @@ function agPlan(d,o){
    if(o.mode==='cift')o.pairs.forEach(function(pr){merge(pr[0],pr[1])});
    else if(o.mode==='gerekirse')o.pairs.forEach(function(pr){if(units.length>cap)merge(pr[0],pr[1])});
    x.dropped=units.slice(cap);units=units.slice(0,cap);
-   units.forEach(function(u){var sp=x.spool.filter(function(q){return !used[q]}),fp=sp.filter(function(q){return forceS[q]});var cand=bestFor(fp.length?fp:sp,u);
-    if(!cand.length){x.dropped.push(u);return}var q=cand[0];used[q]=1;u.forEach(function(id){add('s',r,id,q)})})});
+   var resA=matchU(units,x.spool.filter(function(q){return !used[q]}));
+   units.forEach(function(u,i){var q=resA[i];if(q===undefined||q<0){x.dropped.push(u);return}used[q]=1;u.forEach(function(id){add('s',r,id,q)})})});
   [0,1].forEach(function(r){var x=X[r],o2=X[1-r],left=[];
-   x.dropped.forEach(function(u){
-    var free=o2.pplT.filter(function(q){return !used[q]}).length,ok=o.both[1-r]||free-o2.T>0;
-    var cand=ok?bestFor(o2.spool.filter(function(q){return !used[q]}),u):[];
-    if(!cand.length){left.push(u);return}var q=cand[0];used[q]=1;borrow[q]=1;u.forEach(function(id){add('s',r,id,q)})});
+   var pool=o2.spool.filter(function(q){return !used[q]}),free=o2.pplT.filter(function(q){return !used[q]}).length,lim=o.both[1-r]?1e9:Math.max(0,free-o2.T),resB=matchU(x.dropped,pool);
+   x.dropped.forEach(function(u,i){var q=resB[i];if(q===undefined||q<0||lim<=0){left.push(u);return}lim--;used[q]=1;borrow[q]=1;u.forEach(function(id){add('s',r,id,q)})});
    lefts[r]=left});
   [0,1].forEach(function(r){var left=lefts[r];if(left.length)warn.push(rn(r)+': '+left.map(function(u){return agName('s',r,u[0])}).join(', ')+' için kişi yok, boş kaldı')})}
  [0,1].forEach(function(r){var x=X[r];
