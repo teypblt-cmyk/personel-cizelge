@@ -1920,13 +1920,21 @@ function agOpen(d){
  vt.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();runCmd(vt.value)}};
  $a('.agsend').onclick=function(){runCmd(vt.value)};
  if(!SRC){mic.style.display='none'}
- else mic.onclick=function(){
-  if(rec){try{rec.stop()}catch(e){}return}
-  rec=new SRC();rec.lang='tr-TR';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
-  rec.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;vt.value=t;if(e.results[e.results.length-1].isFinal)runCmd(t)};
-  rec.onerror=function(e){vmsg([],[e.error==='not-allowed'||e.error==='service-not-allowed'?'Mikrofon izni verilmedi.':'Mikrofon hatası: '+e.error])};
-  rec.onend=function(){rec=null;mic.classList.remove('on')};
-  try{rec.start();mic.classList.add('on');vmsg([],[]);vm.innerHTML='<div>Dinliyorum…</div>'}catch(e){rec=null}};
+ else{var lastT='',ran=false,wd=null;
+  var micReset=function(){clearTimeout(wd);rec=null;mic.classList.remove('on')};
+  var kill=function(r0){if(!r0)return;r0.dead=true;try{r0.abort()}catch(e){}};
+  var arm=function(r1){clearTimeout(wd);wd=setTimeout(function(){if(rec===r1){kill(r1);micReset();vmsg([],['Ses alınamadı, mikrofona tekrar dokun.'])}},7000)};
+  mic.onclick=function(){
+   if(rec){var r0=rec;micReset();kill(r0);vm.innerHTML='';return}
+   lastT='';ran=false;vt.value='';
+   var r1=new SRC();rec=r1;r1.lang='tr-TR';r1.interimResults=true;r1.continuous=false;r1.maxAlternatives=1;
+   r1.onresult=function(e){if(r1.dead)return;var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;lastT=t;vt.value=t;arm(r1);
+    if(e.results[e.results.length-1].isFinal&&!ran){ran=true;runCmd(t)}};
+   r1.onerror=function(e){if(r1.dead)return;var c=e.error;if(c==='aborted')return;
+    vmsg([],[c==='not-allowed'?'Mikrofon izni verilmedi. Adres çubuğundaki mikrofon simgesinden izin ver.':c==='service-not-allowed'?'Ses tanıma kapalı. iPhone: Ayarlar > Genel > Klavye > Dikteyi Etkinleştir.':c==='no-speech'?'Ses algılanmadı, mikrofona tekrar dokun.':'Mikrofon hatası ('+c+'), tekrar dene.'])};
+   r1.onend=function(){if(r1.dead)return;var was=(rec===r1);if(was)micReset();
+    if(!ran&&lastT.trim()){ran=true;runCmd(lastT)}else if(!ran&&was&&!vm.querySelector('.bad'))vmsg([],['Ses gelmedi, mikrofona tekrar dokun.'])};
+   try{r1.start();mic.classList.add('on');vm.innerHTML='<div>Dinliyorum…</div>';arm(r1)}catch(e){micReset();vmsg([],['Mikrofon başlatılamadı, tekrar dokun.'])}}}
  var plan=null;
  function lock(){plan=null;$a('.agok').disabled=true;$a('.agprev').innerHTML=''}
  ov.querySelectorAll('input,select').forEach(function(e){e.addEventListener('change',lock)});
