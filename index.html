@@ -608,7 +608,7 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agb .agpt{padding:0;gap:10px}.agb .agpt label{font-size:13px}
 .agfix{display:flex;flex-direction:column;gap:6px}
 .agfr{padding:8px 10px!important;font-size:13px!important;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.05)}
-.agfr button{min-width:28px;height:28px;font-size:18px!important}
+.agfr>button[data-del]{min-width:28px;height:28px;font-size:18px!important}
 .agfix button[data-a]{min-height:38px;padding:6px 14px!important;border-radius:10px!important;font-size:14px!important;margin:0!important}
 .agq{flex-wrap:wrap;gap:8px!important}.agq>span{flex:1 0 100%;font-size:14px;font-weight:600}
 .agq button{flex:1}
@@ -621,7 +621,7 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agst input{height:40px!important;width:50px!important;font-size:20px!important}
 .agb select.agpn{flex:0 0 auto;width:62px;height:34px;font-size:14px;padding:0 6px;text-align:center;text-align-last:center;border-radius:9px}
 .agb .agpt{min-height:0}.agb .agpt label{font-size:13px;line-height:1.25}
-.agfix>.agrow>label:first-child{font-size:13px;font-weight:700;letter-spacing:.08em;color:inherit}.agfl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex:1;min-width:0}.agnm{font-weight:600}.agsf{font-size:11px;letter-spacing:.1em;padding:3px 9px;border-radius:8px;background:var(--grad,var(--pri));color:var(--onc,#fff)}.agch{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.07)}.agch.no{opacity:.55}.agfr button{display:flex!important;align-items:center;justify-content:center;width:32px;height:32px;padding:0!important;line-height:1;flex:0 0 auto;align-self:center}
+.agfix>.agrow>label:first-child{font-size:13px;font-weight:700;letter-spacing:.08em;color:inherit}.agfl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex:1;min-width:0}.agnm{font-weight:600}.agsf{font-size:11px;letter-spacing:.1em;padding:3px 9px;border-radius:8px;background:var(--grad,var(--pri));color:var(--onc,#fff)}.agch{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.07)}.agch.no{opacity:.55}.agfr>button[data-del]{display:flex!important;align-items:center;justify-content:center;width:32px;height:32px;padding:0!important;line-height:1;flex:0 0 auto;align-self:center}
 .agsec.r0{border-color:var(--ac1)}.agsec.r1{border-color:var(--ac2)}
 .agtt{font-weight:800;background:linear-gradient(90deg,#ff3b5c,#ff9d00,#ffe600,#2ee66b,#19c3ff,#5b6bff,#b84dff,#ff3b5c);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:agrb 4s linear infinite}
 @keyframes agrb{to{background-position:300% 0}}
@@ -635,6 +635,11 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agmic,.agsend{width:44px;height:44px;border-radius:14px;flex:0 0 auto;padding:0!important;display:flex;align-items:center;justify-content:center;font-size:20px}
 .agmic.on{animation:agpulse 1s ease-in-out infinite}@keyframes agpulse{50%{box-shadow:0 0 0 6px rgba(229,72,77,.35)}}
 .agvm{font-size:13px;line-height:1.5}.agvm:empty{display:none}.agvm .ok{color:#6fe0a8}.agvm .bad{color:#f2b134}
+.agnm{padding:3px 11px;border-radius:999px;background:rgba(143,180,255,.2);border:1px solid rgba(143,180,255,.5);font-weight:700}
+.agfix button.agch{font:inherit;font-size:12px;color:inherit;padding:3px 10px;min-height:0;border-radius:999px;cursor:pointer;text-align:left}
+.agfix button.agch.sc{background:rgba(242,177,52,.2);border:1px solid rgba(242,177,52,.65)}
+.agfix button.agch.pt{background:rgba(155,107,242,.24);border:1px solid rgba(155,107,242,.7)}
+.agfix button.agch.no{opacity:.55}
 .agpick{display:flex;flex-direction:column;gap:6px}.agpick>b{font-size:14px}
 .agfix .agpick button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
@@ -647,7 +652,7 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agb{padding:4px 2px 10px;display:flex;flex-direction:column;gap:8px;max-height:72vh;overflow:auto}
 .agrow{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
 .agrow label{font-size:13px;color:var(--mute);white-space:nowrap}
-.agsc{flex-wrap:wrap;gap:6px 14px}.agfr{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;padding:4px 0}.agfr button{border:0;background:none;font-size:18px;color:inherit;cursor:pointer}.agfix button[data-a]{margin:2px 4px 2px 0;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:transparent;color:inherit;font-size:13px}.agexp{margin-top:10px;font-size:12px;opacity:.85;line-height:1.5}.agq span{flex:1}.agsc>span{font-size:13px;min-width:90px}.agsc .agck{font-size:12px;white-space:nowrap}
+.agsc{flex-wrap:wrap;gap:6px 14px}.agfr{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;padding:4px 0}.agfr>button[data-del]{border:0;background:none;font-size:18px;color:inherit;cursor:pointer}.agfix button[data-a]{margin:2px 4px 2px 0;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:transparent;color:inherit;font-size:13px}.agexp{margin-top:10px;font-size:12px;opacity:.85;line-height:1.5}.agq span{flex:1}.agsc>span{font-size:13px;min-width:90px}.agsc .agck{font-size:12px;white-space:nowrap}
 .agrow label.agw{flex:1;white-space:normal;color:inherit}
 .agrow select{flex:1;min-width:0}
 .agrow input[type=number]{width:64px;flex:0 0 auto;text-align:center}
@@ -1860,7 +1865,7 @@ function agOpen(d){
  ov.querySelectorAll('[data-st]').forEach(function(b){b.onclick=function(){var r=+b.dataset.st;setCnt(r,(+$a(r?'#agny':'#agnb').value||0)+(+b.dataset.dl))}});
  $a('#agnb').oninput=function(){setCnt(0,+this.value||0)};$a('#agny').oninput=function(){setCnt(1,+this.value||0)};
 
- var fxs=[null,null],pq=[];
+ var fxs=[null,null],pq=[],ed=[null,null];
  function fixUI(){var key=wk+'|'+d,L=(A.fx=A.fx||{})[key]=(A.fx[key]||[]);
   var taken={};[0,1].forEach(function(r){['s','t'].forEach(function(k){agItems(d,k,r).forEach(function(id){gpl(wk,d,k,r,id).forEach(function(q){taken[q]=1})})})});
   L.forEach(function(f){taken[f.p]=1});
@@ -1868,10 +1873,15 @@ function agOpen(d){
   var YN=function(a2,q){return '<button type="button" data-a="'+a2+'y">Evet</button><button type="button" data-a="'+a2+'n">Hayır</button>'};
   [0,1].forEach(function(r){var bx=$a('.agfix[data-r="'+r+'"]');if(!bx)return;var st=fxs[r];
    var chief=null;L.forEach(function(f){if(f.r===r&&f.chief)chief=f});
-   var line=function(f){var i=L.indexOf(f);var ch='';
-    if(d<5)ch+='<span class="agch'+(f.s?'':' no')+'">'+(f.s?(f.sid?'Okul · '+esc(agName('s',f.sr,f.sid)):'Okul · otomatik'):'okul yok')+'</span>';
-    ch+='<span class="agch pt'+(f.id?'':' no')+'">'+(f.id?esc(agName('t',r,f.id)):'nokta yok')+'</span>';
-    return '<div class="agfr"><div class="agfl">'+(f.chief?'<b class="agsf">ŞEF</b>':'')+'<span class="agnm">'+esc(pn(f.p))+'</span>'+ch+'</div><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'};
+   var line=function(f){var i=L.indexOf(f),ch='',e=ed[r],sp='';
+    if(d<5)ch+='<button type="button" class="agch sc'+(f.s?'':' no')+'" data-ed="'+i+'|s">🏫 '+(f.s?(f.sid?esc(agName('s',f.sr,f.sid)):'Okul · otomatik'):'okul yok')+' ▾</button>';
+    ch+='<button type="button" class="agch pt'+(f.id?'':' no')+'" data-ed="'+i+'|t">📍 '+(f.id?esc(agName('t',r,f.id)):'nokta yok')+' ▾</button>';
+    if(e&&e.i===i){var cs=CN.C,pc=f.p;
+     if(e.f==='s'){sp='<div class="agpick"><b>'+esc(pn(f.p))+' · okul</b><button type="button" data-a="epick" data-v="n">Okul yok</button><button type="button" data-a="epick" data-v="a">Otomatik (en az giden)</button>';
+      [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;sp+='<div class="agpk-h">'+esc(rn(sr))+'</div>'+sids.map(function(id){return '<button type="button" data-a="epick" data-v="'+sr+'|'+id+'"><span>'+esc(agName('s',sr,id))+'</span><em>'+(cs[id+'|'+pc]||0)+' kez</em></button>'}).join('')});
+      sp+='<button type="button" data-a="x" class="agx">Vazgeç</button></div>'}
+     else{sp='<div class="agpick"><b>'+esc(pn(f.p))+' · nokta</b><button type="button" data-a="epick" data-v="n">Nokta yok</button>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="epick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(cs[id+'|'+pc]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">Vazgeç</button></div>'}}
+    return '<div class="agfr"><div class="agfl">'+(f.chief?'<b class="agsf">ŞEF</b>':'')+'<span class="agnm">'+esc(pn(f.p))+'</span>'+ch+'</div><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'+sp};
    var h2='';
    if(chief)h2+=line(chief);
    else if(!(st&&st.chief))h2+='<div class="agrow"><label>ŞEF</label><select data-a="chief"><option value="">— seç —</option>'+avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}).map(function(q){return '<option value="'+q+'">'+esc(pn(q))+'</option>'}).join('')+'</select></div>';
@@ -1887,9 +1897,14 @@ function agOpen(d){
    else h2+='<button type="button" class="agadd" data-a="new">+ Personel ekle</button>';
    bx.innerHTML=h2;
    var done=function(id){L.push({p:fxs[r].p,r:r,s:fxs[r].s,sid:fxs[r].sid||null,sr:fxs[r].sr,id:id,chief:!!fxs[r].chief});fxs[r]=null;if(pq.length){var nx=pq.shift();fxs[nx.r]=nx}save();lock();fixUI()};
-   bx.querySelectorAll('[data-del]').forEach(function(b){b.onclick=function(){L.splice(+b.dataset.del,1);save();lock();fixUI()}});
+   bx.querySelectorAll('[data-ed]').forEach(function(b){b.onclick=function(){var pr=b.dataset.ed.split('|'),cur=ed[r];ed[r]=(cur&&cur.i===+pr[0]&&cur.f===pr[1])?null:{i:+pr[0],f:pr[1]};fixUI()}});
+   bx.querySelectorAll('[data-del]').forEach(function(b){b.onclick=function(){L.splice(+b.dataset.del,1);ed[r]=null;save();lock();fixUI()}});
    bx.querySelectorAll('button[data-a]').forEach(function(b){b.onclick=function(){var a2=b.dataset.a;
-    if(a2==='new')fxs[r]={p:null,step:'p'};else if(a2==='x')fxs[r]=null;
+    if(a2==='new')fxs[r]={p:null,step:'p'};else if(a2==='x'){fxs[r]=null;ed[r]=null}
+    else if(a2==='epick'){var v2=b.dataset.v,f2=L[ed[r].i],fl=ed[r].f;
+     if(fl==='s'){if(v2==='n'){f2.s=false;f2.sid=null;f2.sr=undefined}else if(v2==='a'){f2.s=true;f2.sid=null;f2.sr=undefined}else{var pr2=v2.split('|');f2.s=true;f2.sr=+pr2[0];f2.sid=pr2[1]}}
+     else f2.id=v2==='n'?null:v2;
+     ed[r]=null;save();lock()}
     else if(a2==='sy'||a2==='sn'){fxs[r].s=a2==='sy';fxs[r].step=a2==='sy'?'sid':'t'}
     else if(a2==='tn'){return done(null)}else if(a2==='ty'){fxs[r].step='id'}
     else if(a2==='pick'){var v=b.dataset.v;if(fxs[r].step==='p'){fxs[r].p=+v;fxs[r].step=d<5?'s':'t';fxs[r].s=false}else if(fxs[r].step==='sid'){if(v!=='auto'){var pr=v.split('|');fxs[r].sr=+pr[0];fxs[r].sid=pr[1]}fxs[r].step='t'}else return done(v)}
