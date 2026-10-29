@@ -1746,7 +1746,7 @@ function agOpen(d){
   ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+(have?' <small>('+have+' sabit)</small>':'')+'</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'})}
   h+='</div>'});
  if(d<5){h+='<div class="agsec"><div class="agst2">Aynı kişiye giden okullar</div><div class="agpairs"></div></div>'}
- h+='<div class="agprev"></div></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled><span class="agtt">Zbam !</span></button><button type="button" class="agun" style="display:none">Geri al</button></div></div>';
+ h+='<div class="agprev"></div></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled><span class="agtt">Zbam !</span></button></div></div>';
  ov.innerHTML=h;document.body.appendChild(ov);
  var $a=function(x){return ov.querySelector(x)};
  function close(){ov.remove()}
@@ -1831,8 +1831,8 @@ function agOpen(d){
   if(plan.warn.length)pv+='<div class="agw2">'+plan.warn.map(function(x){return '<div>⚠ '+esc(x)+'</div>'}).join('')+'</div>';
   else pv+='<div class="agok2">Eksik ya da çakışma yok.</div>';
   $a('.agprev').innerHTML=pv;$a('.agok').disabled=false;ov.querySelector('.agb').scrollTop=ov.querySelector('.agb').scrollHeight};
- $a('.agok').onclick=function(){if(!plan)return;agApply(d,plan);$a('.agprev').insertAdjacentHTML('afterbegin','<div class="agok2">Uygulandı.</div>');$a('.agok').disabled=true;$a('.agun').style.display='';buildGV()};
- $a('.agun').onclick=function(){if(!agSnapMem)return;agRestore(agSnapMem);agSnapMem=null;$a('.agun').style.display='none';$a('.agprev').innerHTML='<div class="agok2">Geri alındı.</div>';buildGV()}}
+ $a('.agok').onclick=function(){if(!plan)return;agApply(d,plan);close();buildGV()};
+}
 (function(){var lk=false,sy=0;function chk(){var on=!!document.querySelector('.csov,.wdlg'),b=document.body.style;
  if(on&&!lk){lk=true;sy=window.scrollY;b.position='fixed';b.top=(-sy)+'px';b.left='0';b.right='0';b.width='100%'}
  else if(!on&&lk){lk=false;b.position='';b.top='';b.left='';b.right='';b.width='';window.scrollTo(0,sy)}}
