@@ -650,6 +650,16 @@ html .day h3 .qc.ag{background:none!important;border:0!important;box-shadow:none
 .agpr2 .ai{display:inline-flex}.agpr2 .ai.no{color:#ff8a80}.agpr2 .ai.auto{color:#ffd166}.agpr2 .ai.yes{color:#6fe0a8}.agpr2 .al2{font-size:12.5px;opacity:.9}
 .agq .agpr2{flex:1;margin-left:10px}.agpr2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .agfix .agpick button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit}
+.agfix .agpick>b{padding:8px 12px;border-radius:12px;background:linear-gradient(100deg,rgba(47,123,255,.32),rgba(154,134,255,.30));border:1px solid rgba(120,160,255,.45);font-size:14.5px}
+.agfix .agpick.pt>b,.agfix .agpick:has(.ptb)>b{background:linear-gradient(100deg,rgba(154,134,255,.34),rgba(255,110,190,.28));border-color:rgba(190,150,255,.5)}
+.agfix .agpr2 button[data-a="sn"],.agfix .agpr2 button[data-a="tn"]{background:linear-gradient(160deg,rgba(255,110,110,.30),rgba(255,110,110,.12));border:1px solid rgba(255,138,128,.55)}
+.agfix .agpr2 button[data-a="pick"][data-v="auto"]{background:linear-gradient(160deg,rgba(255,209,102,.32),rgba(255,160,70,.12));border:1px solid rgba(255,209,102,.6)}
+.agfix .agpick .agpk-h{margin-top:6px;padding:3px 10px;border-radius:999px;align-self:flex-start;font-size:12px;font-weight:800;letter-spacing:.3px;background:rgba(25,211,255,.18);color:#8fe6ff;border:1px solid rgba(25,211,255,.45)}
+.agfix .agpick .agpk-h.r1{background:rgba(255,140,200,.18);color:#ffb3dc;border-color:rgba(255,140,200,.45)}
+.agfix .agpick button[data-a="pick"][data-v*="|"]{background:linear-gradient(100deg,rgba(47,123,255,.26),rgba(25,211,255,.14));border:1px solid rgba(80,170,255,.5)}
+.agfix .agpick button[data-a="pick"][data-v*="|"][data-v^="1"]{background:linear-gradient(100deg,rgba(255,110,190,.24),rgba(154,134,255,.16));border-color:rgba(230,130,220,.5)}
+.agfix .agpick button.ptb[data-a]{background:linear-gradient(100deg,rgba(154,134,255,.30),rgba(255,110,190,.16));border:1px solid rgba(190,150,255,.55)}
+.agfix .agpick button[data-a="pick"] em{font-style:normal;font-size:12px;padding:2px 9px;border-radius:999px;background:rgba(255,255,255,.14)}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
 .agpk-h{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-top:4px}
 .agfix .agpick .agx{justify-content:center;opacity:.8}
@@ -1925,7 +1935,7 @@ function agOpen(d){
    if(st){var nm=st.p===null?'':esc(pn(st.p));
     if(st.step==='p')h2+='<div class="agpick"><b>Kim?</b>'+agSort(avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}),function(q){var l=CN.RL[String(r+1)+'|'+q];return [CN.RC[String(r+1)+'|'+q]||0,l===undefined?-1:l]}).map(function(q){return '<button type="button" data-a="pick" data-v="'+q+'"><span>'+esc(pn(q))+'</span><em>B '+(CN.RC['1|'+q]||0)+' · Y '+(CN.RC['2|'+q]||0)+'</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>';
     else if(st.step==='s'||st.step==='sid'){h2+='<div class="agpick"><b>'+(st.chief?'★ ':'')+nm+' okula gitsin mi?</b><div class="agpr2"><button type="button" data-a="sn">'+agIco('no','Hayır')+'</button><button type="button" data-a="pick" data-v="auto">'+agIco('auto','Otomatik')+'</button></div>';
-     [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;h2+='<div class="agpk-h">'+esc(rn(sr))+'</div>'+sids.map(function(id){var c=CN.C[id+'|'+st.p]||0;return '<button type="button" data-a="pick" data-v="'+sr+'|'+id+'"><span>'+esc(agName('s',sr,id))+'</span><em>'+c+' kez</em></button>'}).join('')});
+     [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;h2+='<div class="agpk-h r'+sr+'">'+esc(rn(sr))+'</div>'+sids.map(function(id){var c=CN.C[id+'|'+st.p]||0;return '<button type="button" data-a="pick" data-v="'+sr+'|'+id+'"><span>'+esc(agName('s',sr,id))+'</span><em>'+c+' kez</em></button>'}).join('')});
      h2+='<button type="button" data-a="x" class="agx">İptal</button></div>'}
     else h2+='<div class="agpick"><b>'+nm+' noktaya gitsin mi?</b><div class="agpr2"><button type="button" data-a="tn">'+agIco('no','Hayır')+'</button><button type="button" data-a="pick" data-v="auto">'+agIco('auto','Otomatik')+'</button></div>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="pick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(CN.C[id+'|'+st.p]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>'}
    else h2+='<button type="button" class="agadd" data-a="new">+ Personel ekle</button>';
