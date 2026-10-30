@@ -1953,11 +1953,42 @@ function agOpen(d){
    drop(c.p);if(c.chief)for(var z=L.length-1;z>=0;z--)if(L[z].r===c.r&&L[z].chief)L.splice(z,1);
    if(c.pend)pq.push({p:c.p,r:c.r,chief:!!c.chief,s:c.s,sid:c.sid||null,sr:c.sr,step:'id'});
    else L.push({p:c.p,r:c.r,s:c.s,sid:c.sid||null,sr:c.sr,id:c.id||null,chief:!!c.chief});
-   ok.push(pn(c.p)+' → '+rn(c.r)+(c.chief?' · ŞEF':'')+(d<5?' · '+(c.s?(c.sid?'okul: '+agName('s',c.sr,c.sid):'okul otomatik'):'okul yok'):'')+' · '+(c.pend?'nokta: listeden seç':(c.id?'nokta: '+agName('t',c.r,c.id):'nokta yok'))+(c.inferred?' (bölgeyi tahmin ettim)':'')+(d<5&&c.defS?' (okulu söylemedin)':''))});
+   ok.push(pn(c.p)+' → '+rn(c.r)+(c.chief?' · ŞEF':'')+(d<5?' · '+(c.s?(c.sid?'okul: '+agName('s',c.sr,c.sid):'okul otomatik'):'okul yok'):'')+' · '+(c.pend?'nokta: listeden seç':(c.id==='auto'?'nokta otomatik':c.id?'nokta: '+agName('t',c.r,c.id):'nokta yok'))+(c.inferred?' (bölgeyi tahmin ettim)':'')+(d<5&&c.defS?' (okulu söylemedin)':''))});
   if(pq.length){var nx=pq.shift();fxs[nx.r]=nx}
   save();lock();fixUI();vmsg(ok,bad)}
- function runCmd(t){t=(t||'').trim();if(!t)return;var res=agParse(d,t);
-  if(!res.cmds.length&&!res.counts.length&&!res.removes.length&&!res.asked.length&&!res.notes.length){vmsg([],['Anlayamadım. Örnek: “Abdullah Şahin Bahçelievler şef, noktaya gönderme”.']);return}
+ var aiOff=false,aiBusy=false;
+ function aiCtx(){var ppl=[];for(var q=0;q<N;q++){var v=S.w[wk][q][d];ppl.push({i:q,ad:pn(q),kod:codeD(wk,d,q),bolge:v==='1'?0:v==='2'?1:null,izinli:isLv(v)})}
+  var L2=((A.fx||{})[wk+'|'+d]||[]).map(function(f){return {kisi:f.p,bolge:f.r,sef:!!f.chief}});
+  var it=function(k){var o=[];[0,1].forEach(function(r){agItems(d,k,r).forEach(function(id){o.push({r:r,id:id,ad:dn(agName(k,r,id))})})});return o};
+  return {hafta_sonu:d>=5,kisiler:ppl,okullar:d<5?it('s'):[],noktalar:it('t'),eklenenler:L2}}
+ function aiToRes(sn){var out={cmds:[],counts:[],removes:[],notes:(sn.notlar||[]).map(String).slice(0,6),asked:[]},ok=function(p){return Number.isInteger(p)&&p>=0&&p<N};
+  (sn.sayilar||[]).forEach(function(c){if((c.r===0||c.r===1)&&Number.isInteger(c.v)&&c.v>=0)out.counts.push({r:c.r,v:c.v})});
+  (sn.cikar||[]).forEach(function(p){if(ok(p))out.removes.push(p)});
+  (sn.belirsiz||[]).forEach(function(b){out.asked.push({word:String(b.soz||''),names:(b.adaylar||[]).filter(ok).map(pn)})});
+  (sn.komutlar||[]).forEach(function(k){var p=k.kisi;if(!ok(p)){out.notes.push('Kişiyi tanıyamadım.');return}
+   var mv=S.w[wk][p][d],r=(k.bolge===0||k.bolge===1)?k.bolge:(mv==='1'?0:mv==='2'?1:null),inf=false;
+   if(r===null){out.notes.push(pn(p)+': hangi bölge? Bahçelievler ya da Yenibosna de.');return}
+   if(k.bolge!==0&&k.bolge!==1)inf=true;
+   var c={p:p,r:r,chief:!!k.sef,s:false,sid:null,sr:undefined,id:null,pend:false,defS:false,inferred:inf},ok2=k.okul,nk=k.nokta;
+   if(nk==='sor')c.pend=true;else if(nk==='otomatik')c.id='auto';
+   else if(typeof nk==='string'&&nk!=='yok'&&nk!=='belirtilmedi'){if(agItems(d,'t',r).indexOf(nk)>-1)c.id=nk;else out.notes.push(pn(p)+': söylediğin nokta '+rn(r)+' bölgesinde bulunamadı.')}
+   if(d>=5)c.s=false;
+   else if(ok2==='otomatik')c.s=true;
+   else if(ok2&&typeof ok2==='object'&&ok2.id){if(agItems(d,'s',ok2.r).indexOf(ok2.id)>-1){c.s=true;c.sid=ok2.id;c.sr=ok2.r}else{c.s=true;out.notes.push(pn(p)+': okulu bulamadım, otomatik bıraktım.')}}
+   else if(ok2==='yok')c.s=false;
+   else{c.defS=true;c.s=(nk==='yok'||nk==='belirtilmedi'||nk===undefined)}
+   out.cmds.push(c)});
+  return out}
+ async function aiParse(t){var ctl=new AbortController(),to=setTimeout(function(){ctl.abort()},15000);
+  try{var r=await fetch(CFG.URL+'/functions/v1/otosaki-ai',{method:'POST',signal:ctl.signal,headers:{'Content-Type':'application/json',apikey:CFG.KEY},body:JSON.stringify({pin:pw,text:t,ctx:aiCtx()})});
+   var j=await r.json().catch(function(){return null});
+   if(!r.ok||!j||!j.ok){if(r.status===503||r.status===401||r.status===404)aiOff=true;return null}
+   return aiToRes(j.sonuc||{})}catch(e){return null}finally{clearTimeout(to)}}
+ async function runCmd(t){t=(t||'').trim();if(!t||aiBusy)return;
+  var res=null,ai=false;
+  if(!aiOff){aiBusy=true;vm.innerHTML='<div class="ok">Anlıyorum…</div>';res=await aiParse(t);aiBusy=false;ai=!!res}
+  if(!res){res=agParse(d,t);if(!aiOff||ai===false)res.notes=res.notes.slice()}
+  if(!res.cmds.length&&!res.counts.length&&!res.removes.length&&!res.asked.length&&!res.notes.length){vmsg([],['Anlayamadım. Biraz daha açık söyler misin? Örnek: “Abdullah Şahin Bahçelievler şef, noktaya gönderme”.']);return}
   applyCmds(res);vt.value=''}
  vt.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();runCmd(vt.value)}};
  $a('.agsend').onclick=function(){runCmd(vt.value)};
