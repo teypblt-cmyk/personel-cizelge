@@ -1773,7 +1773,7 @@ function agED(a,b){if(a===b)return 0;var m=a.length,n=b.length;if(Math.abs(m-n)>
 function agTM(w,k){if(k.length<3||w.length<3)return false;if(w.indexOf(k)===0&&w.length-k.length<=5)return true;
  if(k.length>=5){if(w.length>=k.length&&w.length-k.length<=5&&agED(w.slice(0,k.length),k)<=1)return true;if(agED(w,k)<=1)return true}return false}
 var AG_STOP={okulu:1,ortaokulu:1,ilkokulu:1,ilkokul:1,ortaokul:1,lisesi:1,imam:1,hatip:1,sokak:1,cadde:1,caddesi:1,nolu:1,devriye:1,kontrol:1,mahallesi:1,okul:1,nokta:1,noktasi:1};
-var AG_NEG=/^(gonderme\w*|yazma\w*|koyma\w*|ekleme\w*|atma\w*|gitme\w*|yapma\w*|olmasin\w*|istemiyor\w*|yok|hayir|degil|haric|disinda|gonderilmesin\w*|yazilmasin\w*|koyulmasin\w*|gitmiyor\w*|cikma\w*)$/;
+var AG_NEG=/^(gonderme\w*|yazma\w*|koyma\w*|ekleme\w*|atma\w*|gitme\w*|yapma\w*|olmasin\w*|istemiyor\w*|yok|hayir|degil|haric|disinda|gonderilmesin\w*|yazilmasin\w*|koyulmasin\w*|gitmiyor\w*|cikma\w*|gerekmez|gerekmiyor|istemem|istemiyoruz|birakma\w*|verme\w*|vermeyin|yazmayin|gondermeyin|koymayin|atmayin|olmaz|gitmez|lazim)$/;
 var AG_NUM={bir:1,iki:2,uc:3,dort:4,bes:5,alti:6,yedi:7,sekiz:8,dokuz:9,on:10};
 function agParse(d,text){
  text=String(text).replace(/\.\s*(?=görev)/gi,' nokta ').replace(/(^|\s)\.(?=\s+\S)/g,'$1nokta');
@@ -1781,11 +1781,11 @@ function agParse(d,text){
  var out={cmds:[],counts:[],removes:[],notes:notes,asked:[]};if(!n)return out;
  // bölgeler
  var regs=[];for(i=0;i<n;i++){var w=W[i];
-  if(/^bahc/.test(w)||agTM(w,'bahcelievler')){regs.push({i:i,r:0});used[i]=true}
-  else if(/^yenibosna/.test(w)||agTM(w,'yenibosna')||/^bosna/.test(w)){regs.push({i:i,r:1});used[i]=true}
+  if(/^bahc|^bh$/.test(w)||agTM(w,'bahcelievler')){regs.push({i:i,r:0});used[i]=true}
+  else if(/^yenibosna|^yb$/.test(w)||agTM(w,'yenibosna')||/^bosna/.test(w)){regs.push({i:i,r:1});used[i]=true}
   else if(w==='yeni'&&W[i+1]&&agTM(W[i+1],'bosna')){regs.push({i:i,r:1});used[i]=true;used[i+1]=true;i++}}
  // sayılar: "bahçelievler 6 kişi"
- for(i=0;i<n;i++){if(/^kisi/.test(W[i])&&i>0){var v=/^\d+$/.test(W[i-1])?+W[i-1]:AG_NUM[W[i-1]];if(v!==undefined&&i>1&&AG_NUM[W[i-2]]===10&&v<10){v+=10;used[i-2]=true}if(v!==undefined){
+ for(i=0;i<n;i++){if(/^(kisi|personel|adam|eleman)/.test(W[i])&&i>0){var v=/^\d+$/.test(W[i-1])?+W[i-1]:AG_NUM[W[i-1]];if(v!==undefined&&i>1&&AG_NUM[W[i-2]]===10&&v<10){v+=10;used[i-2]=true}if(v!==undefined){
    var best=null,bd=9;regs.forEach(function(g){var dd=Math.abs(g.i-(i-1));if(dd<bd&&dd<=3){bd=dd;best=g}});
    if(best){out.counts.push({r:best.r,v:v});used[i]=used[i-1]=true}}}}
  // kişiler
@@ -1811,11 +1811,11 @@ function agParse(d,text){
   imen.push({pos:c.pos,sc:c.sc,alts:[c.it],i:Math.min.apply(null,c.pos)});c.pos.forEach(function(p2){used[p2]=true})});
  // anahtar kelimeler
  var kw=[];for(i=0;i<n;i++){var x=W[i];
-  if(/^okul/.test(x))kw.push({i:i,t:'s'});else if(/^nokta|^gorev/.test(x))kw.push({i:i,t:'t'});else if(/^sef/.test(x))kw.push({i:i,t:'c'});
-  else if(/^(cikar|sil|kaldir|iptal)/.test(x)&&!/^(cikarma|silme|kaldirma)/.test(x))kw.push({i:i,t:'x'})}
+  if(/^okul/.test(x))kw.push({i:i,t:'s'});else if(/^nokta|^gorev|^devriye/.test(x))kw.push({i:i,t:'t'});else if(/^(sef|sorumlu|lider)/.test(x))kw.push({i:i,t:'c'});
+  else if(/^(cikar|sil|kaldir|iptal|vazgec|bosalt)/.test(x)&&!/^(cikarma|silme|kaldirma|vazgecme|iptalme)/.test(x))kw.push({i:i,t:'x'})}
  // segmentler
  men.sort(function(a,b){return a.i0-b.i0});
- if(!men.length){notes.push('Hangi personel olduğunu anlayamadım.');return out}
+ if(!men.length){if(!out.counts.length)notes.push('Hangi personel olduğunu anlayamadım.');return out}
  var segs=men.map(function(m,ix){return {m:m,a:ix?m.i0:0,b:ix<men.length-1?men[ix+1].i0-1:n-1,regs:[],kw:[],im:[]}});
  var segOf=function(pos){for(var s2=0;s2<segs.length;s2++)if(pos>=segs[s2].a&&pos<=segs[s2].b)return segs[s2];return segs[segs.length-1]};
  regs.forEach(function(g){var sg=segOf(g.i),ix=segs.indexOf(sg);
@@ -1848,10 +1848,11 @@ function agParse(d,text){
    else{var ks=Object.keys(kinds);if(ks.length===1&&ks[0]==='t'){if(ng)tNeg=true;else{tPos=true;tpend=true;notes.push(pn(m.p)+': söylediğin nokta birden fazla yere uyuyor, listeden seç.')}}
     else if(ks.length===1){if(ng)sNeg=true;else{sPos=true;notes.push(pn(m.p)+': okul birden fazla yere uyuyor, otomatik bıraktım.')}}
     else notes.push(pn(m.p)+': söylediğin yer hem okul hem nokta olabilir, "okul" ya da "nokta" de.')}});
+  var tAuto=sg.kw.some(function(x){if(x.t!=='t'||neg(sg,x.i))return false;for(var z=Math.max(sg.a,x.i-2);z<=Math.min(sg.b,x.i+3);z++)if(/^(otomatik|farketmez|etmez|herhangi|sistem|sen|secsin|sec)$/.test(W[z]))return true;return false});
   cmd.chief=chiefPos&&!chiefNeg;cmd.unchief=chiefNeg;
   cmd.s=d>=5?false:(sNeg?false:(sPos?true:(tNeg?true:(tPos?false:true))));
   if(sid){cmd.sid=sid;cmd.sr=sr;cmd.s=true}
-  if(tNeg&&!tid)cmd.id=null;else if(tid)cmd.id=tid;else if(tPos||tpend)cmd.pend=true;else if(d>=5&&!sPos)cmd.pend=true;else cmd.id=null;
+  if(tNeg&&!tid)cmd.id=null;else if(tid)cmd.id=tid;else if(tPos&&!tpend&&tAuto)cmd.id='auto';else if(tPos||tpend)cmd.pend=true;else if(d>=5&&!sPos)cmd.pend=true;else cmd.id=null;
   cmd.inferred=inf;cmd.defS=!sNeg&&!sPos&&!sid;
   out.cmds.push(cmd)});
  return out}
