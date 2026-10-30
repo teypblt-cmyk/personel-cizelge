@@ -670,6 +670,34 @@ html .day h3 .qc.ag{background:none!important;border:0!important;box-shadow:none
 .agfix button.agch.no{opacity:1}
 .agfix .agpick button.agx[data-a]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-weight:700;min-height:54px;margin-top:6px;background:linear-gradient(160deg,rgba(255,110,110,.30),rgba(255,110,110,.12));border:1px solid rgba(255,138,128,.55)}
 .agpick button.agx .ai.no{color:#ff8a80}
+/* Otosaki düzen */
+.agb{gap:14px!important}
+.agb .agsec{padding:14px;gap:12px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12)}
+.agsec.r0{border-color:rgba(80,170,255,.5)}.agsec.r1{border-color:rgba(255,140,200,.45)}
+.agb .agsec .agst2{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:none;padding:0;margin:0;color:inherit}
+.agb .agsec .agst2::before{content:"";width:9px;height:9px;border-radius:50%;background:#9a86ff;flex:0 0 auto}
+.agsec.r0 .agst2::before{background:#3aa8ff;box-shadow:0 0 8px #3aa8ff}.agsec.r1 .agst2::before{background:#ff7ac0;box-shadow:0 0 8px #ff7ac0}
+.agb .agcnt{gap:10px}
+.agfix{gap:10px}
+.agfix .agfr{display:flex;align-items:flex-start;gap:8px;padding:10px!important;border-radius:14px;background:rgba(255,255,255,.05)}
+.agfr .agfl{flex:1;min-width:0}
+.agfl .agwho{grid-column:1/-1;display:flex;align-items:center;gap:8px;min-width:0}
+.agfl .agwho .agnm{background:none;border:0;padding:0;font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.agfl .agwho .agsf{flex:0 0 auto;font-size:10.5px;padding:2px 8px;border-radius:999px}
+.agfr>button[data-del]{width:28px;height:28px;border-radius:50%!important;background:rgba(255,255,255,.08);border:0;font-size:16px!important}
+.agfix>.agrow{background:rgba(255,255,255,.04);padding:8px 10px;border-radius:14px}
+.agsub{display:grid;grid-template-columns:1fr 64px 62px;gap:8px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.65;padding:2px 4px 0;border-top:1px solid rgba(255,255,255,.1);padding-top:12px}
+.agsub span:nth-child(n+2){text-align:center}
+.agpts{display:flex;flex-direction:column;gap:6px}
+.agb .agpts .agpt{display:grid;grid-template-columns:1fr 64px 62px;gap:8px;align-items:center;padding:8px 4px;border-radius:12px;background:rgba(255,255,255,.04)}
+.agb .agpts .agpt label.agw{font-size:13px;min-width:0}
+.agb .agpts .agpt label.agsb{justify-content:center;font-size:0;gap:0}
+.agb .agpts .agpt label.agsb input{width:22px;height:22px}
+.agb .agpts .agpt select.agpn{width:62px}
+.agpairs{display:flex;flex-direction:column;gap:8px}
+.agpairs .agrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.agpairs .agrow .agpadd{grid-column:1/-1;min-height:40px;border-radius:12px}
+.agbtns{border-top:1px solid rgba(255,255,255,.1);padding-top:12px!important}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
 .agpk-h{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-top:4px}
 .agfix .agpick .agx{justify-content:center;opacity:.8}
@@ -1897,8 +1925,8 @@ function agOpen(d){
  var cbox=function(r,id,v){return '<div class="agbox r'+r+'"><span>'+esc(rn(r))+'</span><div class="agst"><button type="button" data-st="'+r+'" data-dl="-1" aria-label="Azalt">−</button><input id="'+id+'" type="number" inputmode="numeric" min="0" max="'+tot+'" value="'+v+'"><button type="button" data-st="'+r+'" data-dl="1" aria-label="Arttır">+</button></div></div>'};
  h+='<div class="agcnt">'+cbox(0,'agnb',nB)+cbox(1,'agny',nY)+'</div>';
  [0,1].forEach(function(r){h+='<div class="agsec r'+r+'"><div class="agst2">'+esc(rn(r))+'</div><div class="agfix" data-r="'+r+'"></div>';
-  var ids=agItems(d,'t',r);if(ids.length){
-  ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+'</label><label class="agsb"><input type="checkbox" class="agps" data-id="'+id+'"'+(A.ps&&A.ps[id]?' checked':'')+'>Sabit</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'})}
+  var ids=agItems(d,'t',r);if(ids.length){h+='<div class="agsub"><span>Noktalar</span><span>Sabit</span><span>Kişi</span></div><div class="agpts">';
+  ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+'</label><label class="agsb"><input type="checkbox" class="agps" data-id="'+id+'"'+(A.ps&&A.ps[id]?' checked':'')+'>Sabit</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'});h+='</div>'}
   h+='</div>'});
  if(d<5){h+='<div class="agsec"><div class="agst2">Aynı kişiye giden okullar</div><div class="agpairs"></div></div>'}
  h+='<div class="agprev"></div></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled><span class="agtt">Zbam !</span></button></div></div>';
@@ -1937,7 +1965,7 @@ function agOpen(d){
       [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;sp+='<div class="agpk-h">'+esc(rn(sr))+'</div>'+sids.map(function(id){return '<button type="button" data-a="epick" data-v="'+sr+'|'+id+'"><span>'+esc(agName('s',sr,id))+'</span><em>'+(cs[id+'|'+pc]||0)+' kez</em></button>'}).join('')});
       sp+='<button type="button" data-a="x" class="agx">Vazgeç</button></div>'}
      else{sp='<div class="agpick"><b>'+esc(pn(f.p))+' · nokta</b><div class="agpr2"><button type="button" data-a="epick" data-v="n">'+agIco('no','Nokta yok')+'</button><button type="button" data-a="epick" data-v="auto">'+agIco('auto','Otomatik')+'</button></div>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="epick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(cs[id+'|'+pc]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">Vazgeç</button></div>'}}
-    return '<div class="agfr"><div class="agfl">'+(f.chief?'<b class="agsf">ŞEF</b>':'')+'<span class="agnm">'+esc(pn(f.p))+'</span>'+ch+'</div><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'+sp};
+    return '<div class="agfr"><div class="agfl"><div class="agwho">'+(f.chief?'<b class="agsf">ŞEF</b>':'')+'<span class="agnm">'+esc(pn(f.p))+'</span></div>'+ch+'</div><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'+sp};
    var h2='';
    if(chief)h2+=line(chief);
    else if(!(st&&st.chief))h2+='<div class="agrow"><label>ŞEF</label><select data-a="chief"><option value="">— seç —</option>'+avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}).map(function(q){return '<option value="'+q+'">'+esc(pn(q))+'</option>'}).join('')+'</select></div>';
