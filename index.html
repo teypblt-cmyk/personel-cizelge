@@ -712,6 +712,37 @@ html .day h3 .qc.ag{background:none!important;border:0!important;box-shadow:none
 .agfix .agpr2 button[data-a]{min-height:46px!important;padding:6px!important}
 .agfix .agpick button[data-a="pick"][data-v*="|"],.agfix .agpick button.ptb[data-a]{min-height:38px;padding:6px 12px!important}
 .agfix .agpick>b{padding:7px 12px;font-size:14px}
+/* Otosaki v70 — tek renk sistemi: kırmızı=hayır/yok, amber=otomatik, yeşil=evet, gri=iptal; bölge=tema rengi */
+.agov{--no:#ff7b86;--auto:#ffc65c;--yes:#5fdc9e;--sc:#4cc9f0;--pt:#a98bff}
+.agov .agsec.r0{border-color:color-mix(in srgb,var(--ac1) 55%,transparent)}.agov .agsec.r1{border-color:color-mix(in srgb,var(--ac2) 55%,transparent)}
+.agov .agsec.r0 .agst2::before{background:var(--ac1);box-shadow:0 0 7px var(--ac1)}.agov .agsec.r1 .agst2::before{background:var(--ac2);box-shadow:0 0 7px var(--ac2)}
+.agov .agsec:not(.r0):not(.r1) .agst2::before{background:var(--sc);box-shadow:0 0 7px var(--sc)}
+.agov input[type=checkbox]{accent-color:var(--auto)}
+/* rozetler */
+.agov .agfix button.agch.sc{background:color-mix(in srgb,var(--sc) 14%,transparent);border:1px solid color-mix(in srgb,var(--sc) 55%,transparent)}
+.agov .agfix button.agch.pt{background:color-mix(in srgb,var(--pt) 16%,transparent);border:1px solid color-mix(in srgb,var(--pt) 55%,transparent)}
+.agov .agfix button.agch .mk.y{background:var(--yes)}.agov .agfix button.agch .mk.n{background:var(--no)}
+/* seçim ekranı */
+.agov .agfix .agpick>b{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.14)!important;border-left:3px solid var(--sc)!important;border-radius:12px;font-size:14px}
+.agov .agfix .agpick:has(.ptb)>b{border-left-color:var(--pt)!important}
+.agov .agpr2 .ai.no{color:var(--no)}.agov .agpr2 .ai.auto{color:var(--auto)}.agov .agpr2 .ai.yes{color:var(--yes)}
+.agov .agfix .agpr2 button[data-a="sn"],.agov .agfix .agpr2 button[data-a="tn"],.agov .agfix .agpr2 button[data-a="epick"][data-v="n"]{background:color-mix(in srgb,var(--no) 14%,transparent);border:1px solid color-mix(in srgb,var(--no) 55%,transparent)}
+.agov .agfix .agpr2 button[data-a="pick"][data-v="auto"],.agov .agfix .agpr2 button[data-a="epick"][data-v="a"],.agov .agfix .agpr2 button[data-a="epick"][data-v="auto"]{background:color-mix(in srgb,var(--auto) 15%,transparent);border:1px solid color-mix(in srgb,var(--auto) 60%,transparent)}
+.agov .agfix .agpick button.agx[data-a]{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);min-height:46px;margin-top:4px;color:inherit}
+.agov .agpick button.agx .ai.no{color:rgba(255,255,255,.75)}
+.agov .agfix .agpick button.agx[data-a]{flex-direction:row!important;justify-content:center!important;min-height:40px!important;height:40px;gap:8px!important}.agpick button.agx .ai svg{width:18px;height:18px}
+.agov .agfix .agpick .agpk-h{background:none;border:0;padding:6px 2px 0;border-radius:0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac1);opacity:.95}
+.agov .agfix .agpick .agpk-h.r1{background:none;color:var(--ac2);border:0}
+.agov .agfix .agpick button[data-a="pick"][data-v*="|"],.agov .agfix .agpick button[data-a="epick"][data-v*="|"]{background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.13)!important;border-left:3px solid var(--sc)!important}
+.agov .agfix .agpick button.ptb[data-a]{background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.13)!important;border-left:3px solid var(--pt)!important}
+.agov .agfix .agpick button[data-a="pick"] em,.agov .agfix .agpick button[data-a="epick"] em{background:rgba(255,255,255,.1);color:inherit;opacity:.85}
+.agov .agfix .agpick button[data-a]:active{filter:brightness(1.25)}
+/* küçük detaylar */
+.agov .agfix .agfr{border:1px solid rgba(255,255,255,.08)}
+.agov .agfix .agadd{color:inherit;opacity:.85}
+.agov .agpairs .agrow .agpadd{background:color-mix(in srgb,var(--sc) 16%,transparent);border:1px solid color-mix(in srgb,var(--sc) 55%,transparent)}
+.agov .agpairs .agfr,.agov .agpairs>div{border-radius:10px}
+.agov .agsub{color:inherit}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
 .agpk-h{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-top:4px}
 .agfix .agpick .agx{justify-content:center;opacity:.8}
@@ -1942,7 +1973,7 @@ function agOpen(d){
   var ids=agItems(d,'t',r);if(ids.length){h+='<div class="agsub"><span>Noktalar</span><span>Sabit</span><span>Kişi</span></div><div class="agpts">';
   ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+'</label><label class="agsb"><input type="checkbox" class="agps" data-id="'+id+'"'+(A.ps&&A.ps[id]?' checked':'')+'>Sabit</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'});h+='</div>'}
   h+='</div>'});
- if(d<5){h+='<div class="agsec"><div class="agst2">Aynı kişiye giden okullar</div><div class="agpairs"></div></div>'}
+ if(d<5){h+='<div class="agsec"><div class="agst2">Çift Okul</div><div class="agpairs"></div></div>'}
  h+='<div class="agprev"></div></div><div class="agbtns"><button type="button" class="agpv">Önizle</button><button type="button" class="agok on" disabled><span class="agtt">Zbam !</span></button></div></div>';
  ov.innerHTML=h;document.body.appendChild(ov);
  var $a=function(x){return ov.querySelector(x)};
