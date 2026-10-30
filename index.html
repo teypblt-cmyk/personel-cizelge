@@ -642,6 +642,7 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 .agfix button.agch.pt{background:rgba(155,107,242,.24);border:1px solid rgba(155,107,242,.7)}
 .agfix button.agch.no{opacity:.55}
 .agpick{display:flex;flex-direction:column;gap:6px}.agpick>b{font-size:14px}
+.agpick .agpr2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.agfix .agpick .agpr2 button[data-a]{justify-content:center;text-align:center;font-weight:700;min-height:42px}
 .agfix .agpick button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
 .agpk-h{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-top:4px}
@@ -1919,7 +1920,7 @@ function agOpen(d){
     else if(st.step==='sid'){h2+='<div class="agpick"><b>'+nm+' hangi okula?</b><button type="button" data-a="pick" data-v="auto">Otomatik (en az giden)</button>';
      [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;h2+='<div class="agpk-h">'+esc(rn(sr))+'</div>'+sids.map(function(id){var c=CN.C[id+'|'+st.p]||0;return '<button type="button" data-a="pick" data-v="'+sr+'|'+id+'"><span>'+esc(agName('s',sr,id))+'</span><em>'+c+' kez</em></button>'}).join('')});
      h2+='<button type="button" data-a="x" class="agx">İptal</button></div>'}
-    else h2+='<div class="agpick"><b>'+nm+' noktaya gitsin mi?</b><button type="button" data-a="tn">Hayır</button><button type="button" data-a="pick" data-v="auto">Otomatik (en az giden)</button>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="pick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(CN.C[id+'|'+st.p]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>'}
+    else h2+='<div class="agpick"><b>'+nm+' noktaya gitsin mi?</b><div class="agpr2"><button type="button" data-a="tn">Hayır</button><button type="button" data-a="pick" data-v="auto">Otomatik</button></div>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="pick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(CN.C[id+'|'+st.p]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>'}
    else h2+='<button type="button" class="agadd" data-a="new">+ Personel ekle</button>';
    bx.innerHTML=h2;
    var done=function(id){L.push({p:fxs[r].p,r:r,s:fxs[r].s,sid:fxs[r].sid||null,sr:fxs[r].sr,id:id,chief:!!fxs[r].chief});fxs[r]=null;if(pq.length){var nx=pq.shift();fxs[nx.r]=nx}save();lock();fixUI()};
