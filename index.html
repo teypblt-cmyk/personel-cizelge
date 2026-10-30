@@ -594,6 +594,7 @@ html[data-pre="2"] .wbox{border:1px solid rgba(255,255,255,.25);border-radius:12
 
 .agov .css{max-width:560px;width:calc(100% - 24px)}
 .agb{gap:10px!important;overflow-x:hidden!important}.agb *{box-sizing:border-box}.agb>*{min-width:0;flex-shrink:0}
+.agru{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 2px 0;font-size:13px}.agru label{display:flex;align-items:center;gap:7px}.agru input{width:18px;height:18px;margin:0}.agruap{border:1px solid rgba(255,255,255,.25);background:transparent;color:inherit;border-radius:9px;padding:6px 11px;font:inherit;font-size:12.5px}
 .agcnt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
 .agbox{border:1px solid var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:6px;background:rgba(255,255,255,.04)}
 .agbox>span{font-size:13px;font-weight:700}
@@ -1857,8 +1858,38 @@ function agParse(d,text){
   out.cmds.push(cmd)});
  return out}
 
+function agRulesApply(d){var A=S.ag,key=wk+'|'+d,L=(A.fx=A.fx||{})[key]=(A.fx[key]||[]),ok=[],bad=[];
+ if(!A.ps)A.ps={};if(!A.pn)A.pn={};
+ var prev=(A.rl=A.rl||{})[key]||[],made=[];for(var z=L.length-1;z>=0;z--)if(prev.indexOf(L[z].p)>-1)L.splice(z,1);
+ var manual={};L.forEach(function(f){manual[f.p]=1});
+ var idx=function(nm){var t=agN(nm);for(var q=0;q<N;q++)if(agN(pn(q))===t)return q;return -1};
+ var work=function(q){return q>=0&&!isLv(S.w[wk][q][d])};
+ var cn=function(q){var k=ckey(codeD(wk,d,q));return k===null?-1:k};
+ var all=[];for(var q=0;q<N;q++)if(work(q))all.push(q);
+ var hi=function(ex,mk){var best=null,pool=all.filter(function(q){return ex.indexOf(q)<0&&(!mk||S.w[wk][q][d]===mk)});if(!pool.length&&mk)pool=all.filter(function(q){return ex.indexOf(q)<0});
+  pool.forEach(function(q){if(best===null||cn(q)>cn(best))best=q});return best};
+ var mine=function(q,r){if(manual[q])return null;var f=L.filter(function(x){return x.p===q})[0];if(!f){f={p:q,r:r,s:d<5,sid:null,id:null,chief:false};L.push(f);made.push(q)}return f};
+ var order=['Abdullah Şahin','Muhammet Akıncı','Akif Balı'].map(idx).filter(work),fb=false;
+ var cB=order.length?order[0]:null,cY=order.length>1?order[1]:null;
+ if(cB===null){cB=hi([],'1');fb=true}
+ if(cY===null){cY=hi([cB],'2');if(order.length===0)fb=true}
+ [[0,cB],[1,cY]].forEach(function(z){var r=z[0],c=z[1];if(c===null)return;
+  if(L.some(function(f){return f.r===r&&f.chief}))return;
+  var f=mine(c,r);if(!f){bad.push(rn(r)+' şefi: '+pn(c)+' elle eklenmiş, dokunmadım');return}f.chief=true;f.r=r;
+  ok.push(rn(r)+' şefi: '+pn(c)+(fb&&order.length===0?' (üç kişi de yok, kodu en yüksek)':''))});
+ var pid=-1,pk=agItems(d,'t',1);pk.forEach(function(id){var it=itm('t',1,id);if(it&&agN(it.t).indexOf('ahmet yesevi')>-1)pid=id});
+ var gn=[];
+ if(pid===-1)bad.push('Ahmet Yesevi - Mahmutbey bugün açık değil, grup kuralı atlandı');
+ else['Eyüp Bulut','Emrah Ak','Batuhan Pehlivan','Muhammet Akıncı'].map(idx).filter(work).forEach(function(q){
+  var f=mine(q,1);if(!f)return;if(f.chief&&f.r!==1)return;f.r=1;f.id=pid;if(agN(pn(q))==='muhammet akinci')f.s=false;gn.push(pn(q))});
+ if(gn.length)ok.push(agName('t',1,pid)+': '+gn.join(', '));
+ var yid=null;agItems(d,'t',0).forEach(function(id){var it=itm('t',0,id);if(it&&agN(it.t).indexOf('yaya')>-1)yid=id});
+ if(yid){A.ps[yid]=true;A.pn[yid]=1;ok.push(agName('t',0,yid)+': sabit, kişiyi ben seçeceğim')}
+ ok.push('Bahçelievler 3 kişi');
+ A.rl[key]=made;save();return {ok:ok,bad:bad,cnt:3}}
 function agOpen(d){
  agInit();var A=S.ag,ov=document.createElement('div');ov.className='csov agov';
+ var ruRes=null;if(A.ru!==false&&!(((A.fx||{})[wk+'|'+d]||[]).length))ruRes=agRulesApply(d);
  var avail=[];for(var q=0;q<N;q++)if(!isLv(S.w[wk][q][d]))avail.push(q);
  var cB=0,cY=0;for(var q2=0;q2<N;q2++){var v=S.w[wk][q2][d];if(v==='1')cB++;if(v==='2')cY++}
  var nB=cB||A.nB||3,nY=cY||A.nY||Math.max(0,avail.length-nB);
@@ -1867,6 +1898,7 @@ function agOpen(d){
  var tot=avail.length;nB=Math.min(nB,tot);nY=tot-nB;
  var cbox=function(r,id,v){return '<div class="agbox r'+r+'"><span>'+esc(rn(r))+'</span><div class="agst"><button type="button" data-st="'+r+'" data-dl="-1" aria-label="Azalt">−</button><input id="'+id+'" type="number" inputmode="numeric" min="0" max="'+tot+'" value="'+v+'"><button type="button" data-st="'+r+'" data-dl="1" aria-label="Arttır">+</button></div></div>'};
  h+='<div class="agcnt">'+cbox(0,'agnb',nB)+cbox(1,'agny',nY)+'</div>';
+ h+='<div class="agru"><label><input type="checkbox" id="agru"'+(A.ru!==false?' checked':'')+'> Standart kurallar</label><button type="button" class="agruap">Şimdi uygula</button></div>';
  [0,1].forEach(function(r){h+='<div class="agsec r'+r+'"><div class="agst2">'+esc(rn(r))+'</div><div class="agfix" data-r="'+r+'"></div>';
   var ids=agItems(d,'t',r);if(ids.length){
   ids.forEach(function(id){var have=gpl(wk,d,'t',r,id).length;h+='<div class="agrow agpt"><label class="agw">'+esc(agName('t',r,id))+'</label><label class="agsb"><input type="checkbox" class="agps" data-id="'+id+'"'+(A.ps&&A.ps[id]?' checked':'')+'>Sabit</label><select class="agpn" data-id="'+id+'">'+(function(){var cv=A.pn[id]!==undefined?A.pn[id]:1,mx=Math.max(6,cv),o2='';for(var z=0;z<=mx;z++)o2+='<option value="'+z+'"'+(z===cv?' selected':'')+'>'+z+'</option>';return o2})()+'</select></div>'})}
@@ -1944,6 +1976,9 @@ function agOpen(d){
 
  var vt=$a('#agvt'),vm=$a('.agvm'),mic=$a('.agmic'),SRC=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null;
  function vmsg(ok,bad){vm.innerHTML=ok.map(function(x){return '<div class="ok">✓ '+esc(x)+'</div>'}).join('')+bad.map(function(x){return '<div class="bad">⚠ '+esc(x)+'</div>'}).join('')}
+ if(ruRes){setCnt(0,ruRes.cnt);vmsg(ruRes.ok,ruRes.bad)}
+ $a('#agru').onchange=function(){A.ru=this.checked;save()};
+ $a('.agruap').onclick=function(){var r2=agRulesApply(d);ov.querySelectorAll('.agps').forEach(function(i){i.checked=!!A.ps[i.dataset.id]});ov.querySelectorAll('.agpn').forEach(function(i){if(A.pn[i.dataset.id]!==undefined)i.value=A.pn[i.dataset.id]});setCnt(0,r2.cnt);fixUI();vmsg(r2.ok,r2.bad)};
  function applyCmds(res){var key=wk+'|'+d,L=(A.fx=A.fx||{})[key]=(A.fx[key]||[]),ok=[],bad=res.notes.slice();
   var drop=function(p){for(var z=L.length-1;z>=0;z--)if(L[z].p===p)L.splice(z,1)};
   res.counts.forEach(function(c){setCnt(c.r,c.v);ok.push(rn(c.r)+': '+c.v+' kişi')});
