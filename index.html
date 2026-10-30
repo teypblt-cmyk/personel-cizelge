@@ -670,34 +670,48 @@ html .day h3 .qc.ag{background:none!important;border:0!important;box-shadow:none
 .agfix button.agch.no{opacity:1}
 .agfix .agpick button.agx[data-a]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-weight:700;min-height:54px;margin-top:6px;background:linear-gradient(160deg,rgba(255,110,110,.30),rgba(255,110,110,.12));border:1px solid rgba(255,138,128,.55)}
 .agpick button.agx .ai.no{color:#ff8a80}
-/* Otosaki düzen */
-.agb{gap:14px!important}
-.agb .agsec{padding:14px;gap:12px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12)}
-.agsec.r0{border-color:rgba(80,170,255,.5)}.agsec.r1{border-color:rgba(255,140,200,.45)}
-.agb .agsec .agst2{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:none;padding:0;margin:0;color:inherit}
-.agb .agsec .agst2::before{content:"";width:9px;height:9px;border-radius:50%;background:#9a86ff;flex:0 0 auto}
-.agsec.r0 .agst2::before{background:#3aa8ff;box-shadow:0 0 8px #3aa8ff}.agsec.r1 .agst2::before{background:#ff7ac0;box-shadow:0 0 8px #ff7ac0}
-.agb .agcnt{gap:10px}
-.agfix{gap:10px}
-.agfix .agfr{display:flex;align-items:flex-start;gap:8px;padding:10px!important;border-radius:14px;background:rgba(255,255,255,.05)}
-.agfr .agfl{flex:1;min-width:0}
-.agfl .agwho{grid-column:1/-1;display:flex;align-items:center;gap:8px;min-width:0}
-.agfl .agwho .agnm{background:none;border:0;padding:0;font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.agfl .agwho .agsf{flex:0 0 auto;font-size:10.5px;padding:2px 8px;border-radius:999px}
-.agfr>button[data-del]{width:28px;height:28px;border-radius:50%!important;background:rgba(255,255,255,.08);border:0;font-size:16px!important}
-.agfix>.agrow{background:rgba(255,255,255,.04);padding:8px 10px;border-radius:14px}
-.agsub{display:grid;grid-template-columns:1fr 64px 62px;gap:8px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.65;padding:2px 4px 0;border-top:1px solid rgba(255,255,255,.1);padding-top:12px}
+/* Otosaki kompakt düzen v69 */
+.agb{gap:10px!important}
+.agvoice input{height:38px!important;font-size:14px;border-radius:12px}.agmic,.agsend{width:38px;height:38px;border-radius:12px;font-size:17px}
+.agb .agcnt{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.04);overflow:hidden}
+.agb .agcnt .agbox{padding:8px 6px;border:0;border-radius:0;background:none;gap:4px}
+.agb .agcnt .agbox+.agbox{border-left:1px solid rgba(255,255,255,.1)}
+.agb .agcnt .agbox>span{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+.agb .agst button{width:30px;height:32px;font-size:17px;border-radius:9px}.agb .agst input{height:32px!important;width:42px!important;font-size:17px!important}
+.agb .agsec{padding:10px;gap:8px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.12)}
+.agsec.r0{border-color:rgba(80,170,255,.45)}.agsec.r1{border-color:rgba(255,140,200,.4)}
+.agb .agsec .agst2{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:none;padding:0;margin:0;color:inherit}
+.agb .agsec .agst2::before{content:"";width:8px;height:8px;border-radius:50%;background:#9a86ff;flex:0 0 auto}
+.agsec.r0 .agst2::before{background:#3aa8ff;box-shadow:0 0 7px #3aa8ff}.agsec.r1 .agst2::before{background:#ff7ac0;box-shadow:0 0 7px #ff7ac0}
+.agfix{gap:6px}
+.agfix .agfr{display:flex;align-items:center;gap:6px;padding:7px 8px!important;border-radius:12px;background:rgba(255,255,255,.05)}
+.agfr .agfl{flex:1;min-width:0;display:grid!important;grid-template-columns:1fr auto auto;gap:4px 6px;align-items:center}
+.agfl .agwho{grid-column:auto;display:flex;align-items:center;gap:6px;min-width:0}
+.agfl .agwho .agnm{background:none;border:0;padding:0;font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.agfl .agwho .agsf{flex:0 0 auto;font-size:10px;padding:2px 7px;border-radius:999px}
+.agfix button.agch{width:auto;height:30px;padding:0 8px!important;gap:5px;border-radius:10px!important}
+.agfix button.agch span{display:none}
+.agfix button.agch .mk{width:17px;height:17px;font-size:11px}
+.agfl .agsl{grid-column:1/-1;font-size:11.5px;opacity:.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.agfr>button[data-del]{width:26px;height:26px;border-radius:50%!important;background:rgba(255,255,255,.08);border:0;font-size:15px!important;flex:0 0 auto;align-self:center}
+.agfix>.agrow{background:rgba(255,255,255,.04);padding:6px 8px;border-radius:12px}
+.agfix>.agrow select{height:34px}
+.agfix .agadd{min-height:32px!important;font-size:13px!important;border:1px dashed rgba(255,255,255,.3)!important;background:transparent!important;border-radius:10px!important}
+.agsub{display:grid;grid-template-columns:1fr 54px 58px;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.6;border-top:1px solid rgba(255,255,255,.1);padding:8px 4px 0}
 .agsub span:nth-child(n+2){text-align:center}
-.agpts{display:flex;flex-direction:column;gap:6px}
-.agb .agpts .agpt{display:grid;grid-template-columns:1fr 64px 62px;gap:8px;align-items:center;padding:8px 4px;border-radius:12px;background:rgba(255,255,255,.04)}
-.agb .agpts .agpt label.agw{font-size:13px;min-width:0}
+.agpts{display:flex;flex-direction:column;gap:4px}
+.agb .agpts .agpt{display:grid;grid-template-columns:1fr 54px 58px;gap:6px;align-items:center;padding:5px 4px;border-radius:10px;background:rgba(255,255,255,.04)}
+.agb .agpts .agpt label.agw{font-size:12.5px;min-width:0;line-height:1.2}
 .agb .agpts .agpt label.agsb{justify-content:center;font-size:0;gap:0}
-.agb .agpts .agpt label.agsb input{width:22px;height:22px}
-.agb .agpts .agpt select.agpn{width:62px}
-.agpairs{display:flex;flex-direction:column;gap:8px}
-.agpairs .agrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.agpairs .agrow .agpadd{grid-column:1/-1;min-height:40px;border-radius:12px}
-.agbtns{border-top:1px solid rgba(255,255,255,.1);padding-top:12px!important}
+.agb .agpts .agpt label.agsb input{width:20px;height:20px}
+.agb .agpts .agpt select.agpn{width:58px;height:30px;font-size:13px}
+.agpairs{display:flex;flex-direction:column;gap:6px}
+.agpairs .agrow{display:grid;grid-template-columns:1fr 1fr auto;gap:6px}
+.agpairs .agrow select{height:34px;font-size:13px}.agpairs .agrow .agpadd{grid-column:auto;min-height:34px;border-radius:10px;padding:0 12px!important;font-size:13px}
+.agbtns{border-top:1px solid rgba(255,255,255,.1);padding-top:10px!important}.agbtns button{height:42px}
+.agfix .agpr2 button[data-a]{min-height:46px!important;padding:6px!important}
+.agfix .agpick button[data-a="pick"][data-v*="|"],.agfix .agpick button.ptb[data-a]{min-height:38px;padding:6px 12px!important}
+.agfix .agpick>b{padding:7px 12px;font-size:14px}
 .agpick button em{font-style:normal;opacity:.7;font-size:12px;white-space:nowrap}
 .agpk-h{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-top:4px}
 .agfix .agpick .agx{justify-content:center;opacity:.8}
@@ -1965,7 +1979,7 @@ function agOpen(d){
       [0,1].forEach(function(sr){var sids=agItems(d,'s',sr);if(!sids.length)return;sp+='<div class="agpk-h">'+esc(rn(sr))+'</div>'+sids.map(function(id){return '<button type="button" data-a="epick" data-v="'+sr+'|'+id+'"><span>'+esc(agName('s',sr,id))+'</span><em>'+(cs[id+'|'+pc]||0)+' kez</em></button>'}).join('')});
       sp+='<button type="button" data-a="x" class="agx">Vazgeç</button></div>'}
      else{sp='<div class="agpick"><b>'+esc(pn(f.p))+' · nokta</b><div class="agpr2"><button type="button" data-a="epick" data-v="n">'+agIco('no','Nokta yok')+'</button><button type="button" data-a="epick" data-v="auto">'+agIco('auto','Otomatik')+'</button></div>'+agItems(d,'t',r).map(function(id){return '<button type="button" class="ptb" data-a="epick" data-v="'+id+'"><span>'+esc(agName('t',r,id))+'</span><em>'+(cs[id+'|'+pc]||0)+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">Vazgeç</button></div>'}}
-    return '<div class="agfr"><div class="agfl"><div class="agwho">'+(f.chief?'<b class="agsf">ŞEF</b>':'')+'<span class="agnm">'+esc(pn(f.p))+'</span></div>'+ch+'</div><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'+sp};
+    return '<div class="agfr"><div class="agfl"><div class="agwho">'+(f.chief?'<b class="agsf">ŞEF</b>':'')+'<span class="agnm">'+esc(pn(f.p))+'</span></div>'+ch+(function(){var a=[];if(d<5&&f.s&&f.sid)a.push('🏫 '+esc(agName('s',f.sr,f.sid)));if(f.id&&f.id!=='auto')a.push('📍 '+esc(agName('t',r,f.id)));return a.length?'<div class="agsl">'+a.join(' · ')+'</div>':''})()+'</div><button type="button" data-del="'+i+'" aria-label="Sil">×</button></div>'+sp};
    var h2='';
    if(chief)h2+=line(chief);
    else if(!(st&&st.chief))h2+='<div class="agrow"><label>ŞEF</label><select data-a="chief"><option value="">— seç —</option>'+avail.filter(function(q){var v=S.w[wk][q][d];return !taken[q]&&(v===''||v===String(r+1))}).map(function(q){return '<option value="'+q+'">'+esc(pn(q))+'</option>'}).join('')+'</select></div>';
