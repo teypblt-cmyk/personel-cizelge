@@ -8,3 +8,9 @@ Haftalık personel çizelgesi (bölge, okul, nokta), izin tablosu ve özet rapor
 - Veri tabloları: `cizelge_doc` (güncel çizelge), `cizelge_yedek` (yedekler, en çok 20), `cizelge_secret` (şifrenin hash'i). Tablolara doğrudan erişim kapalı; okuma ve yazma yalnızca şifre kontrollü fonksiyonlarla yapılır. Deneme sayısı sınırlı değildir
 
 Güncelleme: `index.html` dosyasını değiştirip kaydetmek yeterli, bir dakika içinde yayına girer.
+
+## Testler ve yayın
+
+- `node tests/run.js` uygulamayı başsız tarayıcıda açıp dağıtım kurallarını, Aİ komutlarını, Görev Planlama'yı ve izin eşleşmesini denetler.
+- `tests/yayin.sh` testler geçerse gönderir ve GitHub Pages yayınının bittiğini doğrular.
+- Her gönderimde aynı testler GitHub Actions'ta ("Testler") da çalışır.
