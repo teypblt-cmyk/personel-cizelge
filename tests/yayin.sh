@@ -17,6 +17,6 @@ for i in $(seq 1 24); do
     "$H completed success") echo "Yayında: $H"; exit 0;;
     "$H completed "*) echo "Yayın BAŞARISIZ: $r"; exit 1;;
   esac
-  sleep 15
+  timeout 15 tail -f /dev/null || true
 done
 echo "Yayın 6 dakikada başlamadı ya da bitmedi; elle kontrol et."; exit 1
