@@ -189,6 +189,14 @@ test('Aİ: uygulanmamış elle girişler kapatıp açınca kaybolmaz', async (p)
   ok(f, 'kayıt kayboldu'); eq([f.r, f.chief, f.s, f.id], [0, true, false, null]);
 });
 
+test('Aİ: önizlemede isme dokununca "neden" gerekçesi açılır', async (p) => {
+  await openAi(p); await setB(p, 3); await preview(p);
+  const b = p.locator('.agprev .agrb').first(); ok(await b.count(), 'önizlemede satır yok');
+  ok(await p.locator('.agprev .agwhy').first().isHidden(), 'gerekçe baştan açık');
+  await b.click(); const w = await p.locator('.agprev .agwhy').first().innerText();
+  ok(/gün çalıştı/.test(w) && /(gitti|gitmedi)/.test(w), 'gerekçe metni eksik: ' + w);
+});
+
 /* ---------- Görev Planlama ---------- */
 test('Görev Planlama: P noktaları Aİ dağıtımına girmez, sayım kendi içinde, hareketli sayılmaz', async (p) => {
   const r = await p.evaluate(() => {
