@@ -228,6 +228,19 @@ test('Görev Planlama: sayım tablosu herkesi tek ekranda, az gidenden çoğa g�
   eq(r.n, 16, 'izinli görünmemeli'); ok(r.nums.every((v, i) => i === 0 || r.nums[i - 1] <= v), 'sıralı değil'); eq(r.nums[15], 2, 'bugün dahil toplam yanlış'); ok(/Yıldıray/.test(r.last)); eq(r.lv, 0); ok(r.col, 'liste sütun sütun (soldan aşağı) dizilmeli'); ok(r.fits, 'tablo tek ekrana sığmıyor '+r.bb);
 });
 
+test('Aİ: iki noktadaki kişiler yer değiştirir (adla, sesli yazım hatasıyla, adsız)', async (p) => {
+  const setup = () => p.evaluate(() => { var Y = lkey(wk, D, 't', 1); S.gl[Y] = [T.fatih, T.yesevi]; S.gp[pkey(wk, D, 't', 1, T.fatih)] = [3, 4]; S.gp[pkey(wk, D, 't', 1, T.yesevi)] = [7]; [3, 4, 7].forEach(q => S.w[wk][q][D] = '2'); save() });
+  const get = () => p.evaluate(() => ({ f: gpl(wk, D, 't', 1, T.fatih), y: gpl(wk, D, 't', 1, T.yesevi) }));
+  const phr = ["Ahmet ismi Mahmutbey noktasındaki kişileri Fatih caddesi noktasındaki kişilerle yer değiştirelim",
+    'iki noktadaki kişileri yer değiştirelim', 'noktaları takas et', 'Fatih ile Mahmutbey ekiplerini karşılıklı değiştir', 'noktaları ters çevir'];
+  for (const t of phr) { await setup(); await openAi(p); await cmd(p, t); const g = await get(); eq(g, { f: [7], y: [3, 4] }, t) }
+  /* kişi takası bozulmamalı */
+  await setup(); await openAi(p); await cmd(p, 'Arif Özhan ile Muhammet Akıncı yer değiştirsin');
+  const g = await get(); eq(g.y, [7], 'kişi takası nokta takasına dönüştü'); ok(g.f.indexOf(5) > -1 && g.f.indexOf(3) < 0, 'kişi takası yapılmadı');
+  /* tek kişi söylenince ikinci kişi istenir, nokta takası yapılmaz */
+  await setup(); await openAi(p); await cmd(p, 'Arif Özhan yer değiştirsin'); eq(await get(), { f: [3, 4], y: [7] });
+});
+
 /* ---------- İzin eşleşmesi ---------- */
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
   const r = await p.evaluate(() => {
