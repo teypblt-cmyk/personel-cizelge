@@ -224,8 +224,8 @@ test('Görev Planlama: WhatsApp metni açıklama kalın, kodlar, not; gündüz l
 test('Görev Planlama: sayım tablosu herkesi tek ekranda, az gidenden çoğa gösterir', async (p) => {
   await p.evaluate(() => { var a = nid(); S.gi.t[1].push({ id: a, t: 'Mahmutbey Cad. No:73', off: false, ev: true }); S.gp[pkey(wk, D - 1, 'e', 1, a)] = [3, 4]; S.gp[pkey(wk, D, 'e', 1, a)] = [4]; S.w[wk][5][D] = 'I'; save(); buildGV(); evSayim(D) });
   await p.waitForTimeout(350);
-  const r = await p.evaluate(() => { var ls = [...document.querySelectorAll('.evsyl li')]; var b = document.querySelector('.evsy').getBoundingClientRect(); return { n: ls.length, nums: ls.map(l => +l.querySelector('.n').textContent), last: ls[ls.length - 1].querySelector('.nm').textContent, lv: ls.filter(l => l.classList.contains('lv')).length, fits: b.bottom <= innerHeight + 1, bb: b.top+'-'+b.bottom+'/'+innerHeight } });
-  eq(r.n, 17); ok(r.nums.every((v, i) => i === 0 || r.nums[i - 1] <= v), 'sıralı değil'); eq(r.nums[16], 2, 'bugün dahil toplam yanlış'); ok(/Yıldıray/.test(r.last)); eq(r.lv, 1); ok(r.fits, 'tablo tek ekrana sığmıyor '+r.bb);
+  const r = await p.evaluate(() => { var ls = [...document.querySelectorAll('.evsyl li')]; var b = document.querySelector('.evsy').getBoundingClientRect(); return { n: ls.length, nums: ls.map(l => +l.querySelector('.n').textContent), last: ls[ls.length - 1].querySelector('.nm').textContent, lv: ls.filter(l => l.classList.contains('lv')).length, col: ls.length > 9 && ls[1].getBoundingClientRect().left === ls[0].getBoundingClientRect().left && ls[Math.ceil(ls.length / 2)].getBoundingClientRect().left > ls[0].getBoundingClientRect().left, fits: b.bottom <= innerHeight + 1, bb: b.top+'-'+b.bottom+'/'+innerHeight } });
+  eq(r.n, 16, 'izinli görünmemeli'); ok(r.nums.every((v, i) => i === 0 || r.nums[i - 1] <= v), 'sıralı değil'); eq(r.nums[15], 2, 'bugün dahil toplam yanlış'); ok(/Yıldıray/.test(r.last)); eq(r.lv, 0); ok(r.col, 'liste sütun sütun (soldan aşağı) dizilmeli'); ok(r.fits, 'tablo tek ekrana sığmıyor '+r.bb);
 });
 
 /* ---------- İzin eşleşmesi ---------- */
