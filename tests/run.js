@@ -194,7 +194,7 @@ test('Aİ: önizlemede isme dokununca "neden" gerekçesi açılır', async (p) =
   const b = p.locator('.agprev .agrb').first(); ok(await b.count(), 'önizlemede satır yok');
   ok(await p.locator('.agprev .agwhy').first().isHidden(), 'gerekçe baştan açık');
   await b.click(); const w = await p.locator('.agprev .agwhy').first().innerText();
-  ok(/gün çalıştı/.test(w) && /(gitti|gitmedi)/.test(w), 'gerekçe metni eksik: ' + w);
+  ok(/Bölge: B \d+ · Y \d+ gün/.test(w) && /(gitti|gitmedi)/.test(w), 'gerekçe metni eksik: ' + w);
 });
 
 /* ---------- Görev Planlama ---------- */
