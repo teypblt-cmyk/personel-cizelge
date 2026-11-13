@@ -241,6 +241,14 @@ test('Aİ: iki noktadaki kişiler yer değiştirir (adla, sesli yazım hatasıyl
   await setup(); await openAi(p); await cmd(p, 'Arif Özhan yer değiştirsin'); eq(await get(), { f: [3, 4], y: [7] });
 });
 
+test('Personel Kod: kişi eklenir, boşsa kaldırılır, kayıtlıysa kaldırılmaz', async (p) => {
+  const r = await p.evaluate(() => { buildNames(); var n0 = N; document.querySelector('#names .padd').click(); var inps = document.querySelectorAll('#names input[type=text]');
+    var last = inps[inps.length - 1]; last.value = 'Yeni Kişi'; last.dispatchEvent(new Event('input'));
+    var ok1 = N === n0 + 1 && S.names[N - 1] === 'Yeni Kişi' && S.w.every(w => w.length === N); S.w[wk][N - 1][D] = '1'; buildNames(); document.querySelector('#names .pdel').click(); var kept = N === n0 + 1;
+    S.w[wk][N - 1][D] = ''; buildNames(); document.querySelector('#names .pdel').click(); return { ok1, kept, back: N === n0 && S.names.length === n0 } });
+  ok(r.ok1, 'eklenmedi'); ok(r.kept, 'kayıtlı kişi silindi'); ok(r.back, 'boş kişi kaldırılmadı');
+});
+
 /* ---------- İzin eşleşmesi ---------- */
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
   const r = await p.evaluate(() => {
