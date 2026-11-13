@@ -201,7 +201,9 @@ table{font-size:13px}
 .evadd{display:flex;gap:8px;margin-top:6px}.evadd .csb{flex:1 1 0;width:auto;min-height:40px;height:40px;padding:0 10px;display:flex;align-items:center;justify-content:center;gap:6px;background-image:none;font-size:13px;font-weight:700}.evadd .csb .evplus{font-size:15px;font-weight:800;line-height:1;opacity:.85}.evadd .csb .evemo{font-size:17px;line-height:1}.chip.evx .evc{background:transparent;font-size:17px;width:24px;height:24px}
 .evtime{display:flex;align-items:flex-start;gap:10px}.evtime .evemo{font-size:18px;line-height:40px}.evtime textarea{flex:1 1 auto;min-width:0;min-height:40px;box-sizing:border-box;border-radius:10px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--ink);padding:9px 10px;font:inherit;font-size:15px;font-weight:800;resize:vertical}
 .evwa{width:100%;min-height:46px;font-weight:700}
-.padd{grid-column:1/-1;min-height:44px;font-weight:700;margin-top:4px}.pdel{flex:none;width:40px;min-height:40px;padding:0;font-size:18px;line-height:1}
+.padd{grid-column:1/-1;min-height:44px;font-weight:700;margin-top:4px}.pdel{flex:none;width:40px;min-height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center;color:#ff8a8a}.pdel svg{width:18px;height:18px}
+.eyeb{flex:none;width:40px;height:36px;padding:0;display:inline-flex;align-items:center;justify-content:center;color:var(--mute);border-radius:10px}.eyeb svg{width:20px;height:20px}.eyeb.on{color:var(--pri);border-color:color-mix(in srgb,var(--pri) 60%,transparent)}
+.rec .ppk{width:100%;margin-top:6px}.rec .ppl button[data-a]{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;width:100%;min-height:44px;padding:8px 12px}.rec .ppl button[data-a] em{font-style:normal;font-size:12.5px;opacity:.8;white-space:nowrap}.rec .ppl button.agx{justify-content:center}.rec .ppl{margin-top:6px}.rec .ppl[hidden],.rec .ppk[hidden]{display:none}
 .evsay{align-self:flex-start;min-height:40px;padding:0 14px;font-size:14px;font-weight:700;border-radius:12px}
 .evsy{max-height:none}.evsyh{margin:0 0 8px;font-size:12px;color:var(--mute)}.evsyh b,.evsyl .nm b{color:var(--pri);font-size:10px}
 .evsyl{list-style:none;margin:0;padding:0;display:grid;grid-auto-flow:column;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:10px;row-gap:3px}
@@ -860,7 +862,7 @@ details summary .shint{margin-left:8px;font-size:12px;font-weight:600;letter-spa
 <div class="lbg"><i></i><i></i><i></i></div>
 <form id="lcard" class="lcard" data-mode="in" novalidate>
 <svg class="lmark" viewBox="0 0 76 76" aria-hidden="true"><rect width="76" height="76" rx="22" fill="#0e1430"/><g><rect x="9.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="34.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="43.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="17.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="43.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="34.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="51.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="26.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/></g></svg>
-<h2 id="ltitle">Personel Çizelgesi <small class="appv">v1.21</small></h2>
+<h2 id="ltitle">Personel Çizelgesi <small class="appv">v1.22</small></h2>
 <p class="lsub" id="lsub">Devam etmek için şifrenizi girin</p>
 <div class="lfld lin"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lpw" type="password" placeholder="Şifre" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
 <div class="lfld lch"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lp0" type="password" placeholder="Şu anki şifre" autocomplete="current-password" autocapitalize="off" spellcheck="false"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
@@ -871,7 +873,7 @@ details summary .shint{margin-left:8px;font-size:12px;font-weight:600;letter-spa
 <button type="button" id="lalt" class="llink">Şifreyi değiştir</button>
 </form>
 </div>
-<div class="hdr"><h1><span class="ttl">Personel Çizelgesi</span><small class="appv">v1.21</small></h1><button id="undob" type="button" hidden aria-label="Son işlemi geri al" title="Son işlemi geri al"><span aria-hidden="true">↶</span><span class="ul"> Geri al</span></button><button id="lockb" type="button" aria-label="Çıkış yap" title="Çıkış yap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9.5"/></svg></button></div>
+<div class="hdr"><h1><span class="ttl">Personel Çizelgesi</span><small class="appv">v1.22</small></h1><button id="undob" type="button" hidden aria-label="Son işlemi geri al" title="Son işlemi geri al"><span aria-hidden="true">↶</span><span class="ul"> Geri al</span></button><button id="lockb" type="button" aria-label="Çıkış yap" title="Çıkış yap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9.5"/></svg></button></div>
 <div class="tabs" id="tabs" style="margin-bottom:6px"></div>
 <div class="tabs" id="tabs2"></div>
 <div class="card hide" id="nav"></div>
@@ -1528,14 +1530,27 @@ function buildItems(){
   if(!lkd)box.appendChild(ad)});
  box.scrollTop=st0;window.scrollTo(0,py)}
 /* Kişi sayısı sabit değil: en az 17, "Kişi ekle" ile artar. Tüm haftalar, adlar ve kodlar bu sayıya tamamlanır. */
-function fitN(){if(!S||!S.w)return;var m=Math.max(17,(S.names||[]).length);S.w.forEach(function(w){if(w&&w.length>m)m=w.length});N=m;
+function fitN(){if(!S||!S.w)return;var m=Math.max(1,(S.names||[]).length);S.w.forEach(function(w){if(w&&w.length>m)m=w.length});N=m;
  if(!S.names)S.names=[];while(S.names.length<N)S.names.push('');if(!S.codes)S.codes=[];while(S.codes.length<N)S.codes.push('');
  S.w.forEach(function(w){while(w.length<N)w.push(Array(7).fill(''))})}
 function pUsed(i){if(S.w.some(function(w){return (w[i]||[]).some(function(v){return v})}))return true;return Object.keys(S.gp||{}).some(function(k){return (S.gp[k]||[]).indexOf(i)>-1})}
 function addPerson(){N++;S.names.push('');S.codes.push('');S.w.forEach(function(w){w.push(Array(7).fill(''))});save();buildNames();
  var ins=$('names').querySelectorAll('input[type=text]');var last=ins[ins.length-1];if(last){last.focus();last.scrollIntoView({block:'center'})}}
-function delLastPerson(){var i=N-1;if(N<=17)return;if(pUsed(i)){agToast(pn(i)+' çizelgede kayıtlı, silinemez. Adını ve kodunu boşaltabilirsin.');return}
- N--;S.names.length=N;S.codes.length=N;S.w.forEach(function(w){w.length=N});save();buildNames()}
+/* Kişiyi tamamen siler: sonraki kişiler bir sıra yukarı kayar, bütün kayıtlardaki numaraları buna göre güncellenir. */
+function delPerson(i){if(N<=1)return;var m=function(q){q=+q;return q<i?q:q>i?q-1:-1};
+ S.names.splice(i,1);S.codes.splice(i,1);S.w.forEach(function(w){w.splice(i,1)});N--;
+ var mapL=function(M){Object.keys(M||{}).forEach(function(k){var a=(M[k]||[]).map(m).filter(function(q){return q>=0});if(a.length)M[k]=a;else delete M[k]})};
+ var reK=function(M,ix){if(!M)return M;var o={};Object.keys(M).forEach(function(k){var a=k.split('|');if(a[0]==='n'||a.length<=ix){o[k]=M[k];return}var q=m(a[ix]);if(q<0)return;a[ix]=q;o[a.join('|')]=M[k]});return o};
+ mapL(S.gp);S.co=reK(S.co,2);S.rv=reK(S.rv,2);S.ri=reK(S.ri,1);
+ var A=S.ag||{};Object.keys(A.au||{}).forEach(function(k){var rc=A.au[k];if(!rc)return;mapL(rc.gp);
+  ['m','reg'].forEach(function(f){var o=rc[f];if(!o)return;if(Array.isArray(o)){o.splice(i,1);return}var n2={};Object.keys(o).forEach(function(q){var z=m(q);if(z>=0)n2[z]=o[q]});rc[f]=n2})});
+ [A.fx,A.last].forEach(function(F){Object.keys(F||{}).forEach(function(k){F[k]=(F[k]||[]).filter(function(f){return f.p!==i}).map(function(f){if(f.p!==null&&f.p!==undefined)f.p=m(f.p);return f})})});
+ if(Array.isArray(A.sef))A.sef=A.sef.map(function(q){return q===null||q===undefined?q:(m(q)<0?null:m(q))});
+ save();buildNames();show()}
+function delAskP(i){var o=document.createElement('div'),used=pUsed(i);o.className='wdlg';
+ o.innerHTML='<div class="wbox"><div class="wt">'+esc(pn(i))+' silinsin mi?</div><div class="ws">'+(used?'Bu kişinin çizelge, okul, nokta ve izin kayıtları da silinir; geçmiş sayımlar değişir. ':'')+'Bu işlem geri alınamaz.</div><div class="wb"><button class="c">Vazgeç</button><button class="d">Sil</button></div></div>';
+ document.body.appendChild(o);o.querySelector('.c').onclick=function(){o.remove()};o.onclick=function(e){if(e.target===o)o.remove()};
+ o.querySelector('.d').onclick=function(){o.remove();delPerson(i)}}
 function buildNames(){
  var g=$('names');g.innerHTML='';
  for(var i=0;i<N;i++){(function(i){
@@ -1544,7 +1559,7 @@ function buildNames(){
   inp.oninput=function(){S.names[i]=inp.value;save()};
   var ci=document.createElement('input');ci.type='text';ci.placeholder='30/..';ci.value=S.codes[i]||'';ci.style.cssText='width:76px;flex:none';ci.oninput=function(){S.codes[i]=ci.value;save()};
   l.appendChild(s);l.appendChild(ci);l.appendChild(inp);
-  if(i===N-1&&N>17){var x=document.createElement('button');x.type='button';x.className='pdel';x.textContent='×';x.title='Bu kişiyi kaldır';x.setAttribute('aria-label','Bu kişiyi kaldır');x.onclick=function(e){e.preventDefault();delLastPerson()};l.appendChild(x)}
+  if(N>1){var x=document.createElement('button');x.type='button';x.className='pdel';x.innerHTML=IC('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>');x.title='Kişiyi sil';x.setAttribute('aria-label',(S.names[i]||('Personel '+(i+1)))+' sil');x.onclick=function(e){e.preventDefault();delAskP(i)};l.appendChild(x)}
   g.appendChild(l)})(i)}
  var ab=document.createElement('button');ab.type='button';ab.className='padd';ab.textContent='+ Kişi ekle';ab.onclick=addPerson;g.appendChild(ab);
 
@@ -1813,11 +1828,12 @@ function buildCodes(d,ui){
   sp.innerHTML=esc(pn(p))+((st==='1'||st==='2')?' <small class="sm">'+esc(rn(+st-1))+'</small>':'');
   var inp=document.createElement('input');inp.type='text';inp.placeholder='kod';inp.style.cssText='width:90px;flex:none';inp.value=codeD(wk,d,p);
   inp.oninput=function(){var k=wk+'|'+d+'|'+p,v=inp.value.trim();if(v===(S.codes[p]||'').trim())delete S.co[k];else S.co[k]=inp.value;save();refreshOut(d,ui)};
-  var cb=document.createElement('input');cb.type='checkbox';cb.style.cssText='width:22px;height:22px;flex:none;margin:0;accent-color:var(--pri)';cb.title='Bölge listesinde de göster';cb.setAttribute('aria-label','Bölge listesinde de göster');
-  var rk=wk+'|'+d+'|'+p;cb.checked=!!S.rv[rk];if(!onP[p])cb.style.visibility='hidden';
-  cb.onchange=function(){if(cb.checked)S.rv[rk]=1;else delete S.rv[rk];save();refreshOut(d,ui)};
+  var rk=wk+'|'+d+'|'+p,cb=document.createElement('button');cb.type='button';cb.className='eyeb';cb.title='Bölge listesinde de göster';cb.setAttribute('aria-label','Bölge listesinde de göster');
+  var eyeSet=function(){var on=!!S.rv[rk];cb.setAttribute('aria-pressed',on?'true':'false');cb.classList.toggle('on',on);cb.innerHTML=IC(on?EYE1:EYE0)};eyeSet();if(!onP[p])cb.style.visibility='hidden';
+  cb.onclick=function(){if(S.rv[rk])delete S.rv[rk];else S.rv[rk]=1;save();eyeSet();refreshOut(d,ui)};
   row.appendChild(sp);row.appendChild(cb);row.appendChild(inp);box.appendChild(row)})(p)}
 }
+var EYE1='<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',EYE0='<path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-2.6 3.5M6.6 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6"/><path d="M3 3l18 18"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>';
 var SIC={e:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',c:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 12h6M9 16h4"/>',s:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/>',t:'<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',k:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h6M9 14h4"/>'};
 VMAP[SIC.c]=VIN.book;VMAP[SIC.s]=VIN.tower;VMAP[SIC.t]=VIN.pin;VMAP[SIC.k]=VIN.letter;
 function sic(k){return '<span class="si">'+IC(SIC[k])+'</span>'}
@@ -2610,7 +2626,12 @@ function buildDay(d){
     arr.forEach(function(p){t+='<div class="chip" data-p="'+p+'">'+(k==='t'?'<div class="cgh" title="Sürükle" aria-label="Sürükle">'+IC(GRIPI)+'</div>':'')+avh(p)+'<span>'+esc(pn(p))+' <small class="sm">'+plab(k,r,n,p)+'</small></span><button data-r="'+p+'" aria-label="Kaldır">×</button></div>'});
     var av='';for(var p=0;p<N;p++)if(arr.indexOf(p)<0&&(k==='s'?!isLv(S.w[wk][p][d]):S.w[wk][p][d]===String(r+1)))av+='<option value="'+p+'"'+(k==='s'?(ptSet[p]?' data-c="r"':S.w[wk][p][d]===String(r+1)?' data-c="g"':''):(ptSet[p]?' data-c="r"':''))+' data-i="'+pIcons(p,d)+'">'+esc(pn(p))+' ('+plab(k,r,n,p)+')</option>';
     var hint='';if(!av&&arr.length<1){hint='<div class="sm">'+(k==='s'?'Seçilebilecek personel yok (hepsi izinli ya da noktada görevli).':'Görev çizelgesinde '+esc(rn(r))+' bölgesine kimse yazılmamış.')+'</div>'}
-    el.innerHTML=t+hint+(av&&(k==='t'||arr.length<1)?'<select class="add"><option value="">+ Personel seç</option>'+av+'</select>':'');
+    var pk2='';if(k==='t'){var cnd=[];for(var p=0;p<N;p++)if(arr.indexOf(p)<0&&S.w[wk][p][d]===String(r+1))cnd.push({p:p,c:gcount(k,r,n,p),t:gtotal(k,p)});
+     cnd.sort(function(a,b){return (a.c-b.c)||(a.t-b.t)||(a.p-b.p)});
+     if(cnd.length)pk2='<button type="button" class="agadd ppk">+ Personel seç</button><div class="agpick ppl" hidden><b>Kim gitsin?</b>'+cnd.map(function(x){return '<button type="button" data-a="pick" data-v="'+x.p+'"><span>'+esc(pn(x.p))+(ptSet[x.p]?' <small class="sm">📍 başka noktada</small>':'')+'</span><em>'+x.c+' kez</em></button>'}).join('')+'<button type="button" data-a="x" class="agx">İptal</button></div>'}
+    el.innerHTML=t+hint+(k==='t'?pk2:(av&&arr.length<1?'<select class="add"><option value="">+ Personel seç</option>'+av+'</select>':''));
+    var ppk=el.querySelector('.ppk'),ppl=el.querySelector('.ppl');if(ppk){ppk.onclick=function(){ppl.hidden=false;ppk.hidden=true};
+     ppl.querySelectorAll('button[data-a]').forEach(function(b){b.onclick=function(){if(b.dataset.a==='x'){ppl.hidden=true;ppk.hidden=false;return}S.gp[pk]=arr.concat([+b.dataset.v]);save();buildGV()}})}
     el.querySelector('[data-x]').onclick=function(){S.gl[lk]=lst.filter(function(x){return norm(x)!==norm(n)});delete S.gp[pk];save();buildGV()};
     el.querySelectorAll('button[data-r]').forEach(function(b){b.onclick=function(){S.gp[pk]=arr.filter(function(x){return x!==+b.dataset.r});save();buildGV()}});
     var ad=el.querySelector('.add');if(ad)ad.onchange=function(){if(this.value!==''){S.gp[pk]=arr.concat([+this.value]);save();buildGV()}};

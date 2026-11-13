@@ -241,15 +241,25 @@ test('Aİ: iki noktadaki kişiler yer değiştirir (adla, sesli yazım hatasıyl
   await setup(); await openAi(p); await cmd(p, 'Arif Özhan yer değiştirsin'); eq(await get(), { f: [3, 4], y: [7] });
 });
 
-test('Personel Kod: kişi eklenir, boşsa kaldırılır, kayıtlıysa kaldırılmaz', async (p) => {
-  const r = await p.evaluate(() => { buildNames(); var n0 = N; document.querySelector('#names .padd').click(); var inps = document.querySelectorAll('#names input[type=text]');
-    var last = inps[inps.length - 1]; last.value = 'Yeni Kişi'; last.dispatchEvent(new Event('input'));
-    var ok1 = N === n0 + 1 && S.names[N - 1] === 'Yeni Kişi' && S.w.every(w => w.length === N); S.w[wk][N - 1][D] = '1'; buildNames(); document.querySelector('#names .pdel').click(); var kept = N === n0 + 1;
-    S.w[wk][N - 1][D] = ''; buildNames(); document.querySelector('#names .pdel').click(); return { ok1, kept, back: N === n0 && S.names.length === n0 } });
-  ok(r.ok1, 'eklenmedi'); ok(r.kept, 'kayıtlı kişi silindi'); ok(r.back, 'boş kişi kaldırılmadı');
+test('Personel Kod: kişi eklenir; sil onay ister, kişiyi ve kayıtlarını kaydırarak siler', async (p) => {
+  const r = await p.evaluate(() => { buildNames(); var n0 = N; document.querySelector('#names .padd').click(); var ok1 = N === n0 + 1 && S.w.every(w => w.length === N);
+    var a = nid(); S.gi.t[1].push({ id: a, t: 'Test Nok', off: false }); S.gl[lkey(wk, D, 't', 1)] = [a]; S.gp[pkey(wk, D, 't', 1, a)] = [3, 4, 9]; S.co[wk + '|' + D + '|9'] = 'X1';
+    var nm4 = S.names[4], nm9 = S.names[9]; buildNames();
+    var dels = document.querySelectorAll('#names .pdel'); var rows = dels.length === N; dels[3].click(); var dlg = !!document.querySelector('.wdlg'); var still = N === n0 + 1;
+    document.querySelector('.wdlg .d').click();
+    return { ok1, rows, dlg, still, n: N, n0, gp: S.gp[pkey(wk, D, 't', 1, a)], nm3: S.names[3], nm4, co: S.co[wk + '|' + D + '|8'], wl: S.w.every(w => w.length === N) } });
+  ok(r.ok1, 'eklenmedi'); ok(r.rows, 'her satırda sil yok'); ok(r.dlg && r.still, 'onay sormadı'); eq(r.n, r.n0); eq(r.gp, [3, 8], 'kayıtlar kaydırılmadı'); eq(r.nm3, r.nm4); eq(r.co, 'X1'); ok(r.wl);
 });
 
-/* ---------- İzin eşleşmesi ---------- */
+test('Noktalar: personel seçimi Aİ gibi listede, az gidenden; Kodlar listesinde göz düğmesi', async (p) => {
+  const r = await p.evaluate(() => { S.gl[lkey(wk, D, 't', 1)] = [T.fatih]; [3, 4, 5].forEach(q => S.w[wk][q][D] = '2'); S.gp[pkey(wk, D - 1, 't', 1, T.fatih)] = [3]; save(); buildGV();
+    var day = document.querySelectorAll('.day')[D], rec = day.querySelector('.gr[data-k="t"] .rec'); var sel = !!rec.querySelector('select.add');
+    rec.querySelector('.ppk').click(); var bs = [...rec.querySelectorAll('.ppl button[data-a="pick"]')]; var first = +bs[0].dataset.v, last = +bs[bs.length - 1].dataset.v; bs[0].click();
+    var day2 = document.querySelectorAll('.day')[D]; var eye = day2.querySelector('.eyeb'); var cbx = day2.querySelectorAll('.cod input[type=checkbox]').length;
+    return { sel, n: bs.length, first, last, gp: gpl(wk, D, 't', 1, T.fatih), eye: !!eye, cbx } });
+  ok(!r.sel, 'eski açılır liste duruyor'); eq(r.n, 3); eq(r.last, 3, 'çok giden sonda değil'); eq(r.gp, [r.first]); ok(r.eye, 'göz yok'); eq(r.cbx, 0, 'onay kutusu duruyor');
+});
+
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
   const r = await p.evaluate(() => {
     var now = new Date(), cw = -1; for (var w = 0; w < S.w.length; w++) { var a = isoD(w, 0), b = isoD(w, 6), t = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2); if (a <= t && t <= b) cw = w }
