@@ -295,6 +295,15 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   const closed = await p.evaluate(() => ({ n: document.querySelectorAll('[data-a="opendb"]').length, det: !!document.querySelector('.ksov details'), net: document.querySelector('.ksnet strong').textContent }));
   await p.fill('#kda', '1250000'); const fmt = await p.inputValue('#kda'); await p.fill('#kda', '');
   await p.waitForTimeout(700);
+  await p.click('[data-tab="db"]'); await p.locator('.ksov [data-a="opendb"]').first().click();
+  const dh = await p.evaluate(() => { var d = document.querySelector('.ksov .ksdet'); return d ? d.textContent : '' });
+  ok(/Hareketler/.test(dh) && /Ödeme/.test(dh) && /300 ₺/.test(dh) && /Kalan700 ₺/.test(dh), 'borç hareketleri görünmüyor: ' + dh);
+  await p.click('[data-tab="kasa"]'); await p.locator('.ksov [data-a="opentx"]').first().click();
+  const td = await p.evaluate(() => ({ t: document.querySelector('.ksov .ksdet').textContent, ta: !!document.querySelector('#kne') }));
+  ok(/Tarih/.test(td.t) && /Ödeme|Tür/.test(td.t) && td.ta, 'işlem ayrıntısı açılmadı: ' + td.t);
+  await p.fill('#kne', 'Haftalık alışveriş'); await p.press('#kne', 'Tab');
+  const nt = await p.evaluate(() => document.querySelector('.ksov .ksin small') && [...document.querySelectorAll('.ksov .ksin small')].some(e => /Haftalık alışveriş/.test(e.textContent)) || JSON.stringify(window.__ks.doc || '').indexOf('Haftalık') > -1);
+  await p.locator('.ksov [data-a="opentx"]').first().click();
   await p.click('[data-tab="kasa"]'); const n0 = await p.locator('.ksov [data-a="deltx"]').count();
   await p.locator('.ksov [data-a="deltx"]').first().click(); await p.locator('.wdlg .c').click(); const n1 = await p.locator('.ksov [data-a="deltx"]').count();
   await p.locator('.ksov [data-a="deltx"]').first().click(); await p.locator('.wdlg .d').click(); const n2 = await p.locator('.ksov [data-a="deltx"]').count();
