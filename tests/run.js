@@ -291,7 +291,7 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   const k3 = await p.evaluate(() => document.querySelector('.ksm').textContent);
   await p.fill('#kdw', 'Veli'); await p.fill('#kda', '500'); await p.click('[data-a="adddb"]');
   const netB = await p.evaluate(() => document.querySelector('.ksnet strong').textContent);
-  const ids = await p.$$('[data-a="opendb"]'); await ids[1].click(); await p.click('[data-a="donedb"]');
+  const ids = await p.$$('[data-a="opendb"]'); await ids[1].click(); await p.click('[data-a="paydb"]');
   const closed = await p.evaluate(() => ({ n: document.querySelectorAll('[data-a="opendb"]').length, det: !!document.querySelector('.ksov details'), net: document.querySelector('.ksnet strong').textContent }));
   await p.fill('#kda', '1250000'); const fmt = await p.inputValue('#kda'); await p.fill('#kda', '');
   await p.waitForTimeout(700);
