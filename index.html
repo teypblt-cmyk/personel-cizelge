@@ -397,7 +397,9 @@ html[data-pre] .av{box-shadow:0 0 0 2px var(--pri)}
 #login .lcard[data-mode=in] .lch,#login .lcard[data-mode=ch] .lin{display:none}
 #login .lcard.swap .lin,#login .lcard.swap .lch{animation:lfade .3s ease both}
 @keyframes lfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-#login .lmsg{min-height:22px;margin:2px 0 12px;font-size:13.5px;line-height:1.35;color:#ff8fa0}
+#login .lkeep{display:flex;align-items:center;gap:10px;margin:2px 2px 8px;min-height:40px;color:#c9d4ff;font:500 14.5px Inter,system-ui,sans-serif;cursor:pointer;user-select:none}.lkeep input{width:20px;height:20px;margin:0;accent-color:#5b7cff;flex:none}
+.lcard[data-mode="ch"] .lkeep{display:none}
+.lmsg{min-height:22px;margin:2px 0 12px;font-size:13.5px;line-height:1.35;color:#ff8fa0}
 #login .lmsg.ok{color:#43e0a0}
 #login .lbtn{position:relative;width:100%;height:56px;border:0;border-radius:18px;background:linear-gradient(135deg,#2f7bff,#6a5cff);color:#fff;font:700 16px Inter,system-ui,sans-serif;letter-spacing:.01em;cursor:pointer;box-shadow:0 14px 34px -10px rgba(79,110,255,.85),inset 0 1px 0 rgba(255,255,255,.28);transition:transform .15s,filter .2s,opacity .2s}
 #login .lbtn:hover{filter:brightness(1.08)}#login .lbtn:active{transform:scale(.98)}
@@ -954,19 +956,20 @@ html.ksopen,html.ksopen body{overflow:hidden}
 <div class="lbg"><i></i><i></i><i></i></div>
 <form id="lcard" class="lcard" data-mode="in" novalidate>
 <svg class="lmark" viewBox="0 0 76 76" aria-hidden="true"><rect width="76" height="76" rx="22" fill="#0e1430"/><g><rect x="9.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="34.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="43.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="17.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="43.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="34.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="51.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="26.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/></g></svg>
-<h2 id="ltitle">Personel Çizelgesi <small class="appv">v1.29</small></h2>
+<h2 id="ltitle">Personel Çizelgesi <small class="appv">v1.30</small></h2>
 <p class="lsub" id="lsub">Devam etmek için şifrenizi girin</p>
 <div class="lfld lin"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lpw" type="password" placeholder="Şifre" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
 <div class="lfld lch"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lp0" type="password" placeholder="Şu anki şifre" autocomplete="current-password" autocapitalize="off" spellcheck="false"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
 <div class="lfld lch"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg><input id="lp1" type="password" placeholder="Yeni şifre (en az 6 karakter)" autocomplete="new-password" autocapitalize="off" spellcheck="false"></div>
 <div class="lfld lch"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg><input id="lp2" type="password" placeholder="Yeni şifre (tekrar)" autocomplete="new-password" autocapitalize="off" spellcheck="false"></div>
+<label class="lkeep lin" for="lkeep"><input type="checkbox" id="lkeep" checked><span>Oturumu açık tut</span></label>
 <div id="lmsg" class="lmsg" role="alert" aria-live="polite"></div>
 <button type="submit" id="lgo" class="lbtn"><span id="lgot">Giriş</span></button>
 <button type="button" id="lalt" class="llink">Şifreyi değiştir</button>
 <button type="button" id="kasab" class="lkasa"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0 0 4h14a1 1 0 0 1 1 1v3"/><path d="M3 6v12a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3"/><path d="M21 12h-4a2 2 0 0 0 0 4h4z"/></svg><span>Kasa</span></button>
 </form>
 </div>
-<div class="hdr"><h1><span class="ttl">Personel Çizelgesi</span><small class="appv">v1.29</small></h1><button id="undob" type="button" hidden aria-label="Son işlemi geri al" title="Son işlemi geri al"><span aria-hidden="true">↶</span><span class="ul"> Geri al</span></button><button id="lockb" type="button" aria-label="Çıkış yap" title="Çıkış yap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9.5"/></svg></button></div>
+<div class="hdr"><h1><span class="ttl">Personel Çizelgesi</span><small class="appv">v1.30</small></h1><button id="undob" type="button" hidden aria-label="Son işlemi geri al" title="Son işlemi geri al"><span aria-hidden="true">↶</span><span class="ul"> Geri al</span></button><button id="lockb" type="button" aria-label="Çıkış yap" title="Çıkış yap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9.5"/></svg></button></div>
 <div class="tabs" id="tabs" style="margin-bottom:6px"></div>
 <div class="tabs" id="tabs2"></div>
 <div class="card hide" id="nav"></div>
@@ -1204,7 +1207,7 @@ function migrateItems(){
 function ens(){fitN();if(S.thv!==2){S.pk=0;S.thv=2;if(S.thd)S.thd.pk=0}if(!(S.pk>=0&&S.pk<4))S.pk=0;if(['zoom','fade','bounce'].indexOf(S.an)<0)S.an='zoom';if(!S.ri)S.ri={};if(S.gi&&!S.ag)agInit();if(!S.nl)S.nl={};if(!S.gl)S.gl={};if(!S.gp)S.gp={};if(!S.co)S.co={};if(!S.rv)S.rv={};if(!S.codes)S.codes=[];while(S.codes.length<N)S.codes.push('');if(!S.gi)migrateItems();if(!S.pv)S.pv=pvDef();if(!ens.d){wk=Math.max(0,Math.min(S.w.length-1,curWk()));ens.d=1}if(wk>=S.w.length)wk=Math.max(0,S.w.length-1)}
 var CFG={URL:'https://wogswssxyfotwkeflycl.supabase.co',KEY:'sb_publishable_PbxaNErJXA0kll1lcF-Zbg_uwkW638W'};
 var sb=null,pw=null,authed=false,dirty=false,lastJson='',pushT=null,pollOn=false;
-try{pw=localStorage.getItem('cizelge_pw')||null}catch(e){}
+try{pw=localStorage.getItem('cizelge_pw')||sessionStorage.getItem('cizelge_pw')||null}catch(e){}
 function setSt(t){}
 function isAuthErr(m){return /Şifre|deneme/.test(m||'')}
 function $l(id){return document.getElementById(id)}
@@ -1223,7 +1226,7 @@ function showLogin(msg){
  ['lpw','lp0','lp1','lp2'].forEach(function(id){$l(id).value=''});setShow(false);
  setTimeout(function(){try{$l('lpw').focus()}catch(e){}},80)}
 function hideLogin(){var a=document.activeElement;if(a&&a.blur)a.blur();$l('login').style.display='none'}
-function forgetPw(){pw=null;try{localStorage.removeItem('cizelge_pw')}catch(e){}}
+function forgetPw(){pw=null;try{localStorage.removeItem('cizelge_pw');sessionStorage.removeItem('cizelge_pw')}catch(e){}}
 function lockOut(msg){forgetPw();authed=false;dirty=false;clearTimeout(pushT);showLogin(msg)}
 function logout(){lockOut('')}
 async function pushNow(){
@@ -1389,14 +1392,14 @@ async function enter(p,fromSaved){
   if(fromSaved){authed=true;hideLogin();setSt('Çevrimdışı — cihazdaki kayıt gösteriliyor');startPoll();return null}
   return 'Bağlantı hatası. İnternetinizi kontrol edin.'}
  if(!r.data.ok)return r.data.error||'Şifre hatalı';
- pw=p;try{localStorage.setItem('cizelge_pw',p)}catch(e){}
+ pw=p;try{var keep=$l('lkeep');if(!keep||keep.checked){localStorage.setItem('cizelge_pw',p);localStorage.removeItem('cizelge_nokeep')}else{localStorage.removeItem('cizelge_pw');sessionStorage.setItem('cizelge_pw',p);localStorage.setItem('cizelge_nokeep','1')}}catch(e){}
  authed=true;hideLogin();setSt('Bağlanıyor…');
  try{await loadRemote(true)}catch(e){setSt('Çevrimdışı — cihazdaki kayıt gösteriliyor')}
  startPoll();setTimeout(bkAuto,1500);
  return null
 }
 window.addEventListener('load',async function(){
- var lb=$l('lockb');if(lb)lb.onclick=logout;var kb=$l('kasab');if(kb)kb.onclick=function(e){e.preventDefault();KS.open()};
+ var lb=$l('lockb');if(lb)lb.onclick=logout;try{if(localStorage.getItem('cizelge_nokeep'))$l('lkeep').checked=false}catch(e){}var kb=$l('kasab');if(kb)kb.onclick=function(e){e.preventDefault();KS.open()};
  var card=$l('lcard'),busy=false;
  function lock(v){busy=v;$l('lgo').disabled=v;card.classList.toggle('busy',v)}
  [].forEach.call(card.querySelectorAll('.leye'),function(b){b.onclick=function(){setShow(!card.classList.contains('show'))}});
@@ -2439,7 +2442,7 @@ var KS=(function(){
  /* ---- çizim ---- */
  var WAL='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0 0 4h14a1 1 0 0 1 1 1v3"/><path d="M3 6v12a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3"/><path d="M21 12h-4a2 2 0 0 0 0 4h4z"/></svg>';
  function head(){var net=K?kasaBal()+invVal()-kartBorc():0;
-  return '<div class="kshd"><b class="kst">'+WAL+'<span>Kasa</span></b><span class="ksst" aria-live="polite"></span>'+(K?'<button type="button" class="ksic" data-a="lock" title="Kilitle" aria-label="Kasayı kilitle"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button>':'')+'<button type="button" class="ksic" data-a="close" aria-label="Kasayı kapat">×</button></div>'+
+  return '<div class="kshd"><b class="kst">'+WAL+'<span>Kasa</span></b><span class="ksst" aria-live="polite"></span>'+(K?'<button type="button" class="ksic" data-a="lock" title="Kilitle" aria-label="Kasayı kilitle"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button>':'')+'<button type="button" class="ksic" data-a="close" title="Ana menü" aria-label="Ana menüye dön"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button></div>'+
    (K?'<div class="kssum card"><div class="ksnet"><small>Net varlığım</small><strong class="'+(net<0?'neg':'')+'">'+tl(net)+'</strong></div><div class="ks4"><div><small>💵 Nakit</small><b>'+tl(kasaBal())+'</b></div><div><small>💳 Kart borcu</small><b class="'+(kartBorc()>0?'neg':'')+'">'+tl(kartBorc())+'</b></div><div><small>Yatırım</small><b>'+tl(invVal())+'</b></div><div><small>Alacak − Borç</small><b>'+tl(dbTot().a-dbTot().b)+'</b></div></div></div>'+
    '<div class="kstabs" role="tablist">'+[['kasa','Güncel kasa'],['inv','Yatırımlarım'],['db','Borç · Alacak']].map(function(t){return '<button type="button" role="tab" aria-selected="'+(tab===t[0])+'" class="'+(tab===t[0]?'on':'')+'" data-tab="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>':'')}
  function vKasa(){var y=mon[0],m=mon[1],pre=y+'-'+('0'+(m+1)).slice(-2),L=K.tx.filter(function(x){return x.d.slice(0,7)===pre});
