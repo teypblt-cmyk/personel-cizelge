@@ -149,6 +149,22 @@ const setB = async (p, v) => { await p.evaluate((v) => { var nb = document.query
 const preview = async (p) => { await p.locator('.agpv').click(); await p.waitForTimeout(200); return await p.evaluate(() => (S.ag.fx[wk + '|' + D] || []).map(f => ({ p: f.p, r: f.r, sid: f.sid || null, more: (f.more || []).map(m => m.id), id: f.id, pv: f.pv, s: f.s }))) };
 const cmd = async (p, t) => { await p.fill('#agvt', t); await p.locator('.agsend').click(); await p.waitForTimeout(200) };
 
+test('Aİ: önizlemeden sonra biri elle diğer bölgeye alınınca tekrar önizle boşluğu tamamlar (iki yönde)', async (p) => {
+  await openAi(p); await setB(p, 5); const a = await preview(p);
+  const nY = await p.evaluate(() => +document.querySelector('#agny').value);
+  eq(a.filter(f => f.r === 0).length, 5);
+  const mv = a.filter(f => f.r === 0 && f.pv === 1)[0].p;
+  await p.evaluate((q) => { var f = S.ag.fx[wk + '|' + D].find(x => x.p === q); f.org = JSON.parse(JSON.stringify(f)); f.r = 1; f.pv = 0; f.id = 'auto'; f.s = null; f.sid = null; f.more = [] }, mv);
+  const b = await preview(p);
+  eq(b.filter(f => f.r === 0).length, 5, 'Bahçelievler 5e tamamlanmadı'); eq(b.filter(f => f.r === 1).length, nY, 'Yenibosna hedefte değil');
+  ok(b.find(f => f.p === mv).r === 1, 'elle taşınan kişi geri alındı');
+  const mv2 = b.filter(f => f.r === 1 && f.pv === 1)[0].p;
+  await p.evaluate((q) => { var f = S.ag.fx[wk + '|' + D].find(x => x.p === q); f.org = JSON.parse(JSON.stringify(f)); f.r = 0; f.pv = 0; f.id = 'auto'; f.s = null; f.sid = null; f.more = [] }, mv2);
+  const c = await preview(p);
+  eq(c.filter(f => f.r === 0).length, 5, 'ters yönde Bahçelievler 5te kalmadı'); eq(c.filter(f => f.r === 1).length, nY, 'ters yönde Yenibosna tamamlanmadı');
+  ok(c.find(f => f.p === mv2).r === 0 && c.find(f => f.p === mv).r === 1, 'elle taşınanlar korunmadı');
+});
+
 test('Aİ: önizle listeyi doldurur; sayı değişince elle yapılan kalır, gerisi yeniden dağıtılır', async (p) => {
   await openAi(p); await setB(p, 4); const a = await preview(p);
   eq(a.filter(f => f.r === 0).length, 4);
