@@ -293,6 +293,11 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   const closed = await p.evaluate(() => ({ n: document.querySelectorAll('[data-a="opendb"]').length, det: !!document.querySelector('.ksov details'), net: document.querySelector('.ksnet strong').textContent }));
   await p.fill('#kda', '1250000'); const fmt = await p.inputValue('#kda'); await p.fill('#kda', '');
   await p.waitForTimeout(700);
+  await p.click('[data-tab="kasa"]'); const n0 = await p.locator('.ksov [data-a="deltx"]').count();
+  await p.locator('.ksov [data-a="deltx"]').first().click(); await p.locator('.wdlg .c').click(); const n1 = await p.locator('.ksov [data-a="deltx"]').count();
+  await p.locator('.ksov [data-a="deltx"]').first().click(); await p.locator('.wdlg .d').click(); const n2 = await p.locator('.ksov [data-a="deltx"]').count();
+  eq([n1, n2], [n0, n0 - 1], 'hareket silme (onaylı) çalışmıyor');
+  await p.waitForTimeout(700);
   const saved = await p.evaluate(() => { var d = JSON.parse(window.__ks.doc); return { tx: d.tx.length, inv: d.inv.length, db: d.db[0].a, inS: JSON.stringify(S).indexOf('Migros') > -1 } });
   await p.click('[data-a="lock"]'); await p.fill('#kspw', '1111'); await p.click('#kslb'); await p.waitForTimeout(100);
   const wrong = await p.evaluate(() => document.getElementById('ksmsg').textContent);
@@ -303,7 +308,7 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   ok(/6 gr/.test(k2) && /17\.400 ₺/.test(k2), 'altın alıştan hesaplanmadı: ' + k2);
   ok(/700 ₺/.test(k3), 'kısmi ödeme yanlış: ' + k3);
   eq(closed.n, 1, 'kapanan borç listede kaldı'); ok(!closed.det, 'Kapananlar bölümü duruyor'); eq(closed.net, netB, 'borç/alacak net varlığı etkiledi'); eq(fmt, '1.250.000', 'binlik ayraç yok');
-  eq(saved, { tx: 5, inv: 2, db: 700, inS: false }); ok(/hatalı/.test(wrong), 'yanlış şifre kabul edildi');
+  eq(saved, { tx: 4, inv: 2, db: 700, inS: false }); ok(/hatalı/.test(wrong), 'yanlış şifre kabul edildi');
 });
 
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
