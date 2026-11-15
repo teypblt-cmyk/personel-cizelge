@@ -317,7 +317,7 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   await p.click('[data-a="close"]'); await p.evaluate(() => KS.open()); await p.waitForTimeout(200);
   const auto = await p.evaluate(() => !!document.querySelector('.ksnet'));
   const home = await p.evaluate(() => { var b = document.querySelector('.ksov [data-a="close"]'); b.click(); var l = document.getElementById('login'); return { shown: l.style.display !== 'none', mode: document.getElementById('lcard').dataset.mode } });
-  await p.evaluate(() => { document.getElementById('lgoc').click() }); await p.waitForTimeout(100);
+  await p.evaluate(() => { document.getElementById('lgoc').click() }); await p.waitForTimeout(400);
   const back = await p.evaluate(() => document.getElementById('login').style.display);
   ok(first, 'ilk açılışta şifre belirleme istenmedi');
   eq(k1.bars, ['Market', 'Akaryakıt'], 'harcama dağılımı'); ok(/1\.800,50 ₺/.test(k1.sum) && /30\.000 ₺/.test(k1.sum), 'aylık toplam yanlış: ' + k1.sum);

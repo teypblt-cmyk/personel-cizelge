@@ -242,6 +242,15 @@ html[data-anim=zoom] #nav:not(.hide),html[data-anim=zoom] #set:not(.hide),html[d
 html[data-anim=fade] #nav:not(.hide),html[data-anim=fade] #set:not(.hide),html[data-anim=fade] .pop,html[data-anim=fade] details.ain>*:not(summary),html[data-anim=fade] .pin:not(.hide){animation:aFade .35s ease both}
 html[data-anim=bounce] #nav:not(.hide),html[data-anim=bounce] #set:not(.hide),html[data-anim=bounce] .pop,html[data-anim=bounce] details.ain>*:not(summary),html[data-anim=bounce] .pin:not(.hide){animation:aBounce .5s ease both}
 @media (prefers-reduced-motion:reduce){#nav,#set,.pop,.pin,details.ain>*{animation:none!important}}
+/* Toplanma (gather) ve geçişler: tüm temalarda */
+.gin{animation:aGather .42s cubic-bezier(.16,.92,.24,1) both;animation-delay:var(--gd,0ms)}
+@keyframes aGather{from{opacity:0;transform:translate(var(--gx,0),var(--gy,0)) scale(.86) rotate(var(--gr,0deg))}to{opacity:1;transform:none}}
+html[data-anim=gather] details.ain>*:not(summary){animation:aGather .38s cubic-bezier(.16,.92,.24,1) both;--gy:18px}
+#login.lfin{animation:lFin .4s cubic-bezier(.2,.8,.2,1) both}#login.lfout{animation:lFout .26s ease-in both;pointer-events:none}
+@keyframes lFin{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}@keyframes lFout{to{opacity:0;transform:scale(.97)}}
+.ksov.ksout{animation:ksOut .22s ease-in both;pointer-events:none}@keyframes ksOut{to{opacity:0;transform:translateY(16px)}}
+@media (prefers-reduced-motion:reduce){.gin,#login.lfin,#login.lfout,.ksov.ksout{animation:none!important}}
+
 .si{display:inline-flex;vertical-align:-4px;margin-right:8px;color:var(--sec,var(--pri))}
 .si svg{width:18px;height:18px}
 
@@ -958,7 +967,7 @@ html.ksopen,html.ksopen body{overflow:hidden}
 <div class="lflow" aria-hidden="true"><i></i><i></i><i></i><b></b></div>
 <form id="lcard" class="lcard" data-mode="in" novalidate>
 <svg class="lmark" viewBox="0 0 76 76" aria-hidden="true"><rect width="76" height="76" rx="22" fill="#0e1430"/><g><rect x="9.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="34.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="43.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="17.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="43.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="34.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="51.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="26.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/></g></svg>
-<h2 id="ltitle">Personel Çizelgesi <small class="appv">v1.45</small></h2>
+<h2 id="ltitle">Personel Çizelgesi <small class="appv">v1.46</small></h2>
 <p class="lsub" id="lsub">Devam etmek için şifrenizi girin</p>
 <div class="lfld lin"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lpw" type="password" placeholder="Şifre" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
 <div class="lfld lch"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lp0" type="password" placeholder="Şu anki şifre" autocomplete="current-password" autocapitalize="off" spellcheck="false"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
@@ -970,10 +979,10 @@ html.ksopen,html.ksopen body{overflow:hidden}
 <button type="submit" id="lgo" class="lbtn"><span id="lgot">Giriş</span></button>
 <button type="button" id="lalt" class="llink">Şifreyi değiştir</button>
 <button type="button" id="kasab" class="lkasa lbig2"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0 0 4h14a1 1 0 0 1 1 1v3"/><path d="M3 6v12a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3"/><path d="M21 12h-4a2 2 0 0 0 0 4h4z"/></svg><span>Kasa</span></button>
-<div class="lmlinks"><span class="lver appv">v1.45</span><button type="button" id="lout" class="lexit" aria-label="Bu cihazda çıkış yap" title="Bu cihazda çıkış yap"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9.5"/></svg></button></div>
+<div class="lmlinks"><span class="lver appv">v1.46</span><button type="button" id="lout" class="lexit" aria-label="Bu cihazda çıkış yap" title="Bu cihazda çıkış yap"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9.5"/></svg></button></div>
 </form>
 </div>
-<div class="hdr"><h1><span class="ttl">Personel Çizelgesi</span><small class="appv">v1.45</small></h1><button id="undob" type="button" hidden aria-label="Son işlemi geri al" title="Son işlemi geri al"><span aria-hidden="true">↶</span><span class="ul"> Geri al</span></button><button id="lockb" type="button" aria-label="Ana menü" title="Ana menü"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button></div>
+<div class="hdr"><h1><span class="ttl">Personel Çizelgesi</span><small class="appv">v1.46</small></h1><button id="undob" type="button" hidden aria-label="Son işlemi geri al" title="Son işlemi geri al"><span aria-hidden="true">↶</span><span class="ul"> Geri al</span></button><button id="lockb" type="button" aria-label="Ana menü" title="Ana menü"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button></div>
 <div class="tabs" id="tabs" style="margin-bottom:6px"></div>
 <div class="tabs" id="tabs2"></div>
 <div class="card hide" id="nav"></div>
@@ -1208,7 +1217,7 @@ function migrateItems(){
    return id})});
  S.gl=gl2;S.gp=gp2;delete S.gd;
 }
-function ens(){fitN();if(S.thv!==2){S.pk=0;S.thv=2;if(S.thd)S.thd.pk=0}if(!(S.pk>=0&&S.pk<2))S.pk=0;if(['zoom','fade','bounce'].indexOf(S.an)<0)S.an='zoom';if(!S.ri)S.ri={};if(S.gi&&!S.ag)agInit();if(!S.nl)S.nl={};if(!S.gl)S.gl={};if(!S.gp)S.gp={};if(!S.co)S.co={};if(!S.rv)S.rv={};if(!S.codes)S.codes=[];while(S.codes.length<N)S.codes.push('');if(!S.gi)migrateItems();if(!S.pv)S.pv=pvDef();if(!ens.d){wk=Math.max(0,Math.min(S.w.length-1,curWk()));ens.d=1}if(wk>=S.w.length)wk=Math.max(0,S.w.length-1)}
+function ens(){fitN();if(S.thv!==2){S.pk=0;S.thv=2;if(S.thd)S.thd.pk=0}if(!(S.pk>=0&&S.pk<2))S.pk=0;if(S.an==='fade')S.an='gather';if(['zoom','gather','bounce'].indexOf(S.an)<0)S.an='zoom';if(!S.ri)S.ri={};if(S.gi&&!S.ag)agInit();if(!S.nl)S.nl={};if(!S.gl)S.gl={};if(!S.gp)S.gp={};if(!S.co)S.co={};if(!S.rv)S.rv={};if(!S.codes)S.codes=[];while(S.codes.length<N)S.codes.push('');if(!S.gi)migrateItems();if(!S.pv)S.pv=pvDef();if(!ens.d){wk=Math.max(0,Math.min(S.w.length-1,curWk()));ens.d=1}if(wk>=S.w.length)wk=Math.max(0,S.w.length-1)}
 var CFG={URL:'https://wogswssxyfotwkeflycl.supabase.co',KEY:'sb_publishable_PbxaNErJXA0kll1lcF-Zbg_uwkW638W'};
 var sb=null,pw=null,authed=false,dirty=false,lastJson='',pushT=null,pollOn=false;
 try{pw=localStorage.getItem('cizelge_pw')||sessionStorage.getItem('cizelge_pw')||null}catch(e){}
@@ -1244,8 +1253,10 @@ function showLogin(msg){
  ['lpw','lp0','lp1','lp2'].forEach(function(id){$l(id).value=''});setShow(false);
  setTimeout(function(){try{$l('lpw').focus()}catch(e){}},80)}
 /* Ana menü: çizelge ve kasa girişleri. Şifre bu cihazda kayıtlıysa yeniden sorulmaz. */
-function goHome(){$l('login').style.display='flex';setMode(pw||authed?'menu':'in');lmsg('')}
-function hideLogin(){var a=document.activeElement;if(a&&a.blur)a.blur();$l('login').style.display='none'}
+function goHome(){var L=$l('login');clearTimeout(L._t);L.classList.remove('lfout');L.style.display='flex';setMode(pw||authed?'menu':'in');lmsg('');if(!RMO()){L.classList.remove('lfin');void L.offsetWidth;L.classList.add('lfin');L._t=setTimeout(function(){L.classList.remove('lfin')},450)}}
+function hideLogin(){var a=document.activeElement;if(a&&a.blur)a.blur();var L=$l('login');if(L.style.display==='none')return;
+ if(RMO()){L.style.display='none';return}L.classList.remove('lfin');L.classList.add('lfout');clearTimeout(L._t);L._t=setTimeout(function(){L.classList.remove('lfout');L.style.display='none';if(S&&S.an==='gather')gatherIn(document.querySelector('.pin:not(.hide)'))},260)}
+function RMO(){try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}}
 function forgetPw(){pw=null;try{localStorage.removeItem('cizelge_pw');sessionStorage.removeItem('cizelge_pw')}catch(e){}}
 function forgetAll(){forgetPw();try{localStorage.removeItem('kasa_pin')}catch(e){}}
 function lockOut(msg){forgetPw();authed=false;dirty=false;clearTimeout(pushT);showLogin(msg)}
@@ -1571,7 +1582,7 @@ function buildSettings(){var t=themeOf(),box=$('set');box.innerHTML='';
   e.innerHTML='<div style="font-family:'+PFONT[P.hf].replace(/"/g,'&quot;')+';font-weight:700;font-size:16px;'+(P.up?'text-transform:uppercase;letter-spacing:.04em;':'')+'">'+esc(P.n)+'</div><div style="font-size:11.5px;opacity:.72;margin:2px 0 8px">'+esc(P.d)+'</div><div style="display:flex;gap:5px"><i style="width:22px;height:8px;border-radius:4px;background:'+P.pri+'"></i><i style="width:22px;height:8px;border-radius:4px;background:'+P.ac1+'"></i><i style="width:22px;height:8px;border-radius:4px;background:'+P.ac2+'"></i></div>';
   e.onclick=function(){S.sty='pre';S.pk=i;applyColors();save();buildSettings()};pg.appendChild(e)});box.appendChild(pg);
  hd('Açılış animasyonu');var an=document.createElement('div');an.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:8px';
- [['bounce','Zıplama'],['zoom','Büyüme'],['fade','Solma']].forEach(function(x){var e=document.createElement('button');e.textContent=x[1];e.className=(S.an||'zoom')===x[0]?'on':'';e.style.cssText='padding:9px 4px;font-size:13px';
+ [['bounce','Zıplama'],['zoom','Büyüme'],['gather','Toplanma']].forEach(function(x){var e=document.createElement('button');e.textContent=x[1];e.className=(S.an||'zoom')===x[0]?'on':'';e.style.cssText='padding:9px 4px;font-size:13px';
   e.onclick=function(){S.an=x[0];applyColors();save();buildSettings();var p=$('set');p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop');setTimeout(function(){p.classList.remove('pop')},700)};an.appendChild(e)});box.appendChild(an);
  hd('Şifre');var pwb=document.createElement('div');pwb.className='spw';
  pwb.innerHTML='<button type="button" class="spwt">'+IC('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>')+'<span>Çizelge şifresini değiştir</span></button><div class="spwf" hidden><input type="password" id="spw0" placeholder="Şu anki şifre" autocomplete="current-password"><input type="password" id="spw1" placeholder="Yeni şifre (harf, rakam, işaret)" autocomplete="new-password"><input type="password" id="spw2" placeholder="Yeni şifre (tekrar)" autocomplete="new-password"><p class="spwm" role="alert"></p><button type="button" class="on spws">Şifreyi kaydet</button></div>';
@@ -1612,6 +1623,13 @@ function avc(p){var n=pn(p),h=0;for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(
 function ini2(p){var w=pn(p).trim().split(/\s+/);return esc(((w[0]||'').charAt(0)+(w[1]?w[1].charAt(0):'')).toLocaleUpperCase('tr'))}
 function avh(p){return '<i class="av" style="background:'+avc(p)+'">'+ini2(p)+'</i>'}
 
+/* Toplanma animasyonu: görünen düğmeler ve kartlar ekranın farklı yönlerinden hızla kayıp yerine toplanır */
+var GDIR=[[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,-1],[-1,1],[1,1]];
+function gatherIn(root){if(!root||RMO())return;var sel='.card,.day,.gvbar,button,.reg,.chip,.wk,details>summary,.lb,.ib,tr',L=[],vh=innerHeight;
+ root.querySelectorAll(sel).forEach(function(e){if(L.length>=36||e.closest('.gin'))return;var r=e.getBoundingClientRect();if(!r.width||r.bottom<0||r.top>vh)return;if(e.matches('button')&&e.closest('.card')&&L.indexOf(e.closest('.card'))>-1)return;L.push(e)});
+ L.forEach(function(e,i){var d=GDIR[(i*3+Math.floor(Math.random()*8))%8],m=70+Math.random()*90;e.style.setProperty('--gx',(d[0]*m).toFixed(0)+'px');e.style.setProperty('--gy',(d[1]*m).toFixed(0)+'px');e.style.setProperty('--gr',((Math.random()-.5)*10).toFixed(1)+'deg');e.style.setProperty('--gd',(Math.min(i,18)*22)+'ms');
+  e.classList.remove('gin');void e.offsetWidth;e.classList.add('gin');e.addEventListener('animationend',function f(){e.classList.remove('gin');e.removeEventListener('animationend',f)})})}
+var _lastView='';
 function show(){
  ['per','izin','gv','ozet'].forEach(function(k){$('p-'+k).classList.toggle('hide',k!==tab||setOpen)});
  $('set').classList.toggle('hide',!setOpen);$('nav').classList.toggle('hide',!navOpen);if(navOpen)buildNav();
@@ -1620,6 +1638,7 @@ function show(){
  if(tab==='izin')buildLeave();
  if(tab==='gv')buildGV();
  if(tab==='ozet')buildSum();
+ var v=tab+'|'+setOpen+'|'+navOpen;if(v!==_lastView){var prev=_lastView;_lastView=v;if(prev&&S.an==='gather'&&$('login').style.display==='none'){var tg=setOpen?$('set'):navOpen?$('nav'):$('p-'+tab);requestAnimationFrame(function(){gatherIn(tg);if(!setOpen&&!navOpen)gatherIn($('tabs2'))})}}
 }
 function estRows(t){var n=0;String(t).split('\n').forEach(function(l){n+=Math.max(1,Math.ceil(l.length/34))});return Math.max(1,n)}
 function fitTa(t){if(!t.scrollHeight)return;t.rows=1;t.style.height='auto';t.style.height=Math.max(34,t.scrollHeight+2)+'px'}
@@ -2585,7 +2604,7 @@ var KS=(function(){
   document.body.appendChild(o);o.querySelector('.c').onclick=function(){o.remove()};o.onclick=function(e){if(e.target===o)o.remove()};o.querySelector('.d').onclick=function(){o.remove();ok()};setTimeout(function(){var c=o.querySelector('.c');if(c)c.focus()},30)}
  function open(){if(ov)return;if(typeof sb==='undefined'||!sb){alert('Bağlantı kuruluyor, birkaç saniye sonra tekrar dene.');return}var d=new Date();if(!mon)mon=[d.getFullYear(),d.getMonth()];ov=document.createElement('div');ov.className='ksov';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-label','Kasa');
   document.body.appendChild(ov);document.documentElement.classList.add('ksopen');render();if(K)armLock()}
- function close(){if(!ov)return;ov.remove();ov=null;document.documentElement.classList.remove('ksopen')}
+ function close(){if(!ov)return;var o=ov;ov=null;document.documentElement.classList.remove('ksopen');if(RMO()){o.remove();return}o.classList.add('ksout');setTimeout(function(){o.remove()},240)}
  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov&&!document.querySelector('.wdlg'))close()});
  return {open:open,close:close,_t:{num:num,tl:tl,invCalc:function(k){var s=K;K=k;var r=invCalc();K=s;return r}}}
 })();
