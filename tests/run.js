@@ -264,7 +264,7 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   await p.evaluate(() => { window.__ks = { pin: null, doc: null }; var M = window.__ks;
     window.sb = { rpc: function (f, a) { var r;
       if (f === 'kasa_status') r = { ok: true, set: !!M.pin };
-      else if (f === 'kasa_setpin') { M.pin = a.p_new; r = { ok: true } }
+      else if (f === 'kasa_setpin') { if (M.pin && a.p_old !== M.pin) r = { ok: false, error: 'Kasa şifresi hatalı' }; else { M.pin = a.p_new; r = { ok: true } } }
       else if (a.p_pin !== M.pin) r = { ok: false, error: 'Kasa şifresi hatalı' };
       else if (f === 'kasa_get') r = { ok: true, json: M.doc, t: 0 };
       else if (f === 'kasa_set') { M.doc = a.p_json; r = { ok: true } }
@@ -273,7 +273,9 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
     KS.open() });
   await p.waitForTimeout(150);
   const first = await p.evaluate(() => !document.getElementById('kspw2').hidden);
-  await p.fill('#kspw', '4821'); await p.fill('#kspw2', '4821'); await p.click('#kslb'); await p.waitForTimeout(200);
+  await p.fill('#kspw', '4821'); await p.fill('#kspw2', '4821'); await p.click('#kslb'); await p.waitForTimeout(100);
+  const weak = await p.evaluate(() => ({ m: document.getElementById('ksmsg').textContent, pin: window.__ks.pin }));
+  await p.fill('#kspw', 'Ab1!xy'); await p.fill('#kspw2', 'Ab1!xy'); await p.click('#kslb'); await p.waitForTimeout(200);
   const add = async (amt, cat, note) => { await p.fill('#ksa', amt); await p.click('.kscats button[data-c="' + cat + '"]'); await p.fill('#ksn', note || ''); await p.click('[data-a="addtx"]') };
   await add('1.250,50', 'Market', 'Migros'); await add('400', 'Akaryakıt'); await p.click('[data-pm="nakit"]'); await add('150', 'Market');
   await p.click('.kseg [data-k="gelir"]'); await add('30000', 'Maaş');
@@ -299,9 +301,15 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   eq([n1, n2], [n0, n0 - 1], 'hareket silme (onaylı) çalışmıyor');
   await p.waitForTimeout(700);
   const saved = await p.evaluate(() => { var d = JSON.parse(window.__ks.doc); return { tx: d.tx.length, inv: d.inv.length, db: d.db[0].a, inS: JSON.stringify(S).indexOf('Migros') > -1 } });
-  await p.click('[data-a="lock"]'); await p.fill('#kspw', '1111'); await p.click('#kslb'); await p.waitForTimeout(100);
-  const wrong = await p.evaluate(() => document.getElementById('ksmsg').textContent);
-  await p.click('[data-a="close"]');
+  await p.click('[data-a="pw"]'); await p.fill('#kp0', 'yanlis1!'); await p.fill('#kp1', 'Yeni2*sifre'); await p.fill('#kp2', 'Yeni2*sifre'); await p.click('[data-a="pwsave"]'); await p.waitForTimeout(100);
+  const wrong = await p.evaluate(() => document.getElementById('kpm').textContent);
+  await p.fill('#kp0', 'Ab1!xy'); await p.click('[data-a="pwsave"]'); await p.waitForTimeout(150);
+  const changed = await p.evaluate(() => ({ pin: window.__ks.pin, ls: localStorage.getItem('kasa_pin') }));
+  await p.click('[data-a="close"]'); await p.evaluate(() => KS.open()); await p.waitForTimeout(200);
+  const auto = await p.evaluate(() => !!document.querySelector('.ksnet'));
+  const home = await p.evaluate(() => { var b = document.querySelector('.ksov [data-a="close"]'); b.click(); var l = document.getElementById('login'); return { shown: l.style.display !== 'none', mode: document.getElementById('lcard').dataset.mode } });
+  await p.evaluate(() => { document.getElementById('lgoc').click() }); await p.waitForTimeout(100);
+  const back = await p.evaluate(() => document.getElementById('login').style.display);
   ok(first, 'ilk açılışta şifre belirleme istenmedi');
   eq(k1.bars, ['Market', 'Akaryakıt'], 'harcama dağılımı'); ok(/1\.800,50 ₺/.test(k1.sum) && /30\.000 ₺/.test(k1.sum), 'aylık toplam yanlış: ' + k1.sum);
   ok(/Nakit28\.850 ₺/.test(kk.h.replace(/[💵💳 ]/gu, '')) || /28\.850 ₺/.test(kk.h), 'nakit yanlış: ' + kk.h); ok(/Kart borcu650,50 ₺/.test(kk.h), 'kart borcu yanlış: ' + kk.h); ok(/1\.800,50 ₺/.test(kk.m), 'kart ödemesi gider sayıldı: ' + kk.m);
@@ -309,6 +317,8 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   ok(/700 ₺/.test(k3), 'kısmi ödeme yanlış: ' + k3);
   eq(closed.n, 1, 'kapanan borç listede kaldı'); ok(!closed.det, 'Kapananlar bölümü duruyor'); eq(closed.net, netB, 'borç/alacak net varlığı etkiledi'); eq(fmt, '1.250.000', 'binlik ayraç yok');
   eq(saved, { tx: 4, inv: 2, db: 700, inS: false }); ok(/hatalı/.test(wrong), 'yanlış şifre kabul edildi');
+  ok(/harf, rakam/.test(weak.m) && !weak.pin, 'zayıf şifre kabul edildi: ' + weak.m); eq(changed, { pin: 'Yeni2*sifre', ls: 'Yeni2*sifre' }); ok(auto, 'aynı cihazda şifre yeniden soruldu');
+  eq(home, { shown: true, mode: 'menu' }, 'ana menüye dönmedi'); eq(back, 'none', 'menüden çizelgeye dönülmedi');
 });
 
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {

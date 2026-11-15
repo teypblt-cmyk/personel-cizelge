@@ -397,9 +397,13 @@ html[data-pre] .av{box-shadow:0 0 0 2px var(--pri)}
 #login .lcard[data-mode=in] .lch,#login .lcard[data-mode=ch] .lin{display:none}
 #login .lcard.swap .lin,#login .lcard.swap .lch{animation:lfade .3s ease both}
 @keyframes lfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-#login .lkeep{display:flex;align-items:center;gap:10px;margin:2px 2px 8px;min-height:40px;color:#c9d4ff;font:500 14.5px Inter,system-ui,sans-serif;cursor:pointer;user-select:none}.lkeep input{width:20px;height:20px;margin:0;accent-color:#5b7cff;flex:none}
-.lcard[data-mode="ch"] .lkeep{display:none}
-.lmsg{min-height:22px;margin:2px 0 12px;font-size:13.5px;line-height:1.35;color:#ff8fa0}
+#login .lmenu,#login .lmlinks{display:none}
+#login .lcard[data-mode="menu"] .lmenu{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+#login .lcard[data-mode="menu"] .lmlinks{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;margin-top:8px}#login .lmlinks .llink{margin:0}
+#login .lcard[data-mode="menu"] .lfld,#login .lcard[data-mode="menu"] #lgo,#login .lcard[data-mode="menu"] #lalt{display:none!important}
+#login .lbig{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;border:0;border-radius:18px;background:linear-gradient(135deg,#3b82f6,#6d5bff);color:#fff;font:800 17px Inter,system-ui,sans-serif;cursor:pointer;box-shadow:0 12px 30px rgba(80,90,255,.35)}#login .lbig:active{transform:scale(.98)}
+#login .lcard[data-mode="menu"] .lkasa{min-height:58px;font-size:17px;margin-top:10px}
+#login .lmsg{min-height:22px;margin:2px 0 12px;font-size:13.5px;line-height:1.35;color:#ff8fa0}
 #login .lmsg.ok{color:#43e0a0}
 #login .lbtn{position:relative;width:100%;height:56px;border:0;border-radius:18px;background:linear-gradient(135deg,#2f7bff,#6a5cff);color:#fff;font:700 16px Inter,system-ui,sans-serif;letter-spacing:.01em;cursor:pointer;box-shadow:0 14px 34px -10px rgba(79,110,255,.85),inset 0 1px 0 rgba(255,255,255,.28);transition:transform .15s,filter .2s,opacity .2s}
 #login .lbtn:hover{filter:brightness(1.08)}#login .lbtn:active{transform:scale(.98)}
@@ -946,7 +950,7 @@ html.ksopen,html.ksopen body{overflow:hidden}
 .ksbad{outline:2px solid #ff6b6b!important;outline-offset:1px}
 .kslock{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;margin-top:8vh!important;padding:24px 20px!important}
 .kslock h3{margin:0;font-size:22px}.ksli{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;background:var(--grad,var(--pri));color:var(--onc,#fff)}.ksli svg{width:32px;height:32px}
-.kslock form{display:flex;flex-direction:column;gap:8px;width:100%;max-width:300px}.kslock input{text-align:center;font-size:20px;min-height:50px;letter-spacing:.2em}.kslock button{min-height:48px;font-weight:800}
+.kslock form{display:flex;flex-direction:column;gap:8px;width:100%;max-width:300px}.kslock input{text-align:center;font-size:18px;min-height:50px;letter-spacing:.08em}.kslock button{min-height:48px;font-weight:800}
 .wdlg.ksdlg{z-index:500}
 .ksmsg{color:#ff7a7a;min-height:1.2em;margin:0;font-size:14px}
 @media (max-width:380px){.ks3 b{font-size:13.5px}.ksrow{flex-wrap:wrap}.ksrow input[type=date]{flex:1 1 100%}}
@@ -956,20 +960,21 @@ html.ksopen,html.ksopen body{overflow:hidden}
 <div class="lbg"><i></i><i></i><i></i></div>
 <form id="lcard" class="lcard" data-mode="in" novalidate>
 <svg class="lmark" viewBox="0 0 76 76" aria-hidden="true"><rect width="76" height="76" rx="22" fill="#0e1430"/><g><rect x="9.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="34.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="43.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="17.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="43.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="34.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="51.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="26.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/></g></svg>
-<h2 id="ltitle">Personel Çizelgesi <small class="appv">v1.30</small></h2>
+<h2 id="ltitle">Personel Çizelgesi <small class="appv">v1.31</small></h2>
 <p class="lsub" id="lsub">Devam etmek için şifrenizi girin</p>
 <div class="lfld lin"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lpw" type="password" placeholder="Şifre" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
 <div class="lfld lch"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lp0" type="password" placeholder="Şu anki şifre" autocomplete="current-password" autocapitalize="off" spellcheck="false"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
-<div class="lfld lch"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg><input id="lp1" type="password" placeholder="Yeni şifre (en az 6 karakter)" autocomplete="new-password" autocapitalize="off" spellcheck="false"></div>
+<div class="lfld lch"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg><input id="lp1" type="password" placeholder="Yeni şifre (harf, rakam, işaret)" autocomplete="new-password" autocapitalize="off" spellcheck="false"></div>
 <div class="lfld lch"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg><input id="lp2" type="password" placeholder="Yeni şifre (tekrar)" autocomplete="new-password" autocapitalize="off" spellcheck="false"></div>
-<label class="lkeep lin" for="lkeep"><input type="checkbox" id="lkeep" checked><span>Oturumu açık tut</span></label>
 <div id="lmsg" class="lmsg" role="alert" aria-live="polite"></div>
+<div class="lmenu"><button type="button" id="lgoc" class="lbig"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Personel Çizelgesi</span></button></div>
 <button type="submit" id="lgo" class="lbtn"><span id="lgot">Giriş</span></button>
 <button type="button" id="lalt" class="llink">Şifreyi değiştir</button>
-<button type="button" id="kasab" class="lkasa"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0 0 4h14a1 1 0 0 1 1 1v3"/><path d="M3 6v12a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3"/><path d="M21 12h-4a2 2 0 0 0 0 4h4z"/></svg><span>Kasa</span></button>
+<button type="button" id="kasab" class="lkasa lbig2"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0 0 4h14a1 1 0 0 1 1 1v3"/><path d="M3 6v12a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3"/><path d="M21 12h-4a2 2 0 0 0 0 4h4z"/></svg><span>Kasa</span></button>
+<div class="lmlinks"><button type="button" id="lchg" class="llink">Çizelge şifresini değiştir</button><button type="button" id="lout" class="llink">Bu cihazda çıkış yap</button></div>
 </form>
 </div>
-<div class="hdr"><h1><span class="ttl">Personel Çizelgesi</span><small class="appv">v1.30</small></h1><button id="undob" type="button" hidden aria-label="Son işlemi geri al" title="Son işlemi geri al"><span aria-hidden="true">↶</span><span class="ul"> Geri al</span></button><button id="lockb" type="button" aria-label="Çıkış yap" title="Çıkış yap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9.5"/></svg></button></div>
+<div class="hdr"><h1><span class="ttl">Personel Çizelgesi</span><small class="appv">v1.31</small></h1><button id="undob" type="button" hidden aria-label="Son işlemi geri al" title="Son işlemi geri al"><span aria-hidden="true">↶</span><span class="ul"> Geri al</span></button><button id="lockb" type="button" aria-label="Ana menü" title="Ana menü"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button></div>
 <div class="tabs" id="tabs" style="margin-bottom:6px"></div>
 <div class="tabs" id="tabs2"></div>
 <div class="card hide" id="nav"></div>
@@ -1211,12 +1216,13 @@ try{pw=localStorage.getItem('cizelge_pw')||sessionStorage.getItem('cizelge_pw')|
 function setSt(t){}
 function isAuthErr(m){return /Şifre|deneme/.test(m||'')}
 function $l(id){return document.getElementById(id)}
+function pwStrong(p){return typeof p==='string'&&p.length>=6&&/[A-Za-zÇĞİÖŞÜçğıöşü]/.test(p)&&/\d/.test(p)&&/[^A-Za-z0-9ÇĞİÖŞÜçğıöşü\s]/.test(p)}
 function lmsg(t,ok){var m=$l('lmsg');m.textContent=t||'';m.className='lmsg'+(ok?' ok':'')}
 function lerr(t){lmsg(t);var c=$l('lcard');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake')}
 function setShow(v){var c=$l('lcard');c.classList.toggle('show',!!v);['lpw','lp0','lp1','lp2'].forEach(function(id){$l(id).type=v?'text':'password'});[].forEach.call(c.querySelectorAll('.leye'),function(b){b.setAttribute('aria-label',v?'Şifreyi gizle':'Şifreyi göster')})}
 function setMode(m){
  var c=$l('lcard');c.dataset.mode=m;c.classList.remove('swap');void c.offsetWidth;c.classList.add('swap');
- $l('lsub').textContent=m==='in'?'Devam etmek için şifrenizi girin':'Yeni şifrenizi belirleyin';
+ $l('lsub').textContent=m==='menu'?'Ne açmak istersin?':m==='in'?'Devam etmek için şifrenizi girin':'Yeni şifrenizi belirleyin';
  $l('lgot').textContent=m==='in'?'Giriş':'Şifreyi kaydet';
  $l('lalt').textContent=m==='in'?'Şifreyi değiştir':'← Girişe dön';
  $l('lp0').autocomplete='current-password';
@@ -1225,8 +1231,11 @@ function showLogin(msg){
  authed=false;$l('login').style.display='flex';setMode('in');lmsg(msg||'');
  ['lpw','lp0','lp1','lp2'].forEach(function(id){$l(id).value=''});setShow(false);
  setTimeout(function(){try{$l('lpw').focus()}catch(e){}},80)}
+/* Ana menü: çizelge ve kasa girişleri. Şifre bu cihazda kayıtlıysa yeniden sorulmaz. */
+function goHome(){$l('login').style.display='flex';setMode(pw||authed?'menu':'in');lmsg('')}
 function hideLogin(){var a=document.activeElement;if(a&&a.blur)a.blur();$l('login').style.display='none'}
 function forgetPw(){pw=null;try{localStorage.removeItem('cizelge_pw');sessionStorage.removeItem('cizelge_pw')}catch(e){}}
+function forgetAll(){forgetPw();try{localStorage.removeItem('kasa_pin')}catch(e){}}
 function lockOut(msg){forgetPw();authed=false;dirty=false;clearTimeout(pushT);showLogin(msg)}
 function logout(){lockOut('')}
 async function pushNow(){
@@ -1392,18 +1401,21 @@ async function enter(p,fromSaved){
   if(fromSaved){authed=true;hideLogin();setSt('Çevrimdışı — cihazdaki kayıt gösteriliyor');startPoll();return null}
   return 'Bağlantı hatası. İnternetinizi kontrol edin.'}
  if(!r.data.ok)return r.data.error||'Şifre hatalı';
- pw=p;try{var keep=$l('lkeep');if(!keep||keep.checked){localStorage.setItem('cizelge_pw',p);localStorage.removeItem('cizelge_nokeep')}else{localStorage.removeItem('cizelge_pw');sessionStorage.setItem('cizelge_pw',p);localStorage.setItem('cizelge_nokeep','1')}}catch(e){}
+ pw=p;try{localStorage.setItem('cizelge_pw',p);localStorage.removeItem('cizelge_nokeep')}catch(e){}
  authed=true;hideLogin();setSt('Bağlanıyor…');
  try{await loadRemote(true)}catch(e){setSt('Çevrimdışı — cihazdaki kayıt gösteriliyor')}
  startPoll();setTimeout(bkAuto,1500);
  return null
 }
 window.addEventListener('load',async function(){
- var lb=$l('lockb');if(lb)lb.onclick=logout;try{if(localStorage.getItem('cizelge_nokeep'))$l('lkeep').checked=false}catch(e){}var kb=$l('kasab');if(kb)kb.onclick=function(e){e.preventDefault();KS.open()};
+ var lb=$l('lockb');if(lb)lb.onclick=goHome;var kb=$l('kasab');if(kb)kb.onclick=function(e){e.preventDefault();KS.open()};
  var card=$l('lcard'),busy=false;
  function lock(v){busy=v;$l('lgo').disabled=v;card.classList.toggle('busy',v)}
  [].forEach.call(card.querySelectorAll('.leye'),function(b){b.onclick=function(){setShow(!card.classList.contains('show'))}});
- $l('lalt').onclick=function(){if(busy)return;var m=card.dataset.mode==='in'?'ch':'in';setMode(m);lmsg('');setTimeout(function(){try{$l(m==='in'?'lpw':'lp0').focus()}catch(e){}},60)};
+ $l('lalt').onclick=function(){if(busy)return;var m=card.dataset.mode==='in'?'ch':(pw?'menu':'in');setMode(m);lmsg('');setTimeout(function(){try{$l(m==='in'?'lpw':'lp0').focus()}catch(e){}},60)};
+ $l('lchg').onclick=function(){if(busy)return;setMode('ch');lmsg('');setTimeout(function(){try{$l('lp0').focus()}catch(e){}},60)};
+ $l('lout').onclick=function(){if(busy)return;forgetAll();authed=false;dirty=false;clearTimeout(pushT);showLogin('Bu cihazda çıkış yapıldı.')};
+ $l('lgoc').onclick=async function(){if(busy)return;if(authed){hideLogin();return}if(!pw){setMode('in');return}lock(true);lmsg('Açılıyor…');var e=await enter(pw,true);lock(false);if(e){forgetPw();setMode('in');lerr(/Şifre/.test(e)?'Şifre değişmiş. Yeniden giriş yapın.':e)}};
  async function goIn(){
   var v=$l('lpw').value;if(!v){lerr('Şifreyi girin');return}
   lock(true);lmsg('Kontrol ediliyor…');
@@ -1413,7 +1425,7 @@ window.addEventListener('load',async function(){
  async function goCh(){
   var a=$l('lp0').value,b=$l('lp1').value,c=$l('lp2').value;
   if(!a||!b||!c){lerr('Tüm alanları doldurun');return}
-  if(b.length<6){lerr('Yeni şifre en az 6 karakter olmalı');return}
+  if(!pwStrong(b)){lerr('Şifre en az 6 karakter olmalı ve harf, rakam, işaret (örn. !*.-) içermeli');return}
   if(b!==c){lerr('Yeni şifreler aynı değil');return}
   if(b===a){lerr('Yeni şifre eskisiyle aynı olamaz');return}
   lock(true);lmsg('Kaydediliyor…');
@@ -2413,17 +2425,21 @@ var KS=(function(){
  function st(m,bad){var e=ov&&ov.querySelector('.ksst');if(e){e.textContent=m;e.classList.toggle('bad',!!bad)}}
  /* ---- kilit ---- */
  function lockUI(){K=null;PIN=null;render()}
- function armLock(){clearTimeout(lockT);lockT=setTimeout(function(){PIN=null;K=null;if(ov)render()},10*60*1000)}
+ function armLock(){}
+ function remember(p){try{localStorage.setItem('kasa_pin',p)}catch(e){}}
+ function stored(){try{return localStorage.getItem('kasa_pin')}catch(e){return null}}
  function unlockView(){var h='<div class="kslock card"><div class="ksli">'+WAL+'</div>';
-  h+='<h3>Kasa</h3><p class="ksmu" id="kslp">Yükleniyor…</p><form id="kslf" autocomplete="off"><input type="password" id="kspw" inputmode="numeric" placeholder="Kasa şifresi" aria-label="Kasa şifresi" autocomplete="off"><input type="password" id="kspw2" inputmode="numeric" placeholder="Şifre (tekrar)" aria-label="Kasa şifresi tekrar" hidden autocomplete="off"><button type="submit" class="on" id="kslb">Aç</button></form><p class="ksmsg" id="ksmsg" role="alert"></p></div>';return h}
- function wireUnlock(){var f=ov.querySelector('#kslf'),p=ov.querySelector('#kspw'),p2=ov.querySelector('#kspw2'),m=ov.querySelector('#ksmsg'),lp=ov.querySelector('#kslp'),lb=ov.querySelector('#kslb'),isNew=false;
-  rpc('kasa_status',{}).then(function(d){isNew=!(d&&d.set);if(isNew){lp.textContent='İlk kez açıyorsun. Kasana özel bir şifre belirle (en az 4 karakter). Çizelge şifresinden ayrı tutulur; çizelgeyi kullanan başkası kasanı göremez.';p2.hidden=false;lb.textContent='Şifreyi belirle ve aç'}else lp.textContent='Kasa şifreni gir.';setTimeout(function(){p.focus()},50)})
+  h+='<h3>Kasa</h3><p class="ksmu" id="kslp">Yükleniyor…</p><form id="kslf" autocomplete="off"><input type="password" id="kspw" placeholder="Kasa şifresi" aria-label="Kasa şifresi" autocomplete="off"><input type="password" id="kspw2" placeholder="Şifre (tekrar)" aria-label="Kasa şifresi tekrar" hidden autocomplete="off"><button type="submit" class="on" id="kslb">Aç</button></form><p class="ksmsg" id="ksmsg" role="alert"></p></div>';return h}
+ function wireUnlock(){var f=ov.querySelector('#kslf'),p=ov.querySelector('#kspw'),p2=ov.querySelector('#kspw2'),m=ov.querySelector('#ksmsg'),lp=ov.querySelector('#kslp'),lb=ov.querySelector('#kslb'),isNew=false,sv=stored();
+  if(sv){lp.textContent='Açılıyor…';f.style.display='none';loadWith(sv).catch(function(e){try{localStorage.removeItem('kasa_pin')}catch(x){}if(ov&&!K){f.style.display='';lp.textContent=/hatalı/.test(e.message)?'Kasa şifresi değişmiş. Yeniden gir.':e.message;p.focus()}});return}
+  rpc('kasa_status',{}).then(function(d){isNew=!(d&&d.set);if(isNew){lp.textContent='İlk kez açıyorsun. Kasana özel bir şifre belirle: en az 6 karakter, harf, rakam ve işaret (örn. !*.-) içersin. Çizelge şifresinden ayrıdır; bu cihazda bir daha sorulmaz.';p2.hidden=false;lb.textContent='Şifreyi belirle ve aç'}else lp.textContent='Kasa şifreni gir.';setTimeout(function(){p.focus()},50)})
    .catch(function(e){lp.textContent='Bağlantı kurulamadı: '+e.message});
-  f.onsubmit=function(ev){ev.preventDefault();m.textContent='';var a=p.value;if(isNew){if(a.length<4){m.textContent='Şifre en az 4 karakter olmalı.';return}if(a!==p2.value){m.textContent='İki şifre aynı değil.';return}}
+  f.onsubmit=function(ev){ev.preventDefault();m.textContent='';var a=p.value;if(isNew){if(!pwStrong(a)){m.textContent='Şifre en az 6 karakter olmalı ve harf, rakam, işaret içermeli.';return}if(a!==p2.value){m.textContent='İki şifre aynı değil.';return}}
    lb.disabled=true;(isNew?rpc('kasa_setpin',{p_old:null,p_new:a}).then(function(d){if(!d.ok)throw new Error(d.error)}):Promise.resolve())
-   .then(function(){return rpc('kasa_get',{p_pin:a})}).then(function(d){if(!d.ok)throw new Error(d.error);PIN=a;var j=null;try{j=d.json?JSON.parse(d.json):null}catch(e){}
-    K=Object.assign(blank(),j||{});['tx','inv','db'].forEach(function(k){if(!Array.isArray(K[k]))K[k]=[]});if(!K.rt)K.rt={altin:0,usd:0,eur:0,at:0};armLock();render();if(!K.rt.at||Date.now()-K.rt.at>6*3600e3)fetchRates(true)})
-   .catch(function(e){lb.disabled=false;m.textContent=e.message;p.select()})}}
+   .then(function(){return loadWith(a)}).catch(function(e){lb.disabled=false;m.textContent=e.message;p.select()})}}
+ /* Şifre bu cihazda saklanır: başka cihazdan girilmedikçe yeniden sorulmaz */
+ function loadWith(a){return rpc('kasa_get',{p_pin:a}).then(function(d){if(!d.ok)throw new Error(d.error);PIN=a;remember(a);var j=null;try{j=d.json?JSON.parse(d.json):null}catch(e){}
+    K=Object.assign(blank(),j||{});['tx','inv','db'].forEach(function(k){if(!Array.isArray(K[k]))K[k]=[]});if(!K.rt)K.rt={altin:0,usd:0,eur:0,at:0};render();if(!K.rt.at||Date.now()-K.rt.at>6*3600e3)fetchRates(true)})}
  /* ---- kurlar ---- */
  /* Kurlar Harem Altın'ın canlı fiyat akışından (socket.io) alınır: gram has altın (ALTIN), USDTRY, EURTRY satış fiyatı. */
  function fetchRates(quiet){st('Harem Altın kurları alınıyor…');var got={},ws,fin=false;
@@ -2442,7 +2458,7 @@ var KS=(function(){
  /* ---- çizim ---- */
  var WAL='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0 0 4h14a1 1 0 0 1 1 1v3"/><path d="M3 6v12a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3"/><path d="M21 12h-4a2 2 0 0 0 0 4h4z"/></svg>';
  function head(){var net=K?kasaBal()+invVal()-kartBorc():0;
-  return '<div class="kshd"><b class="kst">'+WAL+'<span>Kasa</span></b><span class="ksst" aria-live="polite"></span>'+(K?'<button type="button" class="ksic" data-a="lock" title="Kilitle" aria-label="Kasayı kilitle"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button>':'')+'<button type="button" class="ksic" data-a="close" title="Ana menü" aria-label="Ana menüye dön"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button></div>'+
+  return '<div class="kshd"><b class="kst">'+WAL+'<span>Kasa</span></b><span class="ksst" aria-live="polite"></span>'+(K?'<button type="button" class="ksic'+(tab==='pw'?' on':'')+'" data-a="pw" title="Kasa şifresini değiştir" aria-label="Kasa şifresini değiştir"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2L20 3M16 7l3 3M14 9l2 2"/></svg></button>':'')+'<button type="button" class="ksic" data-a="close" title="Ana menü" aria-label="Ana menüye dön"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button></div>'+
    (K?'<div class="kssum card"><div class="ksnet"><small>Net varlığım</small><strong class="'+(net<0?'neg':'')+'">'+tl(net)+'</strong></div><div class="ks4"><div><small>💵 Nakit</small><b>'+tl(kasaBal())+'</b></div><div><small>💳 Kart borcu</small><b class="'+(kartBorc()>0?'neg':'')+'">'+tl(kartBorc())+'</b></div><div><small>Yatırım</small><b>'+tl(invVal())+'</b></div><div><small>Alacak − Borç</small><b>'+tl(dbTot().a-dbTot().b)+'</b></div></div></div>'+
    '<div class="kstabs" role="tablist">'+[['kasa','Güncel kasa'],['inv','Yatırımlarım'],['db','Borç · Alacak']].map(function(t){return '<button type="button" role="tab" aria-selected="'+(tab===t[0])+'" class="'+(tab===t[0]?'on':'')+'" data-tab="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>':'')}
  function vKasa(){var y=mon[0],m=mon[1],pre=y+'-'+('0'+(m+1)).slice(-2),L=K.tx.filter(function(x){return x.d.slice(0,7)===pre});
@@ -2464,8 +2480,9 @@ var KS=(function(){
   h+='<div class="card"><h4 class="ksh4">Hareketler</h4>'+(ds.length?ds.map(function(d){var p=d.split('-');return '<div class="ksday">'+(+p[2])+' '+AYLAR[+p[1]-1]+'</div>'+by[d].map(function(x){if(x.k==='kartode')return '<div class="ksit"><span class="kse" aria-hidden="true">💳</span><span class="ksin"><b>Kart ödemesi</b><small>Nakitten karta</small></span><b>'+tl(x.a)+'</b><button type="button" class="ksx" data-a="deltx" data-id="'+x.id+'" aria-label="Sil">×</button></div>';
    var em=((x.k==='gelir'?IC2:GC).filter(function(g){return g[0]===x.c})[0]||['','📦'])[1],sub=(x.k==='gider'?(x.m==='kart'?'💳 Kart':'💵 Nakit'):'')+(x.n?(x.k==='gider'?' · ':'')+x.n:'');
    return '<div class="ksit"><span class="kse" aria-hidden="true">'+em+'</span><span class="ksin"><b>'+E(x.c)+'</b>'+(sub?'<small>'+E(sub)+'</small>':'')+'</span><b class="'+(x.k==='gelir'?'pos':'neg')+'">'+tl(x.k==='gelir'?x.a:-x.a,1)+'</b><button type="button" class="ksx" data-a="deltx" data-id="'+x.id+'" aria-label="Sil">×</button></div>'}).join('')}).join(''):'<p class="ksmu">Bu ay için kayıt yok. Yukarıdan ilk harcamanı ekle.</p>')+'</div>';
-  h+='<div class="card ksob"><label for="kso">Başlangıçta elimdeki nakit</label><input id="kso" class="ksnum" inputmode="decimal" value="'+(K.open?qn(K.open):'')+'" placeholder="0 ₺" autocomplete="off"><label for="kkb">Başlangıçtaki kart borcum</label><input id="kkb" class="ksnum" inputmode="decimal" value="'+(K.kopen?qn(K.kopen):'')+'" placeholder="0 ₺" autocomplete="off"><small class="ksmu">Bir kez yaz. Nakit = başlangıç + gelirler − nakit harcamalar − kart ödemeleri. Kart borcu = başlangıç borcu + kartla harcamalar − kart ödemeleri.</small></div>';
+  
   return h}
+ function vPw(){return '<div class="card ksadd"><h4 class="ksh4">Kasa şifresini değiştir</h4><input type="password" id="kp0" placeholder="Şu anki kasa şifresi" autocomplete="current-password"><input type="password" id="kp1" placeholder="Yeni şifre (harf, rakam, işaret)" autocomplete="new-password"><input type="password" id="kp2" placeholder="Yeni şifre (tekrar)" autocomplete="new-password"><p class="ksmsg" id="kpm" role="alert"></p><button type="button" class="on ksgo" data-a="pwsave">Şifreyi kaydet</button><button type="button" data-a="pw">Vazgeç</button></div>'}
  function vInv(){var r=invCalc(),h='';
   h+='<div class="ksassets">'+Object.keys(AS).map(function(k){var a=AS[k],o=r[k],pl=o.v-o.c;
    return '<div class="card ksas"><div class="ksash"><span aria-hidden="true">'+a.e+'</span><b>'+a.n+'</b></div><strong>'+qn(o.q,k==='altin'?2:2)+' '+a.u+'</strong><div class="ksav">'+tl(o.v)+'</div>'+(o.c>0&&buyR(k)?'<small class="'+(pl<0?'neg':'pos')+'">'+tl(pl,1)+' · %'+qn(pl/o.c*100,1)+'</small>':'<small class="ksmu">'+(buyR(k)?'alış kurundan':'kur yok')+'</small>')+'</div>'}).join('')+'</div>';
@@ -2493,7 +2510,7 @@ var KS=(function(){
   
   return h}
  function render(){if(!ov)return;var y=ov.querySelector('.ksb')?ov.querySelector('.ksb').scrollTop:0;
-  var h='<div class="ksb">'+head()+(K?(tab==='kasa'?vKasa():tab==='inv'?vInv():vDb()):unlockView())+'</div>';ov.innerHTML=h;
+  var h='<div class="ksb">'+head()+(K?(tab==='pw'?vPw():tab==='kasa'?vKasa():tab==='inv'?vInv():vDb()):unlockView())+'</div>';ov.innerHTML=h;
   if(!K){wireUnlock();return}ov.querySelector('.ksb').scrollTop=y;wire()}
  function wire(){
   ov.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){tab=b.dataset.tab;openDb=null;render();ov.querySelector('.ksb').scrollTop=0}});
@@ -2511,7 +2528,10 @@ var KS=(function(){
   ov.querySelectorAll('[data-a]').forEach(function(b){b.onclick=function(){act(b.dataset.a,b.dataset.id)}})}
  function bad(id,msg){var e=ov.querySelector(id);if(e){e.focus();e.classList.add('ksbad');setTimeout(function(){e.classList.remove('ksbad')},1200)}st(msg,1)}
  function act(a,id){armLock();
-  if(a==='close'){close();return}if(a==='lock'){lockUI();return}
+  if(a==='close'){close();if(window.goHome)goHome();return}if(a==='pw'){tab=tab==='pw'?'kasa':'pw';render();var f=ov.querySelector('#kp0');if(f)f.focus();return}
+  if(a==='pwsave'){var o0=ov.querySelector('#kp0').value,n1=ov.querySelector('#kp1').value,n2=ov.querySelector('#kp2').value,em=ov.querySelector('#kpm');
+   if(!o0||!n1){em.textContent='Tüm alanları doldur.';return}if(!pwStrong(n1)){em.textContent='Yeni şifre en az 6 karakter olmalı ve harf, rakam, işaret (örn. !*.-) içermeli.';return}if(n1!==n2){em.textContent='Yeni şifreler aynı değil.';return}
+   em.textContent='Kaydediliyor…';rpc('kasa_setpin',{p_old:o0,p_new:n1}).then(function(d){if(!d.ok)throw new Error(d.error);PIN=n1;remember(n1);tab='kasa';render();st('Kasa şifresi değişti')}).catch(function(e){em.textContent=e.message});return}
   if(a==='pm'||a==='nm'){var m=mon[1]+(a==='pm'?-1:1),y=mon[0];if(m<0){m=11;y--}if(m>11){m=0;y++}mon=[y,m];render();return}
   if(a==='rates'){fetchRates(false);return}
   if(a==='kartode'){var kv=num(ov.querySelector('#kko').value);if(!(kv>0))return bad('#kko','Ödenen tutarı yaz');K.tx.push({id:uid(),d:today(),a:Math.round(kv*100)/100,k:'kartode'});save();render();st('Kart ödemesi kaydedildi');return}
