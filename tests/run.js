@@ -149,6 +149,15 @@ const setB = async (p, v) => { await p.evaluate((v) => { var nb = document.query
 const preview = async (p) => { await p.locator('.agpv').click(); await p.waitForTimeout(200); return await p.evaluate(() => (S.ag.fx[wk + '|' + D] || []).map(f => ({ p: f.p, r: f.r, sid: f.sid || null, more: (f.more || []).map(m => m.id), id: f.id, pv: f.pv, s: f.s }))) };
 const cmd = async (p, t) => { await p.fill('#agvt', t); await p.locator('.agsend').click(); await p.waitForTimeout(200) };
 
+test('Aİ: okullar pasifken kişi eklerken "okula gitsin mi?" sorulmaz', async (p) => {
+  await p.evaluate(() => { [0, 1].forEach(r => S.gi.s[r].forEach(it => it.off = true)); save() });
+  await openAi(p);
+  const r = await p.evaluate(() => { var add = document.querySelector('.agov [data-a="new"]'); if (!add) return 'ekle yok'; add.click();
+    var pk = document.querySelector('.agov .agpick [data-a="pick"]'); if (!pk) return 'kişi listesi yok'; pk.click();
+    var b = document.querySelector('.agov .agpick b'); return b ? b.textContent : '' });
+  ok(!/okula gitsin mi/.test(r), 'okul sorusu çıktı: ' + r); ok(/noktaya gitsin mi/.test(r), 'nokta sorusuna geçmedi: ' + r);
+});
+
 test('Aİ: önizlemeden sonra biri elle diğer bölgeye alınınca tekrar önizle boşluğu tamamlar (iki yönde)', async (p) => {
   await openAi(p); await setB(p, 5); const a = await preview(p);
   const nY = await p.evaluate(() => +document.querySelector('#agny').value);
