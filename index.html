@@ -402,29 +402,29 @@ html[data-pre] .av{box-shadow:0 0 0 2px var(--pri)}
 #login .lflow{display:none}
 #login.menu{background:#03040c}
 #login.menu .lbg{display:none}
-#login.menu .lflow{display:block;position:fixed;inset:-10%;pointer-events:none;animation:lhue 16s ease-in-out infinite}
-#login.menu .lflow i{position:absolute;width:62vmax;height:62vmax;border-radius:50%;filter:blur(70px);opacity:.55;will-change:transform}
-#login.menu .lflow i:nth-child(1){left:-12%;top:-8%;background:radial-gradient(circle,#1fc8ff 0%,rgba(31,200,255,0) 65%);animation:lfa 18s ease-in-out infinite}
-#login.menu .lflow i:nth-child(2){right:-18%;top:18%;background:radial-gradient(circle,#8a5cff 0%,rgba(138,92,255,0) 65%);animation:lfb 22s ease-in-out infinite}
-#login.menu .lflow i:nth-child(3){left:10%;bottom:-22%;background:radial-gradient(circle,#ff4fb8 0%,rgba(255,79,184,0) 62%);opacity:.38;animation:lfc 20s ease-in-out infinite}
+#login.menu .lflow{display:block;position:fixed;inset:-10%;pointer-events:none}
+#login.menu .lflow i{position:absolute;width:62vmax;height:62vmax;border-radius:50%;filter:blur(70px);opacity:.7;will-change:transform}
+#login.menu .lflow i:nth-child(1){left:-12%;top:-8%;background:radial-gradient(circle,rgb(var(--f1,47,107,255)) 0%,rgba(var(--f1,47,107,255),0) 65%);transition:background .6s linear;animation:lfa 18s ease-in-out infinite}
+#login.menu .lflow i:nth-child(2){right:-18%;top:18%;background:radial-gradient(circle,rgb(var(--f2,138,92,255)) 0%,rgba(var(--f2,138,92,255),0) 65%);transition:background .6s linear;animation:lfb 22s ease-in-out infinite}
+#login.menu .lflow i:nth-child(3){left:10%;bottom:-22%;background:radial-gradient(circle,rgb(var(--f3,47,191,106)) 0%,rgba(var(--f3,47,191,106),0) 62%);opacity:.42;transition:background .6s linear;animation:lfc 20s ease-in-out infinite}
 #login.menu .lflow b{position:absolute;inset:0;background:radial-gradient(rgba(160,190,255,.16) 1px,transparent 1.4px) 0 0/26px 26px;-webkit-mask-image:radial-gradient(circle at 50% 48%,#000 0,transparent 70%);mask-image:radial-gradient(circle at 50% 48%,#000 0,transparent 70%)}
-@keyframes lhue{0%,100%{filter:hue-rotate(0deg)}50%{filter:hue-rotate(38deg)}}
+
 @keyframes lfa{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(14vw,10vh) scale(1.15)}}
 @keyframes lfb{0%,100%{transform:translate(0,0) scale(1.05)}50%{transform:translate(-16vw,8vh) scale(.9)}}
 @keyframes lfc{0%,100%{transform:translate(0,0)}50%{transform:translate(12vw,-12vh) scale(1.2)}}
 #login.menu .lcard{background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:0;width:100%;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #login.menu .lcard>h2,#login.menu .lcard>.lsub,#login.menu #lmsg:empty{display:none}
-#login.menu .lcard[data-mode="menu"] .lorb{width:min(100vw,470px);margin:auto;animation:lhue 16s ease-in-out infinite}
+#login.menu .lcard[data-mode="menu"] .lorb{width:min(100vw,470px);margin:auto}
 #login.menu .lnode{width:96px;height:96px;margin:-48px 0 0 -48px;font-size:13px;border:1px solid rgba(255,255,255,.5);color:#fff}
-#login.menu .lnode.lncz{background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.85),rgba(120,240,255,.55) 22%,rgba(30,170,230,.55) 52%,rgba(10,40,110,.75) 100%);box-shadow:0 0 40px rgba(62,230,255,.6),0 0 0 7px rgba(62,230,255,.12),inset -10px -12px 20px rgba(0,10,40,.5),inset 6px 6px 14px rgba(255,255,255,.3)}
-#login.menu .lnode.lnks{background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.85),rgba(210,170,255,.6) 22%,rgba(150,80,255,.55) 52%,rgba(60,15,120,.8) 100%);box-shadow:0 0 40px rgba(170,110,255,.6),0 0 0 7px rgba(170,110,255,.12),inset -10px -12px 20px rgba(20,0,50,.5),inset 6px 6px 14px rgba(255,255,255,.3);color:#fff}
+#login.menu .lnode.lncz{background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.85),rgba(var(--na,47,107,255),.6) 26%,rgba(var(--na,47,107,255),.5) 55%,rgba(8,12,40,.8) 100%);box-shadow:0 0 40px rgba(var(--na,47,107,255),.65),0 0 0 7px rgba(var(--na,47,107,255),.14),inset -10px -12px 20px rgba(0,10,40,.5),inset 6px 6px 14px rgba(255,255,255,.3)}
+#login.menu .lnode.lnks{background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.85),rgba(var(--nb,138,92,255),.6) 26%,rgba(var(--nb,138,92,255),.5) 55%,rgba(8,12,40,.8) 100%);box-shadow:0 0 40px rgba(var(--nb,138,92,255),.65),0 0 0 7px rgba(var(--nb,138,92,255),.14),inset -10px -12px 20px rgba(20,0,50,.5),inset 6px 6px 14px rgba(255,255,255,.3);color:#fff}
 #login.menu .lnode .lnico,#login.menu .lnode.lncz .lnico{width:34px;height:34px;margin:0}
-#login.menu .lorbl line#lol_a{stroke:url(#lol1)}#login.menu #lol2 stop{stop-color:#b48cff}
+#login.menu #lol1 stop{stop-color:rgb(var(--na,47,107,255))}#login.menu #lol2 stop{stop-color:rgb(var(--nb,138,92,255))}
 #login.menu .lcard[data-mode="menu"] .lmlinks{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:10px;padding:0 16px calc(18px + env(safe-area-inset-bottom,0px));margin:0}
 #login .lver{font:600 12px/1 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;color:rgba(200,225,255,.75);padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(160,200,255,.18);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 #login .lexit{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:999px;border:1px solid rgba(160,200,255,.22);background:linear-gradient(135deg,rgba(62,230,255,.12),rgba(138,92,255,.14));color:#dbe8ff;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 0 20px rgba(100,140,255,.18)}
 #login .lexit:active{transform:scale(.97)}#login .lexit svg{opacity:.85}
-@media (prefers-reduced-motion:reduce){#login.menu .lflow,#login.menu .lflow i,#login.menu .lcard[data-mode="menu"] .lorb{animation:none}}
+@media (prefers-reduced-motion:reduce){#login.menu .lflow i{animation:none}}
 #login .lorb{display:none}
 #login .lcard[data-mode="menu"] .lorb{display:block;position:relative;width:min(80vw,330px);aspect-ratio:1;margin:0 auto;max-width:100%}
 #login .lcard[data-mode="menu"] .lmark,#login .lcard[data-mode="menu"] .lmenu,#login .lcard[data-mode="menu"] #kasab{display:none!important}
@@ -955,7 +955,7 @@ html.ksopen,html.ksopen body{overflow:hidden}
 <div class="lflow" aria-hidden="true"><i></i><i></i><i></i><b></b></div>
 <form id="lcard" class="lcard" data-mode="in" novalidate>
 <svg class="lmark" viewBox="0 0 76 76" aria-hidden="true"><rect width="76" height="76" rx="22" fill="#0e1430"/><g><rect x="9.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="34.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="17.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="26.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="43.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="26.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="9.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="17.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="43.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="51.70" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="60.20" y="34.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="17.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="26.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="34.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="51.70" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="43.20" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="9.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="17.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="26.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#f97316"/><rect x="34.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="43.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#27315a"/><rect x="51.70" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/><rect x="60.20" y="51.70" width="6.60" height="6.60" rx="1.9" fill="#3b82f6"/></g></svg>
-<h2 id="ltitle">Personel Çizelgesi <small class="appv">v1.41</small></h2>
+<h2 id="ltitle">Personel Çizelgesi <small class="appv">v1.42</small></h2>
 <p class="lsub" id="lsub">Devam etmek için şifrenizi girin</p>
 <div class="lfld lin"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lpw" type="password" placeholder="Şifre" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
 <div class="lfld lch"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="lp0" type="password" placeholder="Şu anki şifre" autocomplete="current-password" autocapitalize="off" spellcheck="false"><button type="button" class="leye" aria-label="Şifreyi göster"><svg class="e1" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="e2" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6a9.7 9.7 0 0 1 1.4-.1C18 5.9 21.5 12 21.5 12a17 17 0 0 1-3 3.8M6.5 7.6A16.6 16.6 0 0 0 2.5 12S6 18.1 12 18.1a9.4 9.4 0 0 0 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
@@ -967,10 +967,10 @@ html.ksopen,html.ksopen body{overflow:hidden}
 <button type="submit" id="lgo" class="lbtn"><span id="lgot">Giriş</span></button>
 <button type="button" id="lalt" class="llink">Şifreyi değiştir</button>
 <button type="button" id="kasab" class="lkasa lbig2"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0 0 4h14a1 1 0 0 1 1 1v3"/><path d="M3 6v12a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3"/><path d="M21 12h-4a2 2 0 0 0 0 4h4z"/></svg><span>Kasa</span></button>
-<div class="lmlinks"><span class="lver appv">v1.41</span><button type="button" id="lout" class="lexit"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9.5"/></svg><span>Bu cihazda çıkış yap</span></button></div>
+<div class="lmlinks"><span class="lver appv">v1.42</span><button type="button" id="lout" class="lexit"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H9"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9.5"/></svg><span>Bu cihazda çıkış yap</span></button></div>
 </form>
 </div>
-<div class="hdr"><h1><span class="ttl">Personel Çizelgesi</span><small class="appv">v1.41</small></h1><button id="undob" type="button" hidden aria-label="Son işlemi geri al" title="Son işlemi geri al"><span aria-hidden="true">↶</span><span class="ul"> Geri al</span></button><button id="lockb" type="button" aria-label="Ana menü" title="Ana menü"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button></div>
+<div class="hdr"><h1><span class="ttl">Personel Çizelgesi</span><small class="appv">v1.42</small></h1><button id="undob" type="button" hidden aria-label="Son işlemi geri al" title="Son işlemi geri al"><span aria-hidden="true">↶</span><span class="ul"> Geri al</span></button><button id="lockb" type="button" aria-label="Ana menü" title="Ana menü"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button></div>
 <div class="tabs" id="tabs" style="margin-bottom:6px"></div>
 <div class="tabs" id="tabs2"></div>
 <div class="card hide" id="nav"></div>
@@ -1226,6 +1226,7 @@ function moStart(){if(MO.run)return;MO.run=true;try{NK.start()}catch(e){}var t0=
    var x2=x*cy+z*sy,z2=-x*sy+z*cy,y2=y*cx-z2*sx;z2=y*sx+z2*cx;var kk=F/(F-z2),px=C+x2*R*1.08*kk,py=C-y2*R*1.08*kk,sc=.78+.32*(z2+1)/2;
    var b=$l('ln'+k);b.style.transform='translate('+px.toFixed(1)+'px,'+py.toFixed(1)+'px) scale('+sc.toFixed(3)+')';b.style.zIndex=Math.round(z2*10)+20;
    var l=$l('lol_'+k.toLowerCase());l.setAttribute('x1',C);l.setAttribute('y1',C);l.setAttribute('x2',px.toFixed(1));l.setAttribute('y2',py.toFixed(1))});
+  if(!MO.lt||now-MO.lt>120){MO.lt=now;var L=$l('login').style,cv=function(o){return NK.col(o).join(',')};L.setProperty('--f1',cv(0));L.setProperty('--f2',cv(2.7));L.setProperty('--f3',cv(5.3));L.setProperty('--na',cv(.6));L.setProperty('--nb',cv(4.6))}
   if(!red)requestAnimationFrame(f);else MO.run=false})(t0)}
 function setMode(m){
  var c=$l('lcard');c.dataset.mode=m;c.classList.remove('swap');void c.offsetWidth;c.classList.add('swap');
@@ -2593,29 +2594,35 @@ var NK=(function(){var N=64,P=[],E=[],sp=1,t=0,last=0,run=false,red=false;
  for(var i=0;i<N;i++)for(var j=i+1;j<N;j++){var dx=P[i][0]-P[j][0],dy=P[i][1]-P[j][1],dz=P[i][2]-P[j][2];if(dx*dx+dy*dy+dz*dz<.47*.47)E.push([i,j])}
  function spr(c1){var c=document.createElement('canvas');c.width=c.height=64;var g=c.getContext('2d'),gr=g.createRadialGradient(32,32,0,32,32,32);
   gr.addColorStop(0,'rgba(255,255,255,1)');gr.addColorStop(.18,c1);gr.addColorStop(.45,c1.replace(/[\d.]+\)$/,'.25)'));gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(0,0,64,64);return c}
- var GC=spr('rgba(62,230,255,1)'),GP=spr('rgba(255,79,184,1)'),GV=spr('rgba(138,92,255,1)');
+ /* Renk akışı: mavi → turkuaz → yeşil → sarı → turuncu → kırmızı → eflatun → mor → mavi */
+ var PAL=[[47,107,255],[24,183,201],[47,191,106],[242,194,59],[242,138,59],[232,80,91],[192,80,200],[138,92,255]],NS=48,SPR=[];
+ function pc(f){var n=PAL.length;f=((f%n)+n)%n;var i=Math.floor(f),u=f-i,a=PAL[i],b=PAL[(i+1)%n];return [Math.round(a[0]+(b[0]-a[0])*u),Math.round(a[1]+(b[1]-a[1])*u),Math.round(a[2]+(b[2]-a[2])*u)]}
+ for(var si=0;si<NS;si++){var cc=pc(si/NS*PAL.length);SPR.push(spr('rgba('+cc.join(',')+',1)'))}
+ function sprAt(f){var n=PAL.length;f=((f%n)+n)%n;return SPR[Math.floor(f/n*NS)%NS]}
+ var CS=.22;
  var Q=new Array(N);
  function draw(cv){var W=Math.round((cv.clientWidth||48)*Math.min(3,window.devicePixelRatio||1));if(W>=40&&cv.width!==W){cv.width=cv.height=W}var g=cv.getContext('2d'),S=cv.width,C=S/2,R=S*.36,F=3.2;g.clearRect(0,0,S,S);
   var ay=t*.45,ax=Math.sin(t*.4)*.35,cy=Math.cos(ay),sy=Math.sin(ay),cx=Math.cos(ax),sx=Math.sin(ax);
   for(var i=0;i<N;i++){var p=P[i],x=p[0]*cy+p[2]*sy,z=-p[0]*sy+p[2]*cy,y=p[1]*cx-z*sx;z=p[1]*sx+z*cx;var k=F/(F-z);Q[i]=[C+x*R*k,C-y*R*k,z,k]}
   g.globalCompositeOperation='lighter';g.lineWidth=Math.max(.6,S/110);
-  var la=.3+Math.sin(t*2)*.18;
+  var la=.3+Math.sin(t*2)*.18,lc=pc(t*CS+1).join(',');
   for(var pass=0;pass<2;pass++){
    if(pass===1){/* çekirdek */var ps=1+Math.sin(t*2.6)*.08,cr=R*.36*ps;g.globalCompositeOperation='source-over';
-    var hg=g.createRadialGradient(C,C,0,C,C,cr*2.4);hg.addColorStop(0,'rgba(138,92,255,.55)');hg.addColorStop(1,'rgba(138,92,255,0)');g.fillStyle=hg;g.fillRect(0,0,S,S);
-    var cg=g.createRadialGradient(C-cr*.35,C-cr*.4,cr*.1,C,C,cr);cg.addColorStop(0,'#ffffff');cg.addColorStop(.3,'#f3c6ff');cg.addColorStop(.75,'#a77bff');cg.addColorStop(1,'#5a2fd0');
+    var k1=pc(t*CS+3.5),k2=pc(t*CS+4.2),rg=function(c,a){return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')'};
+    var hg=g.createRadialGradient(C,C,0,C,C,cr*2.4);hg.addColorStop(0,rg(k1,.55));hg.addColorStop(1,rg(k1,0));g.fillStyle=hg;g.fillRect(0,0,S,S);
+    var cg=g.createRadialGradient(C-cr*.35,C-cr*.4,cr*.1,C,C,cr);cg.addColorStop(0,'#ffffff');cg.addColorStop(.3,rg([Math.min(255,k1[0]+90),Math.min(255,k1[1]+90),Math.min(255,k1[2]+90)],1));cg.addColorStop(.75,rg(k1,1));cg.addColorStop(1,rg([k2[0]*.45|0,k2[1]*.45|0,k2[2]*.45|0],1));
     g.fillStyle=cg;g.beginPath();g.arc(C,C,cr,0,7);g.fill();g.globalCompositeOperation='lighter'}
    for(var e=0;e<E.length;e++){var a=Q[E[e][0]],b=Q[E[e][1]],zz=(a[2]+b[2])/2;if(pass===0?zz>=0:zz<0)continue;
-    g.strokeStyle='rgba(62,230,255,'+(la*(.35+.65*(zz+1)/2)).toFixed(3)+')';g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke()}
+    g.strokeStyle='rgba('+lc+','+(la*(.35+.65*(zz+1)/2)).toFixed(3)+')';g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke()}
    for(var i=0;i<N;i++){var q=Q[i];if(pass===0?q[2]>=0:q[2]<0)continue;var pk=.5+.5*Math.sin(t*3+i*.7),sz=S*(.035+pk*.05)*q[3]*(.6+.4*(q[2]+1)/2);
-    g.globalAlpha=.45+.55*(q[2]+1)/2;g.drawImage(i%5?GC:GP,q[0]-sz,q[1]-sz,sz*2,sz*2)}
+    g.globalAlpha=.45+.55*(q[2]+1)/2;g.drawImage(sprAt(t*CS+i*.09),q[0]-sz,q[1]-sz,sz*2,sz*2)}
    g.globalAlpha=1}
   g.globalCompositeOperation='source-over'}
  function frame(now){var dt=last?Math.min(.05,(now-last)/1000):0;last=now;if(!red)t+=dt*sp;
   var cs=document.querySelectorAll('canvas.nkure'),any=false;
   for(var i=0;i<cs.length;i++){var r=cs[i].getBoundingClientRect();if(r.bottom<0||r.top>innerHeight||!r.width)continue;any=true;draw(cs[i])}
   if(cs.length&&!red)requestAnimationFrame(frame);else{run=false;if(red)for(var i=0;i<cs.length;i++)draw(cs[i])}}
- return {start:function(){if(run)return;run=true;last=0;requestAnimationFrame(frame)},speed:function(v){sp=v}}})();
+ return {start:function(){if(run)return;run=true;last=0;requestAnimationFrame(frame)},speed:function(v){sp=v},col:function(o){return pc(t*CS+(o||0))}}})();
 function agOpen(d){
  agInit();var A=S.ag,ov=document.createElement('div');ov.className='csov agov';
  var listed0={};
