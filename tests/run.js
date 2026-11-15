@@ -296,7 +296,7 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   await add('1.250,50', 'Market', 'Migros'); await add('400', 'Akaryakıt'); await p.click('[data-pm="nakit"]'); await add('150', 'Market');
   await p.click('.kseg [data-k="gelir"]'); await add('30000', 'Maaş');
   const k1 = await p.evaluate(() => ({ bars: [...document.querySelectorAll('.ksbars li')].map(l => l.querySelector('.ksbl').textContent.replace(/[^A-Za-zçğıöşüÇĞİÖŞÜ ]/g, '').trim()), sum: document.querySelector('.ksm').textContent }));
-  await p.fill('#kko', '1000'); await p.click('[data-a="kartode"]');
+  const noCard = await p.evaluate(() => !document.querySelector('.ksov .kskart'));
   const kk = await p.evaluate(() => ({ h: document.querySelector('.ks4').textContent, m: document.querySelector('.ksm').textContent }));
   await p.click('[data-tab="inv"]'); await p.fill('[data-rt="altin"]', '3000'); await p.press('[data-rt="altin"]', 'Tab'); await p.fill('[data-rta="altin"]', '2900'); await p.press('[data-rta="altin"]', 'Tab');
   await p.fill('#kiq', '10'); await p.fill('#kit', '25000'); await p.click('[data-a="addinv"]');
@@ -320,9 +320,12 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   await p.fill('#kne', 'Haftalık alışveriş'); await p.press('#kne', 'Tab');
   const nt = await p.evaluate(() => document.querySelector('.ksov .ksin small') && [...document.querySelectorAll('.ksov .ksin small')].some(e => /Haftalık alışveriş/.test(e.textContent)) || JSON.stringify(window.__ks.doc || '').indexOf('Haftalık') > -1);
   await p.locator('.ksov [data-a="opentx"]').first().click();
-  await p.click('[data-tab="kasa"]'); const n0 = await p.locator('.ksov [data-a="deltx"]').count();
-  await p.locator('.ksov [data-a="deltx"]').first().click(); await p.locator('.wdlg .c').click(); const n1 = await p.locator('.ksov [data-a="deltx"]').count();
-  await p.locator('.ksov [data-a="deltx"]').first().click(); await p.locator('.wdlg .d').click(); const n2 = await p.locator('.ksov [data-a="deltx"]').count();
+  await p.click('[data-tab="kasa"]'); const rows = () => p.locator('.ksov [data-sw="deltx"]').count(); const n0 = await rows();
+  const swipe = async () => { await p.locator('.ksov [data-sw="deltx"]').first().scrollIntoViewIfNeeded(); const bx = await p.locator('.ksov [data-sw="deltx"]').first().boundingBox(); await p.mouse.move(bx.x + bx.width - 20, bx.y + bx.height / 2); await p.mouse.down(); for (let k = 1; k <= 8; k++) await p.mouse.move(bx.x + bx.width - 20 - k * 18, bx.y + bx.height / 2 + 1); await p.mouse.up(); await p.waitForTimeout(80) };
+  const xBtn = await p.locator('.ksov .ksx[data-a="deltx"]').count();
+  await swipe(); await p.locator('.wdlg .c').click(); const n1 = await rows();
+  await swipe(); await p.locator('.wdlg .d').click(); const n2 = await rows();
+  eq(xBtn, 0, 'x sil düğmesi duruyor');
   eq([n1, n2], [n0, n0 - 1], 'hareket silme (onaylı) çalışmıyor');
   await p.waitForTimeout(700);
   const saved = await p.evaluate(() => { var d = JSON.parse(window.__ks.doc); return { tx: d.tx.length, inv: d.inv.length, db: d.db[0].a, inS: JSON.stringify(S).indexOf('Migros') > -1 } });
@@ -337,11 +340,11 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   const back = await p.evaluate(() => document.getElementById('login').style.display);
   ok(first, 'ilk açılışta şifre belirleme istenmedi');
   eq(k1.bars, ['Market', 'Akaryakıt'], 'harcama dağılımı'); ok(/1\.800,50 ₺/.test(k1.sum) && /30\.000 ₺/.test(k1.sum), 'aylık toplam yanlış: ' + k1.sum);
-  ok(/Nakit28\.850 ₺/.test(kk.h.replace(/[💵💳 ]/gu, '')) || /28\.850 ₺/.test(kk.h), 'nakit yanlış: ' + kk.h); ok(/Kart borcu650,50 ₺/.test(kk.h), 'kart borcu yanlış: ' + kk.h); ok(/1\.800,50 ₺/.test(kk.m), 'kart ödemesi gider sayıldı: ' + kk.m);
+  ok(noCard, 'kredi kartı borcum kutusu duruyor'); ok(/29\.850 ₺/.test(kk.h), 'nakit yanlış: ' + kk.h); ok(/Kart borcu1\.650,50 ₺/.test(kk.h), 'kart borcu yanlış: ' + kk.h); ok(/1\.800,50 ₺/.test(kk.m), 'kart ödemesi gider sayıldı: ' + kk.m);
   ok(/6 gr/.test(k2) && /17\.400 ₺/.test(k2), 'altın alıştan hesaplanmadı: ' + k2);
   ok(/700 ₺/.test(k3), 'kısmi ödeme yanlış: ' + k3);
   eq(closed.n, 1, 'kapanan borç listede kaldı'); ok(!closed.det, 'Kapananlar bölümü duruyor'); eq(closed.net, netB, 'borç/alacak net varlığı etkiledi'); eq(fmt, '1.250.000', 'binlik ayraç yok');
-  eq(saved, { tx: 4, inv: 2, db: 700, inS: false }); ok(/hatalı/.test(wrong), 'yanlış şifre kabul edildi');
+  eq(saved, { tx: 3, inv: 2, db: 700, inS: false }); ok(/hatalı/.test(wrong), 'yanlış şifre kabul edildi');
   ok(/harf, rakam/.test(weak.m) && !weak.pin, 'zayıf şifre kabul edildi: ' + weak.m); eq(changed, { pin: 'Yeni2*sifre', ls: 'Yeni2*sifre' }); ok(auto, 'aynı cihazda şifre yeniden soruldu');
   eq(home, { shown: true, mode: 'menu' }, 'ana menüye dönmedi'); eq(back, 'none', 'menüden çizelgeye dönülmedi');
 });
@@ -375,7 +378,7 @@ test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez',
       await t.fn(page);
       if (errs.length) throw new Error('sayfa hatası: ' + errs.join(' | '));
       console.log('  ✓ ' + t.name);
-    } catch (e) { fail++; console.log('  ✗ ' + t.name + '\n      ' + String(e.message).split('\n')[0]) }
+    } catch (e) { fail++; console.log('  ✗ ' + t.name + '\n      ' + String(e.message).split('\n').slice(0, 3).join(' | ')) }
     await ctx.close();
   }
   await browser.close(); srv.close();
