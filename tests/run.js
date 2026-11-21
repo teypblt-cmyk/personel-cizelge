@@ -322,9 +322,12 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   await p.waitForTimeout(700);
   await p.click('[data-tab="db"]'); await p.locator('.ksov [data-a="opendb"]').first().click();
   { await p.locator('.ksov [data-swr]').first().scrollIntoViewIfNeeded(); const bx = await p.locator('.ksov [data-swr]').first().boundingBox(); await p.mouse.move(bx.x + 20, bx.y + bx.height / 2); await p.mouse.down(); for (let k = 1; k <= 8; k++) await p.mouse.move(bx.x + 20 + k * 18, bx.y + bx.height / 2 + 1); await p.mouse.up(); await p.waitForTimeout(150);
-    const pre = await p.evaluate(() => ({ w: document.querySelector('#kdw').value, k: document.querySelector('[data-dk].on').dataset.dk, del: !!document.querySelector('.ksov .ksdet [data-a="deldb"]') }));
-    eq(pre.w, 'Ahmet', 'sağa kaydırınca kişi gelmedi'); eq(pre.k, 'borc'); }
-  await p.fill('#kdw', ''); await p.locator('.ksov [data-a="opendb"]').first().click();
+    ok(await p.locator('#kdx').isVisible(), 'sağa kaydırınca ekleme alanı açılmadı');
+    await p.fill('#kdx', '250'); await p.fill('#kdxn', 'Yemek parası'); await p.click('[data-a="adddbx"]');
+    const ad = await p.evaluate(() => ({ amt: document.querySelector('.ksov [data-swr] .ksam').textContent, n: document.querySelectorAll('.ksov [data-swr]').length }));
+    ok(/950 ₺/.test(ad.amt), 'üzerine eklenmedi: ' + ad.amt); eq(ad.n, 1, 'yeni kayıt açıldı'); }
+  { const h = await p.evaluate(() => document.querySelector('.ksov .ksdet').textContent); ok(/Yemek parası\+250 ₺/.test(h) && /Ödeme−300 ₺/.test(h) && h.indexOf('Ödeme−300') < h.indexOf('Yemek parası'), 'ekleme hareketi görünmüyor ya da sıra yanlış: ' + h);
+    await p.fill('#kdp', '250'); await p.click('[data-a="paydb"]'); }
   const dh = await p.evaluate(() => { var d = document.querySelector('.ksov .ksdet'); return d ? d.textContent : '' });
   ok(/Hareketler/.test(dh) && /Ödeme/.test(dh) && /300 ₺/.test(dh) && /Kalan700 ₺/.test(dh), 'borç hareketleri görünmüyor: ' + dh);
   await p.click('[data-tab="kasa"]'); await p.locator('.ksov [data-a="opentx"]').first().click();
