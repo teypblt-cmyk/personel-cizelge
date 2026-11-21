@@ -301,10 +301,10 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   await p.fill('#kspw', '4821'); await p.fill('#kspw2', '4821'); await p.click('#kslb'); await p.waitForTimeout(100);
   const weak = await p.evaluate(() => ({ m: document.getElementById('ksmsg').textContent, pin: window.__ks.pin }));
   await p.fill('#kspw', 'Ab1!xy'); await p.fill('#kspw2', 'Ab1!xy'); await p.click('#kslb'); await p.waitForTimeout(200);
-  const add = async (amt, cat, note) => { await p.fill('#ksa', amt); await p.click('.kscats button[data-c="' + cat + '"]'); await p.fill('#ksn', note || ''); await p.click('[data-a="addtx"]') };
+  const add = async (amt, cat, note) => { await p.fill('#ksa', amt); await p.fill('#ksn', note || ''); await p.click('[data-a="addtx"]') };
   await add('1.250,50', 'Market', 'Migros'); await add('400', 'Akaryakıt'); await p.click('[data-pm="nakit"]'); await add('150', 'Market');
   await p.click('.kseg [data-k="gelir"]'); await add('30000', 'Maaş');
-  const k1 = await p.evaluate(() => ({ bars: [...document.querySelectorAll('.ksbars li')].map(l => l.querySelector('.ksbl').textContent.replace(/[^A-Za-zçğıöşüÇĞİÖŞÜ ]/g, '').trim()), sum: document.querySelector('.ksm').textContent }));
+  const k1 = await p.evaluate(() => ({ bars: document.querySelectorAll('.ksov .ksbars, .ksov .kscats').length, first: document.querySelector('.ksov .ksit .ksin b').textContent, sum: document.querySelector('.ksm').textContent }));
   const noCard = await p.evaluate(() => !document.querySelector('.ksov .kskart'));
   const kk = await p.evaluate(() => ({ h: document.querySelector('.ks4').textContent, m: document.querySelector('.ksm').textContent }));
   await p.click('[data-tab="inv"]'); await p.fill('[data-rt="altin"]', '3000'); await p.press('[data-rt="altin"]', 'Tab'); await p.fill('[data-rta="altin"]', '2900'); await p.press('[data-rta="altin"]', 'Tab');
@@ -321,11 +321,15 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   await p.fill('#kda', '1250000'); const fmt = await p.inputValue('#kda'); await p.fill('#kda', '');
   await p.waitForTimeout(700);
   await p.click('[data-tab="db"]'); await p.locator('.ksov [data-a="opendb"]').first().click();
+  { await p.locator('.ksov [data-swr]').first().scrollIntoViewIfNeeded(); const bx = await p.locator('.ksov [data-swr]').first().boundingBox(); await p.mouse.move(bx.x + 20, bx.y + bx.height / 2); await p.mouse.down(); for (let k = 1; k <= 8; k++) await p.mouse.move(bx.x + 20 + k * 18, bx.y + bx.height / 2 + 1); await p.mouse.up(); await p.waitForTimeout(150);
+    const pre = await p.evaluate(() => ({ w: document.querySelector('#kdw').value, k: document.querySelector('[data-dk].on').dataset.dk, del: !!document.querySelector('.ksov .ksdet [data-a="deldb"]') }));
+    eq(pre.w, 'Ahmet', 'sağa kaydırınca kişi gelmedi'); eq(pre.k, 'borc'); }
+  await p.fill('#kdw', ''); await p.locator('.ksov [data-a="opendb"]').first().click();
   const dh = await p.evaluate(() => { var d = document.querySelector('.ksov .ksdet'); return d ? d.textContent : '' });
   ok(/Hareketler/.test(dh) && /Ödeme/.test(dh) && /300 ₺/.test(dh) && /Kalan700 ₺/.test(dh), 'borç hareketleri görünmüyor: ' + dh);
   await p.click('[data-tab="kasa"]'); await p.locator('.ksov [data-a="opentx"]').first().click();
   const td = await p.evaluate(() => ({ t: document.querySelector('.ksov .ksdet').textContent, ta: !!document.querySelector('#kne') }));
-  ok(/Tarih/.test(td.t) && /Ödeme|Tür/.test(td.t) && td.ta, 'işlem ayrıntısı açılmadı: ' + td.t);
+  ok(/Tarih/.test(td.t) && /Ödeme|Tür/.test(td.t) && td.ta, 'işlem ayrıntısı açılmadı: ' + td.t); ok(!/Bu kaydı sil/.test(td.t), 'Bu kaydı sil düğmesi duruyor');
   await p.fill('#kne', 'Haftalık alışveriş'); await p.press('#kne', 'Tab');
   const nt = await p.evaluate(() => document.querySelector('.ksov .ksin small') && [...document.querySelectorAll('.ksov .ksin small')].some(e => /Haftalık alışveriş/.test(e.textContent)) || JSON.stringify(window.__ks.doc || '').indexOf('Haftalık') > -1);
   await p.locator('.ksov [data-a="opentx"]').first().click();
@@ -348,7 +352,7 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   await p.evaluate(() => { document.getElementById('lgoc').click() }); await p.waitForTimeout(400);
   const back = await p.evaluate(() => document.getElementById('login').style.display);
   ok(first, 'ilk açılışta şifre belirleme istenmedi');
-  eq(k1.bars, ['Market', 'Akaryakıt'], 'harcama dağılımı'); ok(/1\.800,50 ₺/.test(k1.sum) && /30\.000 ₺/.test(k1.sum), 'aylık toplam yanlış: ' + k1.sum);
+  eq(k1.bars, 0, 'kategori ya da harcama dağılımı duruyor'); ok(/Migros|Gelir|Gider/.test(k1.first), 'hareket başlığı yanlış: ' + k1.first); ok(/1\.800,50 ₺/.test(k1.sum) && /30\.000 ₺/.test(k1.sum), 'aylık toplam yanlış: ' + k1.sum);
   ok(noCard, 'kredi kartı borcum kutusu duruyor'); ok(/29\.850 ₺/.test(kk.h), 'nakit yanlış: ' + kk.h); ok(/Kart borcu1\.650,50 ₺/.test(kk.h), 'kart borcu yanlış: ' + kk.h); ok(/1\.800,50 ₺/.test(kk.m), 'kart ödemesi gider sayıldı: ' + kk.m);
   ok(/6 gr/.test(k2) && /17\.400 ₺/.test(k2), 'altın alıştan hesaplanmadı: ' + k2);
   ok(/700 ₺/.test(k3), 'kısmi ödeme yanlış: ' + k3);
