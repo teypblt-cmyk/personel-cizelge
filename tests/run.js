@@ -149,6 +149,15 @@ const setB = async (p, v) => { await p.evaluate((v) => { var nb = document.query
 const preview = async (p) => { await p.locator('.agpv').click(); await p.waitForTimeout(200); return await p.evaluate(() => (S.ag.fx[wk + '|' + D] || []).map(f => ({ p: f.p, r: f.r, sid: f.sid || null, more: (f.more || []).map(m => m.id), id: f.id, pv: f.pv, s: f.s }))) };
 const cmd = async (p, t) => { await p.fill('#agvt', t); await p.locator('.agsend').click(); await p.waitForTimeout(200) };
 
+test('Yeni dönem: yedek alınamazsa silmez; alınırsa haftalar, atamalar, adlar temizlenir, okul/nokta listeleri kalır', async (p) => {
+  const r = await p.evaluate(async () => { var a = nid(); S.gi.t[1].push({ id: a, t: 'Test Nok', off: false }); S.gl[lkey(wk, D, 't', 1)] = [a]; S.gp[pkey(wk, D, 't', 1, a)] = [3]; S.w[wk][3][D] = '2'; save();
+    var items = S.gi.t[1].length, n = N; window.bkMake = function (note, cb) { cb(false) }; newPeriodAsk(); document.querySelector('.wdlg .d').click(); await new Promise(r => setTimeout(r, 50));
+    var kept = S.names[3] !== '' && S.w[wk][3][D] === '2';
+    window.bkMake = function (note, cb) { cb(true) }; newPeriodAsk(); document.querySelector('.wdlg .d').click(); await new Promise(r => setTimeout(r, 50));
+    return { kept, names: S.names.every(x => x === ''), w: S.w[wk][3][D], gp: Object.keys(S.gp).length, items: S.gi.t[1].length === items, n: N === n, tab } });
+  ok(r.kept, 'yedek alınamadan silindi'); ok(r.names, 'adlar silinmedi'); eq(r.w, ''); eq(r.gp, 0); ok(r.items, 'nokta listesi silindi'); ok(r.n); eq(r.tab, 'per');
+});
+
 test('Aİ: okullar pasifken kişi eklerken "okula gitsin mi?" sorulmaz', async (p) => {
   await p.evaluate(() => { [0, 1].forEach(r => S.gi.s[r].forEach(it => it.off = true)); save() });
   await openAi(p);
