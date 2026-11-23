@@ -158,6 +158,14 @@ test('Yeni dönem: yedek alınamazsa silmez; alınırsa haftalar, atamalar, adla
   ok(r.kept, 'yedek alınamadan silindi'); ok(r.names, 'adlar silinmedi'); eq(r.w, ''); eq(r.gp, 0); ok(r.items, 'nokta listesi silindi'); ok(r.n); eq(r.tab, 'per');
 });
 
+test('Aİ: okul ve nokta yoksa kişi soru sorulmadan eklenir', async (p) => {
+  await p.evaluate(() => { [0, 1].forEach(r => { S.gi.s[r].forEach(it => it.off = true); S.gi.t[r].forEach(it => it.off = true); delete S.gl[lkey(wk, D, 't', r)]; delete S.gl[lkey(wk, D, 's', r)] }); save() });
+  await openAi(p);
+  const r = await p.evaluate(() => { var n0 = (S.ag.fx[wk + '|' + D] || []).length; document.querySelector('.agov [data-a="new"]').click(); var pk = document.querySelector('.agov .agpick [data-a="pick"]'); var q = +pk.dataset.v; pk.click();
+    var L = S.ag.fx[wk + '|' + D] || []; return { asked: !!document.querySelector('.agov .agpick'), added: L.length === n0 + 1, last: L[L.length - 1] } });
+  ok(!r.asked, 'yine soru soruldu'); ok(r.added, 'kişi eklenmedi'); eq(r.last.id, null);
+});
+
 test('Aİ: okullar pasifken kişi eklerken "okula gitsin mi?" sorulmaz', async (p) => {
   await p.evaluate(() => { [0, 1].forEach(r => S.gi.s[r].forEach(it => it.off = true)); save() });
   await openAi(p);
