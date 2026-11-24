@@ -158,6 +158,18 @@ test('Yeni dönem: yedek alınamazsa silmez; alınırsa haftalar, atamalar, adla
   ok(r.kept, 'yedek alınamadan silindi'); ok(r.names, 'adlar silinmedi'); eq(r.w, ''); eq(r.gp, 0); ok(r.items, 'nokta listesi silindi'); ok(r.n); eq(r.tab, 'per');
 });
 
+test('Aİ: çift okulun birine elle seçilen kişi önizlemede iki okulu da alır', async (p) => {
+  const r = await p.evaluate(() => { var s0 = agItems(D, 's', 0); if (s0.length < 2) return { skip: true }; var a = s0[0], b = s0[1];
+    S.ag.pairs = [[a, b]]; S.ag.dp = {}; S.ag.dp[wk + '|' + D] = [a + '+' + b]; save(); return { a, b } });
+  if (r.skip) return;
+  await openAi(p);
+  await p.evaluate((r) => { var L = S.ag.fx[wk + '|' + D] = S.ag.fx[wk + '|' + D] || []; L.push({ p: 4, r: 0, s: true, sid: r.a, sr: 0, more: [], id: 'auto', nk: 0, ns: 0, pv: 0, pend: 1, chief: false }); save() }, r);
+  await openAi(p); const L = await preview(p);
+  const y = L.find(f => f.p === 4);
+  ok(y && y.sid === r.a && (y.more || []).some(m => (m.id || m) === r.b), 'çiftin eşi aynı kişiye yazılmadı: ' + JSON.stringify(y));
+  ok(!L.some(f => f.p !== 4 && (f.sid === r.b || (f.more || []).some(m => (m.id || m) === r.b))), 'çiftin eşi başka birine gitti');
+});
+
 test('Aİ: okul ve nokta yoksa kişi soru sorulmadan eklenir', async (p) => {
   await p.evaluate(() => { [0, 1].forEach(r => { S.gi.s[r].forEach(it => it.off = true); S.gi.t[r].forEach(it => it.off = true); delete S.gl[lkey(wk, D, 't', r)]; delete S.gl[lkey(wk, D, 's', r)] }); save() });
   await openAi(p);
