@@ -149,13 +149,20 @@ const setB = async (p, v) => { await p.evaluate((v) => { var nb = document.query
 const preview = async (p) => { await p.locator('.agpv').click(); await p.waitForTimeout(200); return await p.evaluate(() => (S.ag.fx[wk + '|' + D] || []).map(f => ({ p: f.p, r: f.r, sid: f.sid || null, more: (f.more || []).map(m => m.id), id: f.id, pv: f.pv, s: f.s }))) };
 const cmd = async (p, t) => { await p.fill('#agvt', t); await p.locator('.agsend').click(); await p.waitForTimeout(200) };
 
-test('Yeni dönem: yedek alınamazsa silmez; alınırsa haftalar, atamalar, adlar temizlenir, okul/nokta listeleri kalır', async (p) => {
+test('Haftaları sıfırla: yedeksiz silmez, pazartesi ister, başlangıç tarihini değiştirir, adları isteğe göre siler', async (p) => {
   const r = await p.evaluate(async () => { var a = nid(); S.gi.t[1].push({ id: a, t: 'Test Nok', off: false }); S.gl[lkey(wk, D, 't', 1)] = [a]; S.gp[pkey(wk, D, 't', 1, a)] = [3]; S.w[wk][3][D] = '2'; save();
     var items = S.gi.t[1].length, n = N; window.bkMake = function (note, cb) { cb(false) }; newPeriodAsk(); document.querySelector('.wdlg .d').click(); await new Promise(r => setTimeout(r, 50));
     var kept = S.names[3] !== '' && S.w[wk][3][D] === '2';
-    window.bkMake = function (note, cb) { cb(true) }; newPeriodAsk(); document.querySelector('.wdlg .d').click(); await new Promise(r => setTimeout(r, 50));
-    return { kept, names: S.names.every(x => x === ''), w: S.w[wk][3][D], gp: Object.keys(S.gp).length, items: S.gi.t[1].length === items, n: N === n, tab } });
-  ok(r.kept, 'yedek alınamadan silindi'); ok(r.names, 'adlar silinmedi'); eq(r.w, ''); eq(r.gp, 0); ok(r.items, 'nokta listesi silindi'); ok(r.n); eq(r.tab, 'per');
+    var nm3 = S.names[3];
+    window.bkMake = function (note, cb) { cb(true) }; newPeriodAsk(); document.querySelector('#npd').value = '2026-12-02'; document.querySelector('.wdlg .d').click();
+    var badDay = !!document.querySelector('.wdlg') && /pazartesi/.test(document.querySelector('#npm').textContent); document.querySelector('.wdlg .c').click();
+    newPeriodAsk(); document.querySelector('#npd').value = '2026-11-30'; document.querySelector('.wdlg .d').click(); await new Promise(r => setTimeout(r, 50));
+    var keepNames = S.names[3] === nm3, b0 = S.b0, wl = S.w.length, lbl = wkRange(0), w0 = S.w[0][3][D];
+    newPeriodAsk(); document.querySelector('#npn').checked = true; document.querySelector('.wdlg .d').click(); await new Promise(r => setTimeout(r, 50));
+    return { kept, badDay, keepNames, b0, wl, lbl, w0, names: S.names.every(x => x === ''), gp: Object.keys(S.gp).length, items: S.gi.t[1].length === items, n: N === n, tab } });
+  ok(r.kept, 'yedek alınamadan silindi'); ok(r.badDay, 'pazartesi olmayan gün kabul edildi'); ok(r.keepNames, 'adlar istenmeden silindi');
+  eq(r.b0, '2026-11-30'); eq(r.lbl, '30 Kas – 6 Ara'); eq(r.w0, ''); ok(r.wl >= 1);
+  ok(r.names, 'adlar silinmedi'); eq(r.gp, 0); ok(r.items, 'nokta listesi silindi'); ok(r.n); eq(r.tab, 'per');
 });
 
 test('Aİ: çift okulun birine elle seçilen kişi önizlemede iki okulu da alır', async (p) => {
