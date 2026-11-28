@@ -417,6 +417,15 @@ test('Vardiya: 15:00\'e kadar biten sabahta, 15:00\'ten sonraya sarkan öğlede;
   ok(/Saatsiz Nokta/.test(r.sb.txt) && /Sabah Okul/.test(r.sb.txt), 'sabah listesi yanlış'); eq(r.og.ai, 2); eq(r.sb.ai, 2); ok(!/Uzun Okul/.test(r.sb.txt) && !/13:10-18:00/.test(r.sb.txt), 'sabah listesinde öğle dilimi var'); eq(r.og.on, 'og'); eq(r.og.n, 2);
 });
 
+test('Nokta günleri bölge sayısına (B/Y) katılmaz', async (p) => {
+  const r = await p.evaluate(() => { for (var w = 0; w < S.w.length; w++) for (var d = 0; d < 7; d++) { S.w[w][5][d] = ''; S.w[w][6][d] = '' }
+    S.gl = {}; S.gp = {}; var a = nid(); S.gi.t[0].push({ id: a, t: 'Test Nok', off: false });
+    S.w[0][5][0] = '1'; S.w[0][5][1] = '1'; S.w[0][5][2] = '2'; S.w[0][6][0] = '2';
+    S.gl[lkey(0, 1, 't', 0)] = [a]; S.gp[pkey(0, 1, 't', 0, a)] = [5]; save();
+    var st = agStats(6); return { b: tot(5, '1'), y: tot(5, '2'), rc: st.RC['1|5'] || 0, y6: tot(6, '2'), stat: stat(5) } });
+  eq(r.b, 1); eq(r.y, 1); eq(r.rc, 1); eq(r.y6, 1);
+});
+
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
   const r = await p.evaluate(() => {
     var now = new Date(), cw = -1; for (var w = 0; w < S.w.length; w++) { var a = isoD(w, 0), b = isoD(w, 6), t = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2); if (a <= t && t <= b) cw = w }
