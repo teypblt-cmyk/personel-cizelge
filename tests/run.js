@@ -452,6 +452,15 @@ test('Aİ Noktalar: serbest noktaya kişi seçilir, Aİ o kişiyi başka noktaya
   ok(!after.other, 'serbest noktadaki kişi başka noktaya da yazıldı'); eq(after.kept, [q]); ok(after.pts > 0, 'Aİ hiç nokta atamadı (test geçersiz)');
 });
 
+test('Aİ: bölgede nokta yoksa kişi satırında nokta düğmesi görünmez', async (p) => {
+  await p.evaluate(() => { S.gi.t[0].forEach(it => it.off = true); delete S.gl[lkey(wk, D, 't', 0)]; S.w[wk][1][D] = '1'; S.w[wk][2][D] = '2'; save() });
+  await openAi(p);
+  const r = await p.evaluate(() => { var L = S.ag.fx[wk + '|' + D] = []; L.push({ p: 1, r: 0, s: null, id: 'auto', more: [], chief: false, nk: 0, ns: 0 }, { p: 2, r: 1, s: null, id: 'auto', more: [], chief: false, nk: 0, ns: 0 }); save(); return agItems(D, 't', 1).length });
+  await openAi(p);
+  const c = await p.evaluate(() => ({ b: document.querySelectorAll('.agov .agfix[data-r="0"] .agch.pt').length, y: document.querySelectorAll('.agov .agfix[data-r="1"] .agch.pt').length }));
+  eq(c.b, 0); if (r) ok(c.y > 0, 'Yenibosna nokta düğmesi kayboldu');
+});
+
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
   const r = await p.evaluate(() => {
     var now = new Date(), cw = -1; for (var w = 0; w < S.w.length; w++) { var a = isoD(w, 0), b = isoD(w, 6), t = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2); if (a <= t && t <= b) cw = w }
