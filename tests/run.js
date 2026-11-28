@@ -11,7 +11,7 @@ const NAMES = ['Abdullah Şahin', 'Akif Balı', 'Muhammed Daşçı', 'Arif Özha
 
 /* Sayfada çalışır: temiz bir örnek veri kurar. Okullar: Bahçelievler A1..A4, Yenibosna B1..B4. Noktalar: Bahçelievler "Yaya Sokak" (1 kişi), Yenibosna "Fatih Caddesi" (3) ve "Ahmet Yesevi Mahmutbey" (3). */
 function setupInPage(names) {
-  authed = true; hideLogin();
+  authed = true; hideLogin(); VRD = '';
   document.querySelectorAll('.csov').forEach(function (x) { x.remove() });
   S.names = names.slice();
   for (var w = 0; w < S.w.length; w++) for (var p = 0; p < N; p++) for (var d = 0; d < 7; d++) S.w[w][p][d] = '';
@@ -408,13 +408,13 @@ test('Vardiya: sabah 15:00 öncesini, öğle 15:00 sonrasını gösterir; saatsi
     S.gl[lkey(wk, d, 's', 0)] = [a, b, c]; S.gl[lkey(wk, d, 't', 0)] = [e]; S.gp[pkey(wk, d, 's', 0, a)] = [1]; S.gp[pkey(wk, d, 's', 0, b)] = [2]; S.gp[pkey(wk, d, 't', 0, e)] = [3]; save();
     var out = {}; ['', 'sb', 'og'].forEach(function (v) { setVrd(v); buildGV(); var day = document.getElementById('gvd0');
       out[v] = { recs: [...day.querySelectorAll('.gr[data-k="s"] .rec .hd b')].map(x => x.textContent), txt: buildText(wk, d), ai: agItems(d, 's', 0).filter(x => [a, b, c].indexOf(x) > -1).length,
-        on: day.closest('#p-gv').querySelector('#vrd .on').dataset.v } });
+        on: (day.closest('#p-gv').querySelector('#vrd .on') || {dataset:{}}).dataset.v, n: document.querySelectorAll('#vrd button').length } });
     setVrd(''); buildGV(); return out });
   eq(r[''].recs.filter(x => /Test|Okul/.test(x)).length, 3); eq(r.sb.recs.filter(x => /Test|Okul/.test(x)).length, 3);
   const og = r.og.recs.filter(x => /Test|Okul/.test(x));
   eq(og, ['Emlak Test (13:10-18:00)', 'Uzun Okul (09:00-17:00)']);
   ok(!/Sabah Okul/.test(r.og.txt) && /Saatsiz Nokta/.test(r.og.txt) && /\(13:10-18:00\)/.test(r.og.txt) && !/08:00-13:10/.test(r.og.txt), 'öğle WhatsApp listesi yanlış:\n' + r.og.txt);
-  ok(/Saatsiz Nokta/.test(r.sb.txt) && /Sabah Okul/.test(r.sb.txt), 'sabah listesi yanlış'); eq(r.og.ai, 2); eq(r.sb.ai, 3); eq(r.og.on, 'og');
+  ok(/Saatsiz Nokta/.test(r.sb.txt) && /Sabah Okul/.test(r.sb.txt), 'sabah listesi yanlış'); eq(r.og.ai, 2); eq(r.sb.ai, 3); eq(r.og.on, 'og'); eq(r.og.n, 2);
 });
 
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
