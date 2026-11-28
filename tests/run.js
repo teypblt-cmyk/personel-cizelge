@@ -440,6 +440,18 @@ test('Serbest noktalar: Data\'da ayrı liste; iki bölgeden de kişi seçilir, W
   ok(/Serbest Test/.test(r.txt), 'WhatsApp listesinde yok'); eq(r.y, 0); ok(/📍/.test(r.ico));
 });
 
+test('Aİ Noktalar: serbest noktaya kişi seçilir, Aİ o kişiyi başka noktaya göndermez', async (p) => {
+  const id = await p.evaluate(() => { var id = nid(); S.gi.t[2] = S.gi.t[2] || []; S.gi.t[2].push({ id: id, t: 'Serbest A', off: false }); save(); return id });
+  await openAi(p);
+  const q = await p.evaluate((id) => { var sl = document.querySelector('.agov .agfps select[data-id="' + id + '"]'); if (!sl) return -1; var q = +sl.options[1].value; sl.value = String(q); sl.onchange(); return q }, id);
+  ok(q >= 0, 'Aİ\'de Noktalar bölümü yok');
+  const r = await p.evaluate((a) => ({ gp: gpl(wk, D, 't', 2, a.id), chip: !!document.querySelector('.agov .agfc') }), { id, q });
+  eq(r.gp, [q]); ok(r.chip, 'seçilen kişi görünmüyor');
+  await preview(p); await p.evaluate(() => document.querySelector('.agov .agok').click()); await p.waitForTimeout(200);
+  const after = await p.evaluate((a) => ({ other: [0, 1].some(r => (S.gl[lkey(wk, D, 't', r)] || []).some(i => gpl(wk, D, 't', r, i).indexOf(a.q) > -1)), kept: gpl(wk, D, 't', 2, a.id), pts: [0, 1].reduce((n, r) => n + (S.gl[lkey(wk, D, 't', r)] || []).length, 0) }), { id, q });
+  ok(!after.other, 'serbest noktadaki kişi başka noktaya da yazıldı'); eq(after.kept, [q]); ok(after.pts > 0, 'Aİ hiç nokta atamadı (test geçersiz)');
+});
+
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
   const r = await p.evaluate(() => {
     var now = new Date(), cw = -1; for (var w = 0; w < S.w.length; w++) { var a = isoD(w, 0), b = isoD(w, 6), t = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2); if (a <= t && t <= b) cw = w }
