@@ -463,6 +463,22 @@ test('Aİ: bölge kişi sayısı kutusu yok; bölgesizler iki bölgeye eşit da�
   ok([0, 1, 2].every(q => a.find(f => f.p === q).r === 0), 'yazılan bölge değişti');
 });
 
+test('Aİ: nokta Otomatik seçilirse en az kişisi olan noktaya atanır; seçilmeyen noktaya gitmez; gerekçe gösterilir', async (p) => {
+  const ok0 = await p.evaluate(() => { var ids = agItems(D, 't', 0); if (ids.length < 1) return false; for (var q = 0; q < N; q++) S.w[wk][q][D] = '';
+    [0, 1, 2, 3].forEach(q => S.w[wk][q][D] = '1'); delete S.gl[lkey(wk, D, 't', 0)];
+    S.ag.fx[wk + '|' + D] = [{ p: 1, r: 0, s: false, id: 'auto', ta: 1, more: [], chief: false, nk: 0, ns: 1, pend: 1 }, { p: 2, r: 0, s: false, id: 'auto', more: [], chief: false, nk: 0, ns: 1, pend: 1 }]; save(); return true });
+  if (!ok0) return;
+  await openAi(p);
+  const chips = await p.evaluate(() => [...document.querySelectorAll('.agov .agfix[data-r="0"] .agch.pt span')].map(x => x.textContent));
+  const a = await preview(p);
+  const why = await p.evaluate(() => [...document.querySelectorAll('.agov .agprev .agwhy')].map(x => x.textContent).join('|'));
+  ok(chips.indexOf('Otomatik') > -1 && chips.indexOf('Yok') > -1, 'düğmeler: ' + chips);
+  const f1 = a.find(f => f.p === 1), f2 = a.find(f => f.p === 2);
+  ok(f1 && f1.id && f1.id !== 'auto', 'Otomatik seçilen noktaya atanmadı: ' + JSON.stringify(f1));
+  ok(!f2 || !f2.id || f2.id === 'auto', 'seçilmeyen kişi noktaya atandı');
+  ok(/Otomatik seçtin/.test(why), 'gerekçe yok');
+});
+
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
   const r = await p.evaluate(() => {
     var now = new Date(), cw = -1; for (var w = 0; w < S.w.length; w++) { var a = isoD(w, 0), b = isoD(w, 6), t = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2); if (a <= t && t <= b) cw = w }
