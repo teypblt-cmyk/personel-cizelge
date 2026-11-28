@@ -426,6 +426,20 @@ test('Nokta günleri bölge sayısına (B/Y) katılmaz', async (p) => {
   eq(r.b, 1); eq(r.y, 1); eq(r.rc, 1); eq(r.y6, 1);
 });
 
+test('Serbest noktalar: Data\'da ayrı liste; iki bölgeden de kişi seçilir, WhatsApp\'ta ve bölge sayısında doğru', async (p) => {
+  await p.evaluate(() => { tab = 'per'; show(); buildItems(); });
+  const r = await p.evaluate(async () => { var lb = [...document.querySelectorAll('#itms .lb')].map(x => x.textContent.trim());
+    document.querySelector('#itms button[data-k="t"][data-r="2"]').click(); var id = S.gi.t[2][S.gi.t[2].length - 1].id; S.gi.t[2][S.gi.t[2].length - 1].t = 'Serbest Test'; 
+    var d = 0; for (var q = 0; q < N; q++) S.w[wk][q][d] = ''; S.w[wk][1][d] = '1'; S.w[wk][2][d] = '2';
+    S.gl[lkey(wk, d, 't', 2)] = [id]; save(); tab = 'gv'; show();
+    var rec = document.querySelector('#gvd0 .reg.g3 .rec'); var names = [...rec.querySelectorAll('[data-a="pick"]')].map(b => +b.dataset.v);
+    S.gp[pkey(wk, d, 't', 2, id)] = [2]; save(); buildGV();
+    return { lb, names, txt: buildText(wk, d), y: cnt(wk, 2, '2'), ico: pIcons(2, d) } });
+  ok(r.lb.some(x => /Serbest Noktalar/.test(x)), 'Data\'da Serbest Noktalar yok: ' + r.lb.join(','));
+  ok(r.names.indexOf(1) > -1 && r.names.indexOf(2) > -1, 'iki bölgeden kişi listelenmedi: ' + r.names);
+  ok(/Serbest Test/.test(r.txt), 'WhatsApp listesinde yok'); eq(r.y, 0); ok(/📍/.test(r.ico));
+});
+
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
   const r = await p.evaluate(() => {
     var now = new Date(), cw = -1; for (var w = 0; w < S.w.length; w++) { var a = isoD(w, 0), b = isoD(w, 6), t = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2); if (a <= t && t <= b) cw = w }
