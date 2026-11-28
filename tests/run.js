@@ -461,6 +461,17 @@ test('Aİ: bölgede nokta yoksa kişi satırında nokta düğmesi görünmez', a
   eq(c.b, 0); if (r) ok(c.y > 0, 'Yenibosna nokta düğmesi kayboldu');
 });
 
+test('Bölge dengesi raporu çizelgede yazılan bölgeden sayar (noktada olan gün de dahil); Aİ noktalarında Sabit yok', async (p) => {
+  const r = await p.evaluate(() => { for (var w = 0; w < S.w.length; w++) for (var d = 0; d < 7; d++) S.w[w][5][d] = '';
+    var a = nid(); S.gi.t[0].push({ id: a, t: 'Test Nok', off: false }); S.w[0][5][0] = '1'; S.w[0][5][1] = '1';
+    S.gl[lkey(0, 1, 't', 0)] = [a]; S.gp[pkey(0, 1, 't', 0, a)] = [5]; save();
+    return pvFacts().filter(f => f.p === 5 && f.v.tur === 'Bölge çalışması').length });
+  eq(r, 2);
+  await openAi(p);
+  const c = await p.evaluate(() => ({ ps: document.querySelectorAll('.agov .agps').length, sub: [...document.querySelectorAll('.agov .agsub')].map(x => x.textContent).join('|') }));
+  eq(c.ps, 0); ok(!/Sabit|Kişi/.test(c.sub), 'başlıkta Sabit/Kişi var: ' + c.sub);
+});
+
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
   const r = await p.evaluate(() => {
     var now = new Date(), cw = -1; for (var w = 0; w < S.w.length; w++) { var a = isoD(w, 0), b = isoD(w, 6), t = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2); if (a <= t && t <= b) cw = w }
