@@ -401,6 +401,22 @@ test('Kasa: ayrı şifre, gider/gelir, harcama dağılımı, yatırım, borç-al
   eq(home, { shown: true, mode: 'menu' }, 'ana menüye dönmedi'); eq(back, 'none', 'menüden çizelgeye dönülmedi');
 });
 
+test('Vardiya: sabah 15:00 öncesini, öğle 15:00 sonrasını gösterir; saatsizler ikisinde de', async (p) => {
+  const r = await p.evaluate(() => { var d = 0, a = nid(), b = nid(), c = nid(), e = nid();
+    S.gi.s[0].push({ id: a, t: 'Emlak Test\n(08:00-13:10) (13:10-18:00)', off: false }, { id: b, t: 'Sabah Okul (08:40-15:00)', off: false }, { id: c, t: 'Uzun Okul (09:00-17:00)', off: false });
+    S.gi.t[0].push({ id: e, t: 'Saatsiz Nokta', off: false });
+    S.gl[lkey(wk, d, 's', 0)] = [a, b, c]; S.gl[lkey(wk, d, 't', 0)] = [e]; S.gp[pkey(wk, d, 's', 0, a)] = [1]; S.gp[pkey(wk, d, 's', 0, b)] = [2]; S.gp[pkey(wk, d, 't', 0, e)] = [3]; save();
+    var out = {}; ['', 'sb', 'og'].forEach(function (v) { setVrd(v); buildGV(); var day = document.getElementById('gvd0');
+      out[v] = { recs: [...day.querySelectorAll('.gr[data-k="s"] .rec .hd b')].map(x => x.textContent), txt: buildText(wk, d), ai: agItems(d, 's', 0).filter(x => [a, b, c].indexOf(x) > -1).length,
+        on: day.closest('#p-gv').querySelector('#vrd .on').dataset.v } });
+    setVrd(''); buildGV(); return out });
+  eq(r[''].recs.filter(x => /Test|Okul/.test(x)).length, 3); eq(r.sb.recs.filter(x => /Test|Okul/.test(x)).length, 3);
+  const og = r.og.recs.filter(x => /Test|Okul/.test(x));
+  eq(og, ['Emlak Test (13:10-18:00)', 'Uzun Okul (09:00-17:00)']);
+  ok(!/Sabah Okul/.test(r.og.txt) && /Saatsiz Nokta/.test(r.og.txt) && /\(13:10-18:00\)/.test(r.og.txt) && !/08:00-13:10/.test(r.og.txt), 'öğle WhatsApp listesi yanlış:\n' + r.og.txt);
+  ok(/Saatsiz Nokta/.test(r.sb.txt) && /Sabah Okul/.test(r.sb.txt), 'sabah listesi yanlış'); eq(r.og.ai, 2); eq(r.sb.ai, 3); eq(r.og.on, 'og');
+});
+
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
   const r = await p.evaluate(() => {
     var now = new Date(), cw = -1; for (var w = 0; w < S.w.length; w++) { var a = isoD(w, 0), b = isoD(w, 6), t = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2); if (a <= t && t <= b) cw = w }
