@@ -194,39 +194,6 @@ test('Aİ: okullar pasifken kişi eklerken "okula gitsin mi?" sorulmaz', async (
   ok(!/okula gitsin mi/.test(r), 'okul sorusu çıktı: ' + r); ok(/noktaya gitsin mi/.test(r), 'nokta sorusuna geçmedi: ' + r);
 });
 
-test('Aİ: önizlemeden sonra biri elle diğer bölgeye alınınca tekrar önizle boşluğu tamamlar (iki yönde)', async (p) => {
-  await openAi(p); await setB(p, 5); const a = await preview(p);
-  const nY = await p.evaluate(() => +document.querySelector('#agny').value);
-  eq(a.filter(f => f.r === 0).length, 5);
-  const mv = a.filter(f => f.r === 0 && f.pv === 1)[0].p;
-  await p.evaluate((q) => { var f = S.ag.fx[wk + '|' + D].find(x => x.p === q); f.org = JSON.parse(JSON.stringify(f)); f.r = 1; f.pv = 0; f.id = 'auto'; f.s = null; f.sid = null; f.more = [] }, mv);
-  const b = await preview(p);
-  eq(b.filter(f => f.r === 0).length, 5, 'Bahçelievler 5e tamamlanmadı'); eq(b.filter(f => f.r === 1).length, nY, 'Yenibosna hedefte değil');
-  ok(b.find(f => f.p === mv).r === 1, 'elle taşınan kişi geri alındı');
-  const mv2 = b.filter(f => f.r === 1 && f.pv === 1)[0].p;
-  await p.evaluate((q) => { var f = S.ag.fx[wk + '|' + D].find(x => x.p === q); f.org = JSON.parse(JSON.stringify(f)); f.r = 0; f.pv = 0; f.id = 'auto'; f.s = null; f.sid = null; f.more = [] }, mv2);
-  const c = await preview(p);
-  eq(c.filter(f => f.r === 0).length, 5, 'ters yönde Bahçelievler 5te kalmadı'); eq(c.filter(f => f.r === 1).length, nY, 'ters yönde Yenibosna tamamlanmadı');
-  ok(c.find(f => f.p === mv2).r === 0 && c.find(f => f.p === mv).r === 1, 'elle taşınanlar korunmadı');
-});
-
-test('Aİ: önizle listeyi doldurur; sayı değişince elle yapılan kalır, gerisi yeniden dağıtılır', async (p) => {
-  await openAi(p); await setB(p, 4); const a = await preview(p);
-  eq(a.filter(f => f.r === 0).length, 4);
-  const keep = a.filter(f => f.r === 0)[0].p;
-  await cmd(p, NAMES[keep] + ' okul yazma');
-  await setB(p, 3); const b = await preview(p);
-  const B = b.filter(f => f.r === 0); eq(B.length, 3, 'Bahçelievler 3 olmadı');
-  const k = B.find(f => f.p === keep); ok(k, 'elle değiştirilen kişi bölgeden çıktı'); eq(k.s, false, 'elle "okul yok" korunmadı');
-});
-
-test('Aİ: Uygula sonrası yeniden açılışta da sayı değişince yeniden dağıtılır', async (p) => {
-  await openAi(p); await setB(p, 4); await preview(p); await p.locator('.agok').click(); await p.waitForTimeout(200);
-  const marks = await p.evaluate(() => { var n = 0; for (var q = 0; q < N; q++) if (S.w[wk][q][D] === '1') n++; return n }); eq(marks, 4, 'Uygula bölgeleri yazmadı');
-  await openAi(p); await setB(p, 2); const b = await preview(p);
-  eq(b.filter(f => f.r === 0).length, 2, 'yeniden açılışta sayı uygulanmadı');
-});
-
 test('Aİ: çift okul kutusu önizlemeden sonra kaldırılınca okullar ayrılır', async (p) => {
   await p.evaluate(() => { S.ag.pairs = [[T.A[0], T.A[1]]]; S.ag.dp[wk + '|' + D] = [T.A[0] + '+' + T.A[1]]; save() });
   await openAi(p); await setB(p, 2); const a = await preview(p);
@@ -483,6 +450,17 @@ test('Aİ: noktaların yanında elle seçilen kişi sayısı görünür, Aİ faz
   await preview(p); await p.evaluate(() => document.querySelector('.agov .agok').click()); await p.waitForTimeout(200);
   const on = await p.evaluate((pt) => gpl(wk, D, 't', 0, pt), pt);
   eq(c0, '0'); eq(c1, '1'); eq(on, [1]);
+});
+
+test('Aİ: bölge kişi sayısı kutusu yok; bölgesizler iki bölgeye eşit dağıtılır, yazılanlar korunur', async (p) => {
+  await p.evaluate(() => { for (var q = 0; q < N; q++) S.w[wk][q][D] = ''; S.w[wk][0][D] = '1'; S.w[wk][1][D] = '1'; S.w[wk][2][D] = '1'; save() });
+  await openAi(p);
+  const vis = await p.evaluate(() => !!document.querySelector('.agov .agcnt') && document.querySelector('.agov .agcnt').offsetParent !== null);
+  const a = await preview(p);
+  const n = await p.evaluate(() => N);
+  const b = a.filter(f => f.r === 0).length, y = a.filter(f => f.r === 1).length;
+  ok(!vis, 'sayı kutusu görünüyor'); eq(b + y, n); ok(Math.abs(b - y) <= 1, 'dengesiz: ' + b + '/' + y);
+  ok([0, 1, 2].every(q => a.find(f => f.p === q).r === 0), 'yazılan bölge değişti');
 });
 
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
