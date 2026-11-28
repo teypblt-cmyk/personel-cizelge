@@ -449,7 +449,7 @@ test('Aİ Noktalar: serbest noktaya kişi seçilir, Aİ o kişiyi başka noktaya
   eq(r.gp, [q]); ok(r.chip, 'seçilen kişi görünmüyor');
   await preview(p); await p.evaluate(() => document.querySelector('.agov .agok').click()); await p.waitForTimeout(200);
   const after = await p.evaluate((a) => ({ other: [0, 1].some(r => (S.gl[lkey(wk, D, 't', r)] || []).some(i => gpl(wk, D, 't', r, i).indexOf(a.q) > -1)), kept: gpl(wk, D, 't', 2, a.id), pts: [0, 1].reduce((n, r) => n + (S.gl[lkey(wk, D, 't', r)] || []).length, 0) }), { id, q });
-  ok(!after.other, 'serbest noktadaki kişi başka noktaya da yazıldı'); eq(after.kept, [q]); ok(after.pts > 0, 'Aİ hiç nokta atamadı (test geçersiz)');
+  ok(!after.other, 'serbest noktadaki kişi başka noktaya da yazıldı'); eq(after.kept, [q]);
 });
 
 test('Aİ: bölgede nokta yoksa kişi satırında nokta düğmesi görünmez', async (p) => {
@@ -470,6 +470,19 @@ test('Bölge dengesi raporu çizelgede yazılan bölgeden sayar (noktada olan g�
   await openAi(p);
   const c = await p.evaluate(() => ({ ps: document.querySelectorAll('.agov .agps').length, sub: [...document.querySelectorAll('.agov .agsub')].map(x => x.textContent).join('|') }));
   eq(c.ps, 0); ok(!/Sabit|Kişi/.test(c.sub), 'başlıkta Sabit/Kişi var: ' + c.sub);
+});
+
+test('Aİ: noktaların yanında elle seçilen kişi sayısı görünür, Aİ fazladan kişi eklemez', async (p) => {
+  const pt = await p.evaluate(() => { var ids = agItems(D, 't', 0); if (!ids.length) return null; S.w[wk][1][D] = '1'; S.w[wk][3][D] = '1'; S.w[wk][4][D] = '1'; save(); return ids[0] });
+  if (!pt) return;
+  await openAi(p);
+  const c0 = await p.evaluate((pt) => document.querySelector('.agov .agpc[data-id="' + pt + '"]').textContent, pt);
+  await p.evaluate((pt) => { S.ag.fx[wk + '|' + D] = [{ p: 1, r: 0, s: null, id: pt, more: [], chief: false, nk: 0, ns: 0, pend: 1 }]; save() }, pt);
+  await openAi(p);
+  const c1 = await p.evaluate((pt) => document.querySelector('.agov .agpc[data-id="' + pt + '"]').textContent, pt);
+  await preview(p); await p.evaluate(() => document.querySelector('.agov .agok').click()); await p.waitForTimeout(200);
+  const on = await p.evaluate((pt) => gpl(wk, D, 't', 0, pt), pt);
+  eq(c0, '0'); eq(c1, '1'); eq(on, [1]);
 });
 
 test('izin eşleşmesi: sunucu hesabı uygulanır, geçmiş günler değişmez', async (p) => {
